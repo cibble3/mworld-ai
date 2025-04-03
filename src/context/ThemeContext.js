@@ -313,7 +313,7 @@ const THEME_MAP = {
 const ThemeContext = createContext({
   theme: THEMES.DEFAULT,
   themeConfig: defaultThemeConfig,
-  setTheme: () => {},
+  setTheme: () => { },
   availableThemes: Object.keys(THEMES)
 });
 
@@ -322,7 +322,7 @@ export const ThemeProvider = ({ children, initialTheme = THEMES.DEFAULT }) => {
   // Get theme from localStorage or use default
   const [theme, setThemeState] = useState(initialTheme);
   const [themeConfig, setThemeConfig] = useState(THEME_MAP[initialTheme] || defaultThemeConfig);
-  
+
   // Effect to load theme from localStorage on initial render
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
@@ -334,7 +334,7 @@ export const ThemeProvider = ({ children, initialTheme = THEMES.DEFAULT }) => {
       document.documentElement.setAttribute('data-theme', initialTheme);
     }
   }, [initialTheme]);
-  
+
   // Handle theme change
   const setTheme = (newTheme) => {
     if (THEME_MAP[newTheme]) {
@@ -344,13 +344,13 @@ export const ThemeProvider = ({ children, initialTheme = THEMES.DEFAULT }) => {
       document.documentElement.setAttribute('data-theme', newTheme);
     }
   };
-  
+
   // Provide theme context to children
   return (
-    <ThemeContext.Provider 
-      value={{ 
-        theme, 
-        themeConfig, 
+    <ThemeContext.Provider
+      value={{
+        theme,
+        themeConfig,
         setTheme,
         availableThemes: Object.keys(THEMES)
       }}

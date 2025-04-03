@@ -8,7 +8,7 @@ import CookiesModal from '@/components/CookiesModal/CookiesModal';
 import TopText from '../components/content/TopText';
 import BottomContent from '../components/content/BottomContent';
 
-const LegacyLayout = ({ 
+const LegacyLayout = ({
   children,
   meta = {},
   containerProps = {},
@@ -16,19 +16,19 @@ const LegacyLayout = ({
   title,
   description,
   bottomContentChildren,
-  ...props 
+  ...props
 }) => {
   const { theme } = useTheme();
-  
+
   // Always show sidebar for now to maintain consistent layout
   const showSidebar = true;
 
   return (
     <>
       <Meta {...meta} />
-      
-      <div 
-        className={`min-h-screen flex flex-col ${className}`} 
+
+      <div
+        className={`min-h-screen flex flex-col ${className}`}
         style={{
           backgroundColor: '#16181c',
           color: '#ffffff',
@@ -42,21 +42,21 @@ const LegacyLayout = ({
         {showSidebar && <LegacySidebar />}
 
         {/* Main content area - with appropriate padding for sidebar */}
-        <main 
-          className={`flex-grow pt-16 ${showSidebar ? 'ml-64' : ''}`}
+        <main
+          className={`flex-grow pt-16  ${showSidebar ? 'lg:ml-64 ml-0' : ''}`}
         >
-          <Container {...containerProps}>
+          <Container {...containerProps} fluid={true}>
             {/* Optional Cookies Modal - Rendered early */}
             <CookiesModal />
-            
+
             {/* Use TopText component */}
             {(title || description) && (
               <TopText title={title} description={description} />
             )}
-            
+
             {/* Main Page Content (e.g., ModelGrid) */}
             {children}
-            
+
             {/* Use BottomContent component */}
             {bottomContentChildren && (
               <BottomContent>
@@ -67,7 +67,7 @@ const LegacyLayout = ({
         </main>
 
         {/* Footer */}
-        <footer 
+        <footer
           className={`border-t py-8 ${showSidebar ? 'ml-64' : ''}`}
           style={{
             backgroundColor: '#1a1a1a',
@@ -117,12 +117,12 @@ const LegacyLayout = ({
                 </div>
               </div>
             </div>
-            
-            <div 
+
+            <div
               className="mt-8 pt-8 border-t text-center"
-              style={{ 
-                borderColor: '#333', 
-                color: '#a0a0a0' 
+              style={{
+                borderColor: '#333',
+                color: '#a0a0a0'
               }}
             >
               <p>&copy; {new Date().getFullYear()} MistressWorld. All rights reserved.</p>

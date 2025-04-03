@@ -28,7 +28,7 @@ const DynamicSidebar = () => {
 
         if (response.data?.success) {
           let models = [];
-          
+
           if (response.data.data?.models && Array.isArray(response.data.data.models)) {
             models = response.data.data.models;
           } else if (response.data.data?.items && Array.isArray(response.data.data.items)) {
@@ -36,7 +36,7 @@ const DynamicSidebar = () => {
           } else if (Array.isArray(response.data.data)) {
             models = response.data.data;
           }
-          
+
           setTrendingModels(models);
         } else {
           // In development, use fallback data
@@ -44,11 +44,11 @@ const DynamicSidebar = () => {
             const fallbackModels = Array.from({ length: 5 }, (_, i) => ({
               id: `trending-${i}`,
               performerId: `trending-${i}`,
-              name: `Trending Model ${i+1}`,
+              name: `Trending Model ${i + 1}`,
               age: 20 + (i * 2),
               ethnicity: ['asian', 'latin', 'ebony', 'white'][i % 4],
               tags: ['trending', 'popular'],
-              thumbnail: `https://picsum.photos/id/${400+i}/300/400`,
+              thumbnail: `https://picsum.photos/id/${400 + i}/300/400`,
               isOnline: true,
               viewerCount: 100 + (i * 50)
             }));
@@ -60,17 +60,17 @@ const DynamicSidebar = () => {
       } catch (err) {
         console.error('Error fetching trending models:', err);
         setError(err.message);
-        
+
         // Fallback data for development
         if (process.env.NODE_ENV === 'development') {
           const fallbackModels = Array.from({ length: 5 }, (_, i) => ({
             id: `trending-${i}`,
             performerId: `trending-${i}`,
-            name: `Trending Model ${i+1}`,
+            name: `Trending Model ${i + 1}`,
             age: 20 + (i * 2),
             ethnicity: ['asian', 'latin', 'ebony', 'white'][i % 4],
             tags: ['trending', 'popular'],
-            thumbnail: `https://picsum.photos/id/${400+i}/300/400`,
+            thumbnail: `https://picsum.photos/id/${400 + i}/300/400`,
             isOnline: true,
             viewerCount: 100 + (i * 50)
           }));
@@ -86,14 +86,14 @@ const DynamicSidebar = () => {
 
   // Popular tags that could be fetched from API in the future
   const popularTags = [
-    'asian', 'ebony', 'latina', 'white', 'teen', 'milf', 
+    'asian', 'ebony', 'latina', 'white', 'teen', 'milf',
     'bbw', 'mature', 'lesbian', 'squirt', 'anal', 'fetish'
   ];
 
   return (
-    <div className="p-4">
+    <div className="p-4 border-r border-[#333] lg:block hidden">
       <h3 className="text-pink-500 font-bold text-xl mb-4">Trending Models</h3>
-      
+
       {loading ? (
         <div className="space-y-4">
           {[...Array(3)].map((_, i) => (
@@ -113,11 +113,11 @@ const DynamicSidebar = () => {
           {trendingModels.map((model) => (
             <Link href={`/chat/${model.performerId}`} key={model.id} className="flex items-center hover:bg-gray-800 p-2 rounded transition-colors">
               <div className="relative w-12 h-12 rounded-full overflow-hidden mr-3">
-                <Image 
-                  src={model.thumbnail || '/images/placeholder.jpg'} 
-                  alt={model.name} 
-                  width={48} 
-                  height={48} 
+                <Image
+                  src={model.thumbnail || '/images/placeholder.jpg'}
+                  alt={model.name}
+                  width={48}
+                  height={48}
                   className="object-cover"
                   unoptimized
                 />

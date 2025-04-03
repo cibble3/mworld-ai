@@ -16,7 +16,7 @@ const FetishPage = () => {
       try {
         console.log('[FetishPage] Fetching models...');
         setLoading(true);
-        
+
         const response = await axios.get('/api/models', {
           params: {
             provider: 'awe',
@@ -25,13 +25,13 @@ const FetishPage = () => {
             debug: true
           }
         });
-        
-        console.log(`[FetishPage] API response:`, 
-          response.data?.success ? 
-            `Success - ${response.data.data?.models?.length || 0} models` : 
+
+        console.log(`[FetishPage] API response:`,
+          response.data?.success ?
+            `Success - ${response.data.data?.models?.length || 0} models` :
             `Failed - ${response.data.error || 'Unknown error'}`
         );
-        
+
         // Handle different possible API response structures
         let models = [];
         if (response.data?.success) {
@@ -45,29 +45,29 @@ const FetishPage = () => {
             console.warn(`[FetishPage] Unexpected API response structure`);
             models = [];
           }
-          
+
           if (models.length > 0) {
             console.log('[FetishPage] First model:', JSON.stringify(models[0]).substring(0, 100));
           } else {
             console.warn('[FetishPage] No models found in API response');
           }
-          
+
           setModels(models);
         } else {
           // Handle error from API
           console.error('[FetishPage] API error:', response.data?.error);
           setError(response.data?.error || 'Failed to fetch models');
-          
+
           // In development, use fallback models 
           if (process.env.NODE_ENV === 'development') {
             const fallbackModels = Array.from({ length: 8 }, (_, i) => ({
               id: `fallback-${i}`,
               performerId: `fallback-${i}`,
-              name: `Fetish Model ${i+1}`,
+              name: `Fetish Model ${i + 1}`,
               age: 25 + (i % 10),
               ethnicity: ['asian', 'latin', 'ebony', 'white'][i % 4],
               tags: ['fetish', 'bdsm', 'dominatrix'],
-              thumbnail: `https://picsum.photos/id/${300+i}/300/400`,
+              thumbnail: `https://picsum.photos/id/${300 + i}/300/400`,
               isOnline: true,
               viewerCount: Math.floor(Math.random() * 100)
             }));
@@ -82,7 +82,7 @@ const FetishPage = () => {
         setLoading(false);
       }
     };
-    
+
     fetchModels();
   }, []);
 
@@ -97,15 +97,15 @@ const FetishPage = () => {
     <div className="bg-[#16181c] min-h-screen">
       <HeadMeta pageContent={pageContent} />
       <CookiesModal />
-      
+
       {/* Sidebar as an overlay that doesn't affect main content flow */}
-      <div className="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] bg-[#1a1a1a] overflow-y-auto z-10 pointer-events-auto">
+      <div className="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] bg-[#1a1a1a] overflow-y-auto z-10 pointer-events-auto lg:block hidden">
         <DynamicSidebar />
       </div>
-      
+
       <div className="py-4 px-3">
         <h1 className="text-2xl md:text-3xl font-bold mb-6">Live Fetish Cams</h1>
-        
+
         {loading ? (
           <div className="flex justify-center py-10">
             <div className="animate-pulse text-xl">Loading models...</div>
@@ -123,11 +123,11 @@ const FetishPage = () => {
             <p className="text-gray-400 mb-5">
               Showing {models.length} fetish models on Mistress World. Explore our selection of beautiful fetish cam models ready to engage in private BDSM sessions.
             </p>
-            
+
             <ModelGrid models={models} isLoading={false}>
               {(model) => (
-                <ModelCard 
-                  key={model.id || model.slug} 
+                <ModelCard
+                  key={model.id || model.slug}
                   performerId={model.id || model.slug}
                   name={model.name}
                   age={model.age}

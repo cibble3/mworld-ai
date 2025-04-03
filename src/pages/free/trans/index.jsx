@@ -63,30 +63,30 @@ const freeTransCategories = [
 const CategoryCard = ({ category }) => {
   const { theme } = useTheme();
   const currentTheme = themes[theme];
-  
+
   const cardStyle = {
     backgroundColor: currentTheme?.secondary || '#1a1c21',
     borderColor: currentTheme?.border || '#2d3748',
   };
-  
+
   return (
     <Link href={`/free/trans/${category.id}`}>
-      <div 
+      <div
         className="relative rounded-lg overflow-hidden group transition-all hover:shadow-lg"
         style={cardStyle}
       >
         <div className="aspect-video relative">
           {/* Use a placeholder image if the category image is missing */}
-          <Image 
-            src={category.image || '/images/placeholder.jpg'} 
-            alt={category.name} 
+          <Image
+            src={category.image || '/images/placeholder.jpg'}
+            alt={category.name}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-110"
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
         </div>
-        
+
         <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
           <h3 className="text-lg font-semibold">{category.name}</h3>
           <p className="text-sm text-gray-300 mt-1 line-clamp-2">{category.description}</p>
@@ -102,34 +102,34 @@ const FreeTransPage = () => {
     meta_title: "Free Trans Cams - Watch Free Live Trans Webcams - MistressWorld",
     meta_desc: "Watch free transgender webcams with no registration required. Stream live trans models for free at MistressWorld - the best free trans cam site."
   };
-  
+
   return (
     <div className="bg-[#16181c] min-h-screen">
       <HeadMeta pageContent={pageContent} />
       <CookiesModal />
-      
+
       {/* Sidebar as an overlay that doesn't affect main content flow */}
-      <div className="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] bg-[#1a1a1a] overflow-y-auto z-10 pointer-events-auto">
+      <div className="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] bg-[#1a1a1a] overflow-y-auto z-10 pointer-events-auto lg:block hidden">
         <DynamicSidebar />
       </div>
-      
+
       <div className="py-4 px-3">
         <h1 className="text-2xl md:text-3xl font-bold mb-2">Free Trans Cams</h1>
         <p className="text-gray-400 mb-6">
           Watch free live transgender cam shows. No registration required - just click and enjoy high quality streams with our trans performers.
         </p>
-        
+
         {/* Main Content */}
         <section className="py-4">
           <h2 className="text-2xl font-bold mb-6">Free Trans Categories</h2>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {freeTransCategories.map(category => (
               <CategoryCard key={category.id} category={category} />
             ))}
           </div>
         </section>
-        
+
         {/* Bottom content section */}
         <div className="mt-12 grid md:grid-cols-2 gap-8">
           <div className="bg-[#1a1c21] rounded-lg p-6">

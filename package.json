@@ -37,6 +37,7 @@
     "react-device-detect": "^2.2.3",
     "react-dom": "^18",
     "react-icons": "^4.11.0",
+    "react-modern-drawer": "^1.4.0",
     "react-redux": "^9.2.0",
     "swiper": "^11.2.6",
     "swr": "^2.3.3"

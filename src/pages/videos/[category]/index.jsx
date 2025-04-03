@@ -5,7 +5,7 @@ import CookiesModal from '@/components/CookiesModal/CookiesModal';
 import DynamicSidebar from '@/components/navigation/DynamicSidebar';
 import VideoGrid from '@/theme/components/grid/VideoGrid';
 import VideoCard from '@/theme/components/common/VideoCard';
-import { getCategoryMeta } from '@/utils/category-helpers'; 
+import { getCategoryMeta } from '@/utils/category-helpers';
 import useModelFeed from '@/hooks/useModelFeed';
 import TopText from "@/theme/components/content/TopText";
 import BottomContent from "@/theme/components/content/BottomContent";
@@ -72,12 +72,12 @@ const VideoCategoryPage = () => {
   }
 
   // Fetch videos using our model feed hook with the VPAPI provider
-  const { 
-    models: videos, 
-    isLoading, 
-    error, 
-    hasMore, 
-    loadMore 
+  const {
+    models: videos,
+    isLoading,
+    error,
+    hasMore,
+    loadMore
   } = useModelFeed({
     provider: ApiProviders.VPAPI,
     category: videoCategory,
@@ -97,16 +97,16 @@ const VideoCategoryPage = () => {
       title: `${videoCategory.charAt(0).toUpperCase() + videoCategory.slice(1)} Videos`,
       description: `Watch the best ${videoCategory} videos. New videos added daily.`
     };
-    
+
     const title = content.title;
     const description = content.description;
-    
+
     const computedMeta = {
       title: `${title} - MistressWorld`,
       description: description,
       keywords: `${videoCategory} videos, free videos, adult videos, video clips`,
     };
-    
+
     // Create the bottom content
     const bottomContent = content.content ? (
       <div className="grid md:grid-cols-2 gap-8">
@@ -122,10 +122,10 @@ const VideoCategoryPage = () => {
         ))}
       </div>
     ) : null;
-    
-    return { 
-      meta: computedMeta, 
-      pageTitle: title, 
+
+    return {
+      meta: computedMeta,
+      pageTitle: title,
       pageDescription: description,
       bottomContentJSX: bottomContent
     };
@@ -141,16 +141,16 @@ const VideoCategoryPage = () => {
     <div className="bg-[#16181c] min-h-screen">
       <HeadMeta pageContent={pageContent} />
       <CookiesModal />
-      
+
       {/* Sidebar as an overlay that doesn't affect main content flow */}
-      <div className="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] bg-[#1a1a1a] overflow-y-auto z-10 pointer-events-auto">
+      <div className="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] bg-[#1a1a1a] overflow-y-auto z-10 pointer-events-auto lg:block hidden">
         <DynamicSidebar />
       </div>
-      
+
       <div className="py-4 px-3">
         <h1 className="text-2xl md:text-3xl font-bold mb-6">{pageTitle}</h1>
         <p className="text-gray-400 mb-6">{pageDescription}</p>
-        
+
         {/* Videos Grid Section */}
         <section className="py-4">
           <VideoGrid
@@ -184,7 +184,7 @@ const VideoCategoryPage = () => {
             </div>
           )}
         </section>
-        
+
         {/* Bottom Content Section */}
         {bottomContentJSX && (
           <div className="mt-12">

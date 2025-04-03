@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* Import theme variables */
-@import './themes.css';
+@import "./themes.css";
 
 .box,
 .box-content {
@@ -116,9 +116,9 @@
   --color-secondary: #2a2a2a;
   --color-text-primary: #ffffff;
   --color-text-secondary: #b0b0b0;
-  --color-text-accent: #FF007A;
+  --color-text-accent: #ff007a;
   --color-border: #333333;
-  --color-button-primary: #FF007A;
+  --color-button-primary: #ff007a;
   --color-button-primary-hover: #ff3399;
   --color-button-secondary: #333333;
   --color-button-secondary-hover: #444444;
@@ -131,9 +131,10 @@
 }
 
 /* Theme transition effects */
-body, 
+body,
 body * {
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease,
+    color 0.3s ease;
 }
 
 /* Fix some of the transition effects for performance */
@@ -153,7 +154,8 @@ img {
 
 .model-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 /* Sidebar animation */
@@ -1095,6 +1097,9 @@ li.categories_items a:hover {
   font-size: 11px;
   padding: 2px 6px;
   border-radius: 4px;
-  background-color: #E0006C;
+  background-color: #e0006c;
   color: white;
+}
+.EZDrawer .EZDrawer__container {
+  background-color: black !important;
 }
