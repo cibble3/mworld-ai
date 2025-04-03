@@ -7,6 +7,10 @@ import Image from 'next/image';
  * DynamicSidebar component that displays trending models and other dynamic content
  * This appears on the left side of the page
  */
+export const popularTags = [
+  'asian', 'ebony', 'latina', 'white', 'teen', 'milf',
+  'bbw', 'mature', 'lesbian', 'squirt', 'anal', 'fetish'
+];
 const DynamicSidebar = () => {
   const [trendingModels, setTrendingModels] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -85,10 +89,7 @@ const DynamicSidebar = () => {
   }, []);
 
   // Popular tags that could be fetched from API in the future
-  const popularTags = [
-    'asian', 'ebony', 'latina', 'white', 'teen', 'milf',
-    'bbw', 'mature', 'lesbian', 'squirt', 'anal', 'fetish'
-  ];
+
 
   return (
     <div className="p-4 border-r border-[#333] lg:block hidden">

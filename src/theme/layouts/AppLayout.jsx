@@ -7,7 +7,10 @@ import LegacyTopbar from '../components/navigation/LegacyTopbar';
 import CookiesModal from '@/components/CookiesModal/CookiesModal';
 import TopText from '../components/content/TopText';
 import BottomContent from '../components/content/BottomContent';
-
+import Link from 'next/link';
+import { FaInstagram, FaTwitter } from "react-icons/fa6";
+import { IoLogoYoutube } from 'react-icons/io';
+import { popularTags } from '@/components/navigation/DynamicSidebar';
 const LegacyLayout = ({
   children,
   meta = {},
@@ -68,7 +71,7 @@ const LegacyLayout = ({
 
         {/* Footer */}
         <footer
-          className={`border-t py-8 ${showSidebar ? 'ml-64' : ''}`}
+          className={`border-t py-8 ${showSidebar ? 'lg:ml-64 ml-0' : ''}`}
           style={{
             backgroundColor: '#1a1a1a',
             borderColor: '#333',
@@ -76,7 +79,7 @@ const LegacyLayout = ({
         >
           <Container>
             {/* Footer content */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div>
                 <h3 className="text-pink-500 font-bold mb-4">Company</h3>
                 <ul className="space-y-2">
@@ -106,14 +109,46 @@ const LegacyLayout = ({
                 <h3 className="text-pink-500 font-bold mb-4">Follow Us</h3>
                 <div className="flex space-x-4">
                   <a href="#" className="text-gray-300 hover:text-white text-2xl">
-                    <i className="fab fa-instagram"></i>
+                    <FaInstagram />
                   </a>
                   <a href="#" className="text-gray-300 hover:text-white text-2xl">
-                    <i className="fab fa-youtube"></i>
+                    <IoLogoYoutube />
                   </a>
                   <a href="#" className="text-gray-300 hover:text-white text-2xl">
-                    <i className="fab fa-twitter"></i>
+                    <FaTwitter />
                   </a>
+                </div>
+              </div>
+              <div className="lg:hidden block">
+                <h3 className="text-pink-500 font-bold text-xl mb-4">Quick Links</h3>
+                <ul className="space-y-2">
+                  <li>
+                    <Link href="/girls" className="text-gray-300 hover:text-white">Girls</Link>
+                  </li>
+                  <li>
+                    <Link href="/trans" className="text-gray-300 hover:text-white">Trans</Link>
+                  </li>
+                  <li>
+                    <Link href="/fetish" className="text-gray-300 hover:text-white">Fetish</Link>
+                  </li>
+                  <li>
+                    <Link href="/free" className="text-gray-300 hover:text-white">Free Cams</Link>
+                  </li>
+                  <li>
+                    <Link href="/videos" className="text-gray-300 hover:text-white">Videos</Link>
+                  </li>
+                </ul>
+              </div>
+              <div className="lg:hidden block">
+                <h3 className="text-pink-500 font-bold text-xl mb-4">Popular Tags</h3>
+                <div className="flex flex-wrap gap-2">
+                  {popularTags.map((tag) => (
+                    <Link href={`/tag/${tag}`} key={tag}>
+                      <span className="px-2 py-1 bg-gray-800 text-sm rounded hover:bg-gray-700 transition-colors">
+                        {tag}
+                      </span>
+                    </Link>
+                  ))}
                 </div>
               </div>
             </div>

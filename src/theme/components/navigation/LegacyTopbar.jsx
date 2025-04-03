@@ -8,7 +8,8 @@ import useCategories from '@/hooks/useCategories';
 import { capitalizeString, slugify } from '@/utils/string-helpers';
 import Drawer from "react-modern-drawer";
 import "react-modern-drawer/dist/index.css";
-import { IoMenuSharp } from 'react-icons/io5';
+import { IoLanguageOutline, IoMenuSharp } from 'react-icons/io5';
+import { CiLogin } from "react-icons/ci";
 
 const formatFilterName = (name) => {
   return capitalizeString(name.replace(/_/g, ' '));
@@ -31,7 +32,11 @@ const LegacyTopbar = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
 
   const [isOpen, setIsOpen] = React.useState(false);
+  const [openCategory, setOpenCategory] = useState(null);
 
+  const handleToggle = (slug) => {
+    setOpenCategory(openCategory === slug ? null : slug);
+  };
 
   const toggleDrawer = () => {
     setIsOpen((prevState) => !prevState);
@@ -175,79 +180,77 @@ const LegacyTopbar = () => {
           <div className="flex items-center space-x-2">
             <div onClick={toggleDrawer} className="block xl:hidden">
               <IoMenuSharp fontSize={24} />
-              <Drawer
-                open={isOpen}
-                onClose={toggleDrawer}
-                direction="left"
-                className="bla bla bla"
-              >
-                <div>
-                  <ul className="flex flex-col items-start p-5 gap-5 text-xl h-full text-lightgray font-semibold">
-                    {isLoading ? (
-                      <span className="text-sm">Loading Nav...</span>
-                    ) : isError ? (
-                      <span className="text-sm text-red-500">Error</span>
-                    ) : (
-                      categories
-                        .filter(cat => ['girls', 'trans', 'fetish', 'free', 'videos'].includes(cat.slug))
-                        .map((cat) => {
-                          const isActive = currentMainCategorySlug === cat.slug;
-                          const hasFilters = cat.filters && cat.filters.length > 0;
-                          return (
-                            <div
-                              key={cat.slug}
-                              className="relative group"
-                              onMouseEnter={hasFilters ? () => handleMouseEnter(cat.slug) : undefined}
-                              onMouseLeave={hasFilters ? handleMouseLeave : undefined}
-                            >
-                              <Link
-                                href={`/${cat.slug}`}
-                                className={`px-3 py-1 text-md transition-colors ${isActive ? '' : 'hover:text-gray-300'}`}
-                                style={isActive ? activeLinkStyle : {}}
-                              >
-                                {cat.name}
-                                {hasFilters && <span className="ml-1 text-xs">▼</span>}
-                              </Link>
-
-                              {hasFilters && openDropdown === cat.slug && (
-                                <div
-                                  className="absolute left-0 mt-1 w-64 rounded shadow-lg z-30 border"
-                                  style={dropdownStyle}
-                                >
-                                  {cat.filters.map((filter) => (
-                                    <div key={filter.type} className="py-1">
-                                      <span className="block px-4 pt-1 pb-0.5 text-xs font-semibold uppercase tracking-wider" style={{ color: currentTheme.text?.primary || '#fff' }}>{formatFilterName(filter.name)}</span>
-                                      <div className="grid grid-cols-2 gap-x-2 px-4 pb-1">
-                                        {filter.options.map((option) => {
-                                          const filterSlug = slugify(filter.type);
-                                          const optionSlug = slugify(option);
-                                          const href = `/${cat.slug}/${filterSlug}/${optionSlug}`;
-                                          const isFilterActive = router.asPath.includes(href);
-                                          return (
-                                            <Link
-                                              key={optionSlug}
-                                              href={href}
-                                              className={`block py-0.5 text-xs rounded transition-colors ${isFilterActive ? 'text-pink-500 font-semibold' : 'hover:bg-gray-700'}`}
-                                              onClick={handleMouseLeave}
-                                            >
-                                              {capitalizeString(option)}
-                                            </Link>
-                                          );
-                                        })}
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })
-                    )}
-
-                  </ul>
-                </div>
-              </Drawer>
             </div>
+            <Drawer
+              open={isOpen}
+              onClose={toggleDrawer}
+              direction="left"
+              className="bla bla bla"
+            >
+              <div>
+                <ul className="flex flex-col items-start p-5 gap-5 text-xl h-full text-lightgray font-semibold">
+                  {isLoading ? (
+                    <span className="text-sm">Loading Nav...</span>
+                  ) : isError ? (
+                    <span className="text-sm text-red-500">Error</span>
+                  ) : (
+                    categories
+                      .filter((cat) => ["girls", "trans", "fetish", "free", "videos"].includes(cat.slug))
+                      .map((cat) => {
+                        const isActive = currentMainCategorySlug === cat.slug;
+                        const hasFilters = cat.filters && cat.filters.length > 0;
+                        const isOpen = openCategory === cat.slug;
+
+                        return (
+                          <div key={cat.slug} className="w-full">
+                            <button
+                              onClick={() => handleToggle(cat.slug)}
+                              className={`flex justify-between w-full px-3 py-1 text-md transition-colors ${isActive ? "" : "hover:text-gray-300"}`}
+                              style={isActive ? activeLinkStyle : {}}
+                            >
+                              {cat.name}
+                              {hasFilters && <span className="ml-1 text-xs">{isOpen ? "▲" : "▼"}</span>}
+                            </button>
+
+                            {hasFilters && isOpen && (
+                              <div className="mt-1 w-full rounded shadow-lg border p-2">
+                                {cat.filters.map((filter) => (
+                                  <div key={filter.type} className="py-1">
+                                    <span className="block px-4 pt-1 pb-0.5 text-xs font-semibold uppercase tracking-wider">
+                                      {formatFilterName(filter.name)}
+                                    </span>
+                                    <div className="grid grid-cols-2 gap-x-2 px-4 pb-1">
+                                      {filter.options.map((option) => {
+                                        const filterSlug = slugify(filter.type);
+                                        const optionSlug = slugify(option);
+                                        const href = `/${cat.slug}/${filterSlug}/${optionSlug}`;
+                                        const isFilterActive = router.asPath.includes(href);
+
+                                        return (
+                                          <Link
+                                            key={optionSlug}
+                                            href={href}
+                                            className={`block py-0.5 text-xs rounded transition-colors ${isFilterActive ? "text-pink-500 font-semibold" : "hover:bg-gray-700"
+                                              }`}
+                                            onClick={() => setOpenCategory(null)}
+                                          >
+                                            {capitalizeString(option)}
+                                          </Link>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })
+                  )}
+                </ul>
+              </div>
+            </Drawer>
+
             {/* Language Dropdown */}
             {/* <div>
               <button>Theme</button>
@@ -255,10 +258,11 @@ const LegacyTopbar = () => {
             <div className="relative">
               <button
                 onClick={() => setIsLanguageOpen(!isLanguageOpen)}
-                className="text-sm flex items-center justify-between border border-gray-700 rounded px-2 py-1 min-w-[120px]"
+                className="text-sm flex items-center justify-between border border-gray-700 rounded px-2 py-1 md:min-w-[120px] "
                 style={buttonStyle}
               >
-                <span className=''>Select Language</span>
+                <span className='md:block hidden'>Select Language</span>
+                <span className='md:hidden block'><IoLanguageOutline /></span>
                 <span className="ml-2">▼</span>
               </button>
 
@@ -286,13 +290,14 @@ const LegacyTopbar = () => {
               className="text-sm px-3 py-1.5 border border-gray-700 rounded"
               style={buttonStyle}
             >
-              Login
+              <div className='md:block hidden' > Login</div>
+              <div className='md:hidden block' > <CiLogin /></div>
             </Link>
 
             {/* Join Now */}
             <Link
               href="/join"
-              className="text-sm px-3 py-1.5 rounded text-white"
+              className="md:text-sm text-[10px] px-3 py-1.5 rounded text-white"
               style={primaryButtonStyle}
             >
               Join Now for FREE
