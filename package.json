@@ -1,0 +1,51 @@
+{
+  "name": "mistressworld",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start -p 3000 || (echo '\n⚠️ Port 3000 is in use, trying 3001 instead...' && next start -p 3001)",
+    "lint": "next lint",
+    "sync:awe": "node src/cli/awe-sync.js",
+    "flatten:categories": "node src/cli/flatten-categories.js",
+    "jobs:process": "node src/cli/job-runner.js",
+    "job:add-awe": "node src/cli/create-awe-job.js",
+    "job:add-categories": "node src/cli/create-category-job.js",
+    "scheduler:start": "node src/cli/scheduler.js",
+    "generate:model": "node ai-writer.js --type=model",
+    "generate:category": "node ai-writer.js --type=category",
+    "job:daily": "node jobs/job-runner.js --schedule=daily",
+    "job:weekly": "node jobs/job-runner.js --schedule=weekly",
+    "job:monthly": "node jobs/job-runner.js --schedule=monthly"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.6.1",
+    "@upstash/redis": "^1.34.6",
+    "axios": "^1.5.1",
+    "chalk": "^4.1.2",
+    "commander": "^11.0.0",
+    "dompurify": "^3.2.4",
+    "dotenv": "^16.4.7",
+    "he": "^1.2.0",
+    "nanospinner": "^1.1.0",
+    "next": "^15.2.4",
+    "node-cron": "^3.0.3",
+    "openai": "^4.12.4",
+    "react": "^18",
+    "react-bootstrap": "^2.10.9",
+    "react-device-detect": "^2.2.3",
+    "react-dom": "^18",
+    "react-icons": "^4.11.0",
+    "react-redux": "^9.2.0",
+    "swiper": "^11.2.6",
+    "swr": "^2.3.3"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10",
+    "eslint": "^8",
+    "eslint-config-next": "13.5.4",
+    "postcss": "^8",
+    "tailwindcss": "^3"
+  }
+}

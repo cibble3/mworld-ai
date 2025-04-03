@@ -1,0 +1,4041 @@
+@media only screen and (max-width: 767px) {
+  .courses-details-info .image .content span,
+  .order-details .order-table table thead tr th,
+  .privacy-policy-content ol li,
+  .privacy-policy-content ul li,
+  .purchase-guide-content ol li,
+  .purchase-guide-content ul li,
+  .terms-of-service-content ol li,
+  .terms-of-service-content ul li,
+  .widget-area .widget_recent_courses .item .info .title,
+  body,
+  p {
+    font-size: 14.5px;
+  }
+  .blog-details-desc .article-footer .article-share,
+  .blog-details-desc .article-footer .article-tags,
+  .courses-details-desc-style-two .why-you-learn ul li,
+  .overview-box .overview-content,
+  .overview-box .overview-image,
+  .prev-link-wrapper {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  .banner-section .container-fluid,
+  .contact-info ul li p,
+  .container,
+  .error-content p,
+  .hero-banner-area .container-fluid,
+  .main-banner .container-fluid,
+  .main-banner-wrapper .container-fluid,
+  .start-with-success-area .section-title h2,
+  .yoga-banner-content {
+    max-width: 100%;
+  }
+  p {
+    line-height: 1.7;
+  }
+  .hero-banner-area,
+  .ptb-100,
+  .view-all-courses-area-two.ptb-70 {
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+  .about-area-two.pt-70,
+  .experience-area.extra-padding,
+  .footer-area,
+  .funfacts-area .col-lg-3:first-child .single-funfacts-item,
+  .pt-100,
+  .subscribe-area-two,
+  .view-all-courses-area {
+    padding-top: 60px;
+  }
+  .boxes-area,
+  .pt-70,
+  .ptb-70 {
+    padding-top: 30px;
+  }
+  .courses-area.pt-100.pb-70,
+  .kindergarten-services-area,
+  .pb-100 {
+    padding-bottom: 60px;
+  }
+  .courses-area.pt-100.pb-70.bg-f5f7fa,
+  .pb-70,
+  .ptb-70 {
+    padding-bottom: 30px;
+  }
+  .default-btn {
+    font-size: 13px;
+    padding: 10px 20px 10px 45px;
+  }
+  .default-btn i {
+    left: 20px;
+  }
+  .section-title {
+    max-width: 100%;
+    margin-bottom: 40px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .about-content .sub-title,
+  .about-content-box .sub-title,
+  .experience-content .sub-title,
+  .feedback-content .sub-title,
+  .free-trial-form .sub-title,
+  .information-content .sub-title,
+  .overview-box .overview-content .sub-title,
+  .premium-access-content .sub-title,
+  .section-title .sub-title,
+  .subscribe-content .sub-title {
+    font-size: 12.5px;
+  }
+  .premium-access-content h2,
+  .section-title h2,
+  .subscribe-content h2 {
+    max-width: 100%;
+    font-size: 25px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .premium-access-content p,
+  .section-title p,
+  .subscribe-content p {
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 10px;
+  }
+  .mtb-100 {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .contact-form form input,
+  .contact-form form textarea,
+  .form-control,
+  .teacher-register-box form input,
+  .teacher-register-box form textarea {
+    height: 48px;
+    font-size: 14.5px;
+  }
+  .main-banner {
+    padding-top: 70px;
+    padding-bottom: 70px;
+  }
+  .banner-section,
+  .banner-wrapper-area,
+  .kindergarten-main-banner {
+    padding-top: 100px;
+  }
+  .main-banner-content {
+    max-width: 100%;
+    text-align: center;
+    padding-right: 0;
+  }
+  .banner-content p,
+  .banner-wrapper-content p,
+  .banner-wrapper-text p,
+  .main-banner-content p {
+    max-width: 100%;
+    font-weight: 500;
+    font-size: 15px;
+  }
+  .banner-wrapper-text h1,
+  .main-banner-content h1 {
+    margin-bottom: 15px;
+    font-size: 28px;
+  }
+  .banner-content h1,
+  .banner-wrapper-content h1 {
+    margin-bottom: 12px;
+    font-size: 28px;
+  }
+  .banner-content .default-btn,
+  .banner-wrapper-text .default-btn,
+  .courses-info,
+  .hero-banner-content .default-btn,
+  .kindergarten-banner-content .default-btn-style-two,
+  .main-banner-content .default-btn,
+  .main-banner-wrapper-content .default-btn,
+  .single-language-courses-box .default-btn,
+  .yoga-banner-content .content .default-btn {
+    margin-top: 5px;
+  }
+  .main-banner-courses-list .single-courses-box {
+    margin-top: 30px !important;
+  }
+  .banner-section {
+    padding-bottom: 80px;
+  }
+  .apply-instructor-image,
+  .banner-content,
+  .banner-wrapper-content,
+  .blog-details-desc .article-footer,
+  .cart-buttons .shopping-coupon-code,
+  .contact-info,
+  .elearniv-grid-sorting,
+  .elearniv-grid-sorting .ordering,
+  .feedback-content,
+  .hero-banner-content,
+  .information-content,
+  .single-features-box.without-padding,
+  .view-all-courses-content {
+    text-align: center;
+  }
+  .banner-content h1 {
+    line-height: 1.4;
+  }
+  .about-img,
+  .banner-image,
+  .banner-wrapper-image,
+  .courses-sidebar-information .btn-box,
+  .hero-banner-image,
+  .information-image,
+  .kindergarten-banner-image,
+  .main-banner-wrapper-image {
+    margin-top: 30px;
+  }
+  .banner-shape1,
+  .banner-shape10,
+  .banner-shape11,
+  .banner-shape12,
+  .banner-shape13,
+  .banner-shape14,
+  .banner-shape15,
+  .banner-shape16,
+  .banner-shape17,
+  .banner-shape18,
+  .banner-shape19,
+  .banner-shape2,
+  .banner-shape3,
+  .banner-shape4,
+  .banner-shape5,
+  .banner-shape6,
+  .banner-shape7,
+  .banner-shape8,
+  .banner-shape9,
+  .banner-wrapper::before,
+  .divider,
+  .divider2,
+  .divider3,
+  .download-syllabus-form .syllabus-shape1,
+  .download-syllabus-form .syllabus-shape2,
+  .download-syllabus-form .syllabus-shape3,
+  .events-details-image::before,
+  .experience-content .shape,
+  .experience-shape1,
+  .experience-shape2,
+  .health-coaching-banner-content h1 br,
+  .health-coaching-shape1,
+  .health-coaching-shape2,
+  .health-coaching-shape3,
+  .health-coaching-shape4,
+  .health-coaching-shape5,
+  .health-coaching-shape6,
+  .health-coaching-shape7,
+  .kids-kite-image,
+  .kindergarten-about-image .shape,
+  .kindergarten-services-area::before,
+  .kindergarten-shape1,
+  .kindergarten-shape10,
+  .kindergarten-shape11,
+  .kindergarten-shape12,
+  .kindergarten-shape13,
+  .kindergarten-shape14,
+  .kindergarten-shape15,
+  .kindergarten-shape16,
+  .kindergarten-shape17,
+  .kindergarten-shape18,
+  .kindergarten-shape19,
+  .kindergarten-shape2,
+  .kindergarten-shape20,
+  .kindergarten-shape3,
+  .kindergarten-shape4,
+  .kindergarten-shape5,
+  .kindergarten-shape6,
+  .kindergarten-shape7,
+  .kindergarten-shape8,
+  .kindergarten-shape9,
+  .newsletter-modal .newsletter-modal-content .modal-image,
+  .object1,
+  .object2,
+  .object3,
+  .object4,
+  .program-list .program-circle-shape,
+  .shape1,
+  .shape10,
+  .shape11,
+  .shape12,
+  .shape13,
+  .shape14,
+  .shape15,
+  .shape16,
+  .shape17,
+  .shape18,
+  .shape19,
+  .shape2,
+  .shape20,
+  .shape21,
+  .shape22,
+  .shape23,
+  .shape3,
+  .shape4,
+  .shape5,
+  .shape6,
+  .shape7,
+  .shape8,
+  .shape9,
+  .single-blog-item .post-image::before,
+  .single-blog-post-box .post-content .post-content-footer li .post-author img,
+  .single-feedback-item::after,
+  .single-funfacts img,
+  .single-kindergarten-courses-box .courses-image::before,
+  .single-kindergarten-feedback-item .content img,
+  .single-testimonials-item .shape-img,
+  .tree-shape,
+  .tree-shape2,
+  .tree-shape3,
+  .yoga-banner-content .content .bottom-image,
+  .yoga-banner-content .content .top-image,
+  .yoga-banner-content .main-image {
+    display: none;
+  }
+  .banner-wrapper-content form .input-search,
+  .single-feedback-item p {
+    font-size: 15px;
+  }
+  .banner-wrapper-content form button {
+    font-size: 14px;
+    height: auto;
+    border-radius: 5px;
+    margin-top: 15px;
+    position: relative;
+    padding: 10px 25px;
+  }
+  .banner-wrapper-content .popular-search-list {
+    margin-top: 17px;
+  }
+  .banner-wrapper-content .popular-search-list li {
+    font-size: 14px;
+    margin-right: 10px;
+    margin-top: 3px;
+  }
+  .banner-inner-area .row .col-lg-4:last-child .single-banner-box {
+    border-bottom: none;
+  }
+  .single-banner-box {
+    padding: 25px;
+    text-align: center;
+    border-radius: 0 !important;
+    border-right: none;
+    border-bottom: 1px solid #eee;
+  }
+  .single-banner-box .icon {
+    position: relative;
+    left: 0;
+    top: 0;
+    transform: unset;
+    font-size: 35px;
+    margin-bottom: 15px;
+  }
+  .information-content .apply-details li h3,
+  .single-banner-box h3 {
+    margin-bottom: 8px;
+    font-size: 18px;
+  }
+  .banner-wrapper {
+    height: auto;
+    padding-top: 120px;
+    padding-bottom: 100px;
+  }
+  .banner-wrapper-text {
+    max-width: 100%;
+    text-align: center;
+    margin-top: 0;
+    margin-left: 0;
+  }
+  .single-box-item {
+    top: 0;
+    padding: 55px 20px 25px;
+    margin-bottom: 0;
+    margin-top: 30px;
+  }
+  .single-box-item .icon {
+    font-size: 50px;
+    margin-bottom: 50px;
+  }
+  .contact-info ul li h3,
+  .single-advisor-box .advisor-content h3,
+  .single-blog-post .post-content h3,
+  .single-blog-post-box .post-content h3,
+  .single-blog-post-item .post-content h3,
+  .single-box-item h3,
+  .single-courses-box .courses-content h3,
+  .single-courses-item .courses-content h3,
+  .single-courses-item-box .courses-content h3,
+  .single-testimonials-item h3,
+  .slogan-content h3 {
+    font-size: 18px;
+  }
+  .partner-area {
+    padding-bottom: 20px;
+  }
+  .partner-area.ptb-70 {
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+  .single-features-box {
+    padding: 20px 15px;
+  }
+  .single-features-box .icon {
+    font-size: 40px;
+  }
+  .privacy-policy-content h3,
+  .purchase-guide-content h3,
+  .single-features-box h3,
+  .terms-of-service-content h3 {
+    margin-bottom: 12px;
+    font-size: 18px;
+  }
+  .single-features-box .link-btn {
+    margin-top: 3px;
+    font-size: 14.5px;
+  }
+  .single-features-box:hover {
+    transform: translateY(0);
+  }
+  .about-image .row .col-lg-6:nth-child(3) .image,
+  .feedback-info,
+  .feedback-info p {
+    margin-top: 0;
+  }
+  .about-content {
+    padding-left: 0;
+    text-align: center;
+    margin-top: 30px;
+  }
+  .about-content h2,
+  .about-content-box h2,
+  .feedback-content h2,
+  .get-instant-courses-content h2,
+  .single-courses-item-box .courses-image .fav,
+  .view-all-courses-content h2 {
+    font-size: 25px;
+  }
+  .about-content .features-list,
+  .profile-courses-quizzes .tab-content .nav {
+    margin-top: -10px;
+  }
+  .about-content .features-list li span {
+    font-size: 16px;
+    padding-left: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .about-content .features-list li span i {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    font-size: 20px;
+    display: block;
+    margin: 0 auto 5px;
+  }
+  .about-content .default-btn {
+    margin-top: 25px;
+  }
+  .about-content-box,
+  .slogan-content {
+    padding-left: 0;
+    text-align: center;
+  }
+  .about-video-box,
+  .view-all-courses-image {
+    margin-top: 30px;
+    margin-left: 0;
+  }
+  .about-video-box .video-btn,
+  .video-box .video-btn {
+    width: 65px;
+    height: 65px;
+    font-size: 30px;
+    line-height: 65px;
+  }
+  .about-img .image {
+    text-align: center;
+    padding-bottom: 0;
+  }
+  .about-img .image img,
+  .apply-instructor-image img,
+  .kindergarten-about-image .main-image img {
+    width: 100%;
+  }
+  .about-img .image img:nth-child(2) {
+    position: relative;
+    left: 0;
+    bottom: 0;
+    margin-top: 25px;
+  }
+  .slogan-image {
+    padding-right: 0;
+    margin-top: 0;
+    margin-bottom: 30px;
+  }
+  .slogan-content p {
+    font-size: 17px;
+  }
+  .slogan-content span {
+    font-size: 14px;
+    margin-top: 6px;
+  }
+  .slogan-content::before {
+    right: 0;
+    left: 0;
+    top: 0;
+    font-size: 160px;
+  }
+  .single-courses-box .courses-image .price {
+    width: 50px;
+    height: 50px;
+    right: 15px;
+    bottom: -25px;
+    line-height: 52px;
+    font-size: 18px;
+  }
+  .download-syllabus-form,
+  .events-box .content,
+  .feedback-quote,
+  .order-details .payment-box,
+  .single-blog-post-box .post-content,
+  .single-courses-box .courses-content,
+  .single-courses-item .courses-content,
+  .single-kindergarten-courses-box .courses-content {
+    padding: 20px;
+  }
+  .coming-soon-content #timer div span,
+  .download-syllabus-form form .form-group .nice-select,
+  .elearniv-grid-sorting .ordering label,
+  .membership-levels-table .table thead th h3,
+  .newsletter-modal
+    .newsletter-modal-content
+    .modal-inner-content
+    form
+    .input-newsletter,
+  .order-details .order-table table tbody tr td,
+  .overview-box .overview-content .btn-box .applestore-btn span,
+  .overview-box .overview-content .btn-box .playstore-btn span,
+  .single-blog-post-box .post-content .post-content-footer li,
+  .single-blog-post-box .post-content .post-content-footer li .post-author span,
+  .single-categories-box .content span,
+  .single-courses-box .courses-content .courses-box-footer li,
+  .single-courses-item .courses-content .courses-content-footer li,
+  .single-events-box .image .date,
+  .start-with-success-box .content span {
+    font-size: 14px;
+  }
+  .single-courses-box.without-boxshadow {
+    box-shadow: 0 8px 16px 0 rgba(146, 184, 255, 0.2);
+  }
+  .blog-post-info p,
+  .courses-info p,
+  .kindergarten-banner-content p,
+  .premium-access-content,
+  .subscribe-content {
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .courses-details-info .info li.price,
+  .courses-sidebar-information .info li.price,
+  .events-details-info .info li.price,
+  .related-courses h3,
+  .single-categories-box .content h3,
+  .single-courses-item .courses-content .fav,
+  .single-footer-widget h3 {
+    font-size: 20px;
+  }
+  .single-courses-item .courses-content .price {
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+  .our-story-content,
+  .profile-box .image,
+  .single-courses-item .courses-content .courses-content-footer {
+    padding-right: 0;
+  }
+  .single-courses-item-box .courses-image .price {
+    width: 50px;
+    height: 50px;
+    bottom: -25px;
+    line-height: 52px;
+    font-size: 18px;
+  }
+  .cart-totals ul,
+  .faq-accordion-tab .react-tabs__tab-list,
+  .feedback-content .feedback-slides,
+  .kindergarten-banner-content .image,
+  .shorting-menu {
+    margin-bottom: 20px;
+  }
+  .shorting-menu .filter {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  .categories-btn-box,
+  .coming-soon-content #timer,
+  .events-details-header ul li,
+  .profile-courses-quizzes .tab-content .nav .nav-item {
+    margin-top: 10px;
+  }
+  .boxes-area.boxes-style-two .single-box-item,
+  .single-advisor-box .advisor-image {
+    top: 0;
+    margin-bottom: 0;
+  }
+  .single-advisor-box .advisor-image img {
+    width: 100%;
+    display: inline-block !important;
+  }
+  .single-advisor-box .advisor-content,
+  .start-with-success-box .content {
+    padding: 25px 20px;
+  }
+  .single-advisor-box .advisor-content .sub-title,
+  .single-advisor-item .advisor-content span {
+    font-size: 13.5px;
+  }
+  .single-advisor-item .advisor-image .social-link {
+    bottom: 10px;
+  }
+  .single-advisor-item .advisor-image .social-link li {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+  .blog-details-desc .article-content h3,
+  .comments-area .comment-respond .comment-reply-title,
+  .comments-area .comments-title,
+  .courses-details-desc-style-two .courses-reviews h3,
+  .events-details-desc h3,
+  .products-details-desc h3,
+  .profile-box .content h3,
+  .single-advisor-item .advisor-content h3,
+  .single-kindergarten-services-box .content h3,
+  .widget-area .widget .widget-title {
+    font-size: 19px;
+  }
+  .single-feedback-item {
+    text-align: left;
+    padding: 25px;
+  }
+  .single-feedback-item::before {
+    font-size: 60px;
+    right: 25px;
+    bottom: 60px;
+  }
+  .single-testimonials-item {
+    padding-left: 0;
+  }
+  .single-testimonials-item .client-img {
+    position: relative;
+    left: 0;
+    width: 120px !important;
+    height: 120px;
+    top: 0;
+    transform: translateY(0);
+    margin-bottom: 20px;
+  }
+  .single-testimonials-item p {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+  .single-feedback-box,
+  .teacher-register-box {
+    padding: 25px;
+  }
+  .single-feedback-box::before {
+    right: 20px;
+    bottom: 50px;
+    font-size: 70px;
+  }
+  .funfacts-list .single-funfacts-box {
+    margin-bottom: 0 !important;
+    margin-top: 30px !important;
+  }
+  .single-funfacts-box {
+    padding: 40px 20px;
+  }
+  .single-funfacts h3,
+  .single-funfacts-box h3,
+  .single-funfacts-item h3 {
+    font-size: 30px;
+  }
+  .single-funfacts h3 span,
+  .single-funfacts-box h3 span,
+  .single-funfacts-item h3 span {
+    font-size: 35px;
+  }
+  .get-instant-courses-content .sub-title,
+  .next-link-wrapper .meta-wrapper,
+  .prev-link-wrapper .meta-wrapper,
+  .single-blog-item .post-content .category,
+  .single-funfacts p,
+  .single-funfacts-box p,
+  .single-funfacts-item p,
+  .view-all-courses-content .sub-title {
+    font-size: 13px;
+  }
+  .funfacts-area .col-lg-3,
+  .funfacts-area-two .col-lg-3 {
+    border-right: none;
+  }
+  .funfacts-area .col-lg-3:last-child .single-funfacts-item {
+    border-bottom: none;
+    padding-bottom: 60px;
+  }
+  .single-funfacts,
+  .single-funfacts-item {
+    border-bottom: 1px solid #eaecf0;
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
+  .funfacts-area-two {
+    border: none;
+  }
+  .funfacts-area-two .col-lg-3:first-child .single-funfacts {
+    padding-top: 0;
+  }
+  .funfacts-area-two .col-lg-3:last-child .single-funfacts {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .video-box {
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 60px;
+  }
+  .coming-soon-content,
+  .get-instant-courses-content {
+    padding: 30px 20px;
+  }
+  .single-blog-post .post-content .category,
+  .single-blog-post-box .post-content .category,
+  .single-blog-post-item .post-content .category {
+    font-size: 12px;
+  }
+  .single-blog-post .post-content .post-content-footer,
+  .single-blog-post-box .post-content .post-content-footer,
+  .single-blog-post-item .post-content .post-content-footer {
+    margin-top: 15px;
+  }
+  .blog-post-info {
+    padding-top: 25px;
+  }
+  .subscribe-content .newsletter-form .input-newsletter {
+    height: 48px;
+    padding-left: 15px;
+    font-size: 14px;
+  }
+  .subscribe-content .newsletter-form .default-btn {
+    position: relative;
+    border-radius: 5px;
+    height: auto;
+    margin-top: 15px;
+  }
+  .subscribe-content .newsletter-form .default-btn i {
+    top: 10px;
+  }
+  .page-title-area {
+    padding-top: 15px;
+    padding-bottom: 50px;
+  }
+  .page-title-content ul li {
+    font-size: 14px;
+    margin-right: 17px;
+    margin-bottom: 8px;
+  }
+  .page-title-content ul li::before {
+    right: -11px;
+    top: 4px;
+    height: 13px;
+  }
+  .page-title-content h2 {
+    max-width: 100%;
+    margin-top: 50px;
+    font-size: 26px;
+  }
+  .single-testimonials-box {
+    max-width: 100%;
+    padding-right: 0;
+  }
+  .single-testimonials-box .client-img,
+  .subscribe-image {
+    margin-bottom: 35px;
+  }
+  .courses-details-header .courses-meta ul li:last-child,
+  .load-more-btn {
+    margin-bottom: 0;
+  }
+  .single-testimonials-box p {
+    font-size: 18px;
+    line-height: 1.6;
+  }
+  .single-kindergarten-services-box img,
+  .single-testimonials-box .shape-img img.shape-2 {
+    display: none !important;
+  }
+  .single-testimonials-box::before {
+    bottom: -15px;
+    font-size: 100px;
+  }
+  .our-story-title h3 {
+    font-size: 18px;
+    padding-left: 22px;
+  }
+  .our-story-title h3 .number {
+    top: 1px;
+    font-size: 20px;
+  }
+  .feedback-quote .client-info,
+  .health-coaching-banner-content .btn-box,
+  .our-story-area .col-lg-4,
+  .our-story-area .col-lg-8,
+  .our-story-area .col-lg-8:nth-child(2),
+  .our-story-image,
+  .pagination-area {
+    margin-top: 20px;
+  }
+  .start-with-success-box .content h3 {
+    font-size: 18px;
+    margin-bottom: 7px;
+  }
+  .start-with-success-box .content .link-btn {
+    width: 50px;
+    height: 50px;
+    right: 20px;
+    top: -25px;
+    font-size: 25px;
+  }
+  .faq-accordion-tab .react-tabs__tab-list .react-tabs__tab {
+    margin-bottom: 20px;
+    padding: 15px;
+    font-size: 14px;
+  }
+  .contact-form h2,
+  .contact-info h2,
+  .download-syllabus-form h2,
+  .error-content h3,
+  .experience-content h2,
+  .faq-accordion-tab .react-tabs__tab-list .react-tabs__tab i,
+  .free-trial-form h2,
+  .membership-levels-table .table thead th h2,
+  .overview-box .overview-content h2,
+  .program-section-title h2,
+  .single-pricing-box .price,
+  .teacher-register-box h2 {
+    font-size: 25px;
+  }
+  .faq-accordion .accordion .accordion-title {
+    padding: 15px 15px 15px 43px;
+    font-size: 14px;
+  }
+  .faq-accordion .accordion .accordion-title i {
+    left: 15px;
+    top: 50%;
+    font-size: 20px;
+    transform: translateY(-50%);
+  }
+  .faq-accordion .accordion .accordion-content {
+    padding-bottom: 15px;
+    padding-right: 15px;
+    padding-left: 42px;
+  }
+  .contact-info .sub-title {
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  .contact-info ul li {
+    padding-right: 0;
+    padding-left: 0;
+  }
+  .contact-info ul li .icon {
+    width: 60px;
+    height: 60px;
+    left: 0;
+    position: relative;
+    font-size: 30px;
+    top: 0;
+    margin-left: auto;
+    margin-bottom: 17px;
+    margin-right: auto;
+  }
+  .contact-form {
+    text-align: center;
+    padding: 25px 15px;
+    margin-left: 0;
+    margin-top: 30px;
+  }
+  .login-form {
+    padding: 30px 20px;
+    margin-right: 0;
+  }
+  .login-form h2,
+  .register-form h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 25px;
+  }
+  .login-form form .lost-your-password-wrap,
+  .register-form form .lost-your-password-wrap {
+    text-align: left;
+    margin-top: 15px;
+  }
+  .login-form form button,
+  .register-form form button {
+    padding: 13px 30px;
+    font-size: 15px;
+  }
+  .register-form {
+    margin-top: 40px;
+    border-top: 1px solid #eee;
+    padding-left: 0;
+    padding-top: 30px;
+  }
+  .error-area {
+    height: auto;
+    padding-top: 150px;
+    padding-bottom: 150px;
+  }
+  .error-content .btn-box .default-btn {
+    margin-left: 3px;
+    margin-right: 3px;
+  }
+  .coming-soon-area {
+    height: 100%;
+    padding: 120px 15px;
+  }
+  .coming-soon-content h2 {
+    margin-top: 25px;
+    font-size: 25px;
+  }
+  .coming-soon-content #timer div {
+    width: 95px;
+    height: 100px;
+    font-size: 35px;
+    margin-top: 20px;
+  }
+  .coming-soon-content form {
+    max-width: 100%;
+    margin-top: 40px;
+  }
+  .privacy-policy-content img,
+  .purchase-guide-content img,
+  .terms-of-service-content img {
+    margin-bottom: 25px;
+  }
+  .privacy-policy-content .blockquote p,
+  .privacy-policy-content blockquote p,
+  .purchase-guide-content .blockquote p,
+  .purchase-guide-content blockquote p,
+  .terms-of-service-content .blockquote p,
+  .terms-of-service-content blockquote p {
+    font-size: 15px !important;
+  }
+  .elearniv-grid-sorting .result-count {
+    margin-bottom: 13px;
+  }
+  .load-more-btn {
+    margin-top: 20px;
+  }
+  .load-more-btn .load-more {
+    padding: 12px 55px 12px 30px;
+    font-size: 15px;
+  }
+  .load-more-btn .load-more i {
+    right: 30px;
+    font-size: 16px;
+  }
+  .courses-details-desc .react-tabs__tab-list {
+    padding: 10px 15px 0;
+  }
+  .courses-details-desc .react-tabs__tab-list .react-tabs__tab {
+    margin-right: 20px;
+    margin-bottom: 10px;
+    padding: 5px 0;
+    font-size: 15px;
+  }
+  .courses-details-desc .react-tabs__tab-panel {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 30px;
+  }
+  .apply-instructor-content h3,
+  .billing-details .title,
+  .blog-details-desc
+    .article-author
+    .author-profile
+    .author-profile-title
+    .author-profile-title-details
+    .author-profile-details
+    h4,
+  .cart-totals h3,
+  .cart-totals ul li:last-child,
+  .courses-details-desc .react-tabs__tab-panel .courses-overview h3,
+  .courses-details-desc .react-tabs__tab-panel .courses-reviews h3,
+  .courses-details-desc-style-two
+    .courses-author
+    .author-profile
+    .author-profile-title
+    .author-profile-title-details
+    .author-profile-details
+    h4,
+  .events-box .content h3,
+  .order-details .title,
+  .products-details-tabs .react-tabs__tab-panel .products-reviews h3,
+  .products-details-tabs .react-tabs__tab-panel .review-form-wrapper h3,
+  .single-blog-item .post-content h3,
+  .single-events-box .content h3,
+  .single-events-box-item .content h3,
+  .single-feedback-item-box .client-info .title h3,
+  .single-health-services-box h3,
+  .single-kindergarten-courses-box .courses-content h3,
+  .single-products-box .products-content h3 {
+    font-size: 18px;
+  }
+  .courses-details-desc .react-tabs__tab-panel .courses-curriculum,
+  .courses-details-desc-style-two .courses-curriculum {
+    padding: 20px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .courses-details-desc .react-tabs__tab-panel .courses-curriculum h3,
+  .courses-details-desc-style-two .courses-curriculum h3 {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+  .courses-details-desc .react-tabs__tab-panel .courses-curriculum ul li a,
+  .courses-details-desc-style-two .courses-curriculum ul li {
+    display: block !important;
+    padding: 13px 20px 13px 45px;
+    margin-left: -20px;
+    margin-right: -20px;
+  }
+  .courses-details-desc
+    .react-tabs__tab-panel
+    .courses-curriculum
+    ul
+    li
+    a::before,
+  .courses-details-desc-style-two .courses-curriculum ul li::before {
+    left: 20px;
+    top: 13px;
+    font-size: 15px;
+  }
+  .courses-details-desc
+    .react-tabs__tab-panel
+    .courses-curriculum
+    ul
+    li
+    a
+    .courses-name {
+    font-size: 15px;
+  }
+  .courses-details-desc
+    .react-tabs__tab-panel
+    .courses-curriculum
+    ul
+    li
+    a
+    .courses-meta,
+  .courses-details-desc-style-two .courses-curriculum ul li .courses-meta {
+    text-align: left;
+    margin-top: 5px;
+  }
+  .courses-details-desc
+    .react-tabs__tab-panel
+    .courses-curriculum
+    ul
+    li
+    a
+    .courses-meta
+    .duration,
+  .courses-details-desc
+    .react-tabs__tab-panel
+    .courses-curriculum
+    ul
+    li
+    a
+    .courses-meta
+    .questions,
+  .courses-details-desc
+    .react-tabs__tab-panel
+    .courses-curriculum
+    ul
+    li
+    a
+    .courses-meta
+    .status,
+  .courses-details-desc-style-two
+    .courses-curriculum
+    ul
+    li
+    .courses-meta
+    .duration,
+  .courses-details-desc-style-two
+    .courses-curriculum
+    ul
+    li
+    .courses-meta
+    .questions,
+  .courses-details-desc-style-two
+    .courses-curriculum
+    ul
+    li
+    .courses-meta
+    .status {
+    font-size: 13.5px;
+    margin-top: 7px;
+  }
+  .about-content .about-list,
+  .courses-details-desc
+    .react-tabs__tab-panel
+    .courses-instructor
+    .single-advisor-box
+    .advisor-image,
+  .information-content .apply-details {
+    text-align: left;
+  }
+  .courses-details-desc
+    .react-tabs__tab-panel
+    .courses-instructor
+    .single-advisor-box
+    .advisor-image
+    img {
+    width: auto;
+  }
+  .courses-details-desc
+    .react-tabs__tab-panel
+    .courses-instructor
+    .single-advisor-box
+    .advisor-content,
+  .profile-box .content {
+    padding: 25px 0 0;
+  }
+  .courses-details-desc .react-tabs__tab-panel .courses-reviews .rating,
+  .courses-details-desc-style-two .courses-reviews .rating,
+  .products-details-tabs .react-tabs__tab-panel .products-reviews .rating {
+    top: 2px;
+  }
+  .courses-details-desc .react-tabs__tab-panel .courses-reviews .rating span,
+  .courses-details-desc-style-two .courses-reviews .rating span {
+    font-size: 17px;
+  }
+  .courses-details-desc .react-tabs__tab-panel .courses-reviews .side,
+  .courses-details-desc-style-two .courses-reviews .side,
+  .products-details-tabs .react-tabs__tab-panel .products-reviews .side {
+    width: 20%;
+  }
+  .courses-details-desc .react-tabs__tab-panel .courses-reviews .side div,
+  .courses-details-desc-style-two .courses-curriculum ul li .courses-name,
+  .courses-details-desc-style-two .courses-reviews .side div,
+  .courses-details-header .courses-title p,
+  .courses-details-info .courses-share .share-info span,
+  .courses-details-info .info li.price span,
+  .courses-sidebar-information .info li.price span,
+  .events-details-info .info li.price span,
+  .order-details .order-table table tbody tr td.order-shipping span,
+  .order-details .order-table table tbody tr td.order-subtotal span,
+  .order-details .order-table table tbody tr td.total-price span,
+  .single-events-box .content .location,
+  .single-products-box .products-content .price {
+    font-size: 15px;
+  }
+  .courses-details-desc .react-tabs__tab-panel .courses-reviews .middle,
+  .courses-details-desc-style-two .courses-reviews .middle,
+  .products-details-tabs .react-tabs__tab-panel .products-reviews .middle {
+    width: 60%;
+  }
+  .courses-details-desc .react-tabs__tab-panel .courses-review-comments h3,
+  .products-details-tabs .react-tabs__tab-panel .products-review-comments h3 {
+    padding-bottom: 10px;
+    font-size: 18px;
+  }
+  .cart-table table tbody tr td:first-child,
+  .cart-table table thead tr th:first-child,
+  .comments-area .comment-body,
+  .courses-details-desc
+    .react-tabs__tab-panel
+    .courses-review-comments
+    .user-review,
+  .courses-details-desc-style-two .courses-review-comments .user-review,
+  .products-details-tabs
+    .react-tabs__tab-panel
+    .products-review-comments
+    .user-review {
+    padding-left: 0;
+  }
+  .courses-details-info .btn-box,
+  .courses-details-info .courses-share,
+  .courses-details-info .info {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .courses-details-desc
+    .react-tabs__tab-panel
+    .courses-review-comments
+    .user-review
+    img,
+  .courses-details-desc-style-two .courses-review-comments .user-review img {
+    position: relative;
+    left: 0;
+    top: 0;
+    margin-bottom: 15px;
+  }
+  .courses-details-desc
+    .react-tabs__tab-panel
+    .courses-review-comments
+    .user-review
+    .review-rating
+    span,
+  .courses-details-desc-style-two
+    .courses-review-comments
+    .user-review
+    .review-rating
+    span {
+    display: block !important;
+    top: 0;
+    font-size: 16px;
+    margin-left: 0;
+    margin-top: 5px;
+  }
+  .courses-details-info,
+  .experience-img,
+  .program-list {
+    margin-left: 0;
+    margin-top: 30px;
+  }
+  .courses-details-info .image .content i {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 20px;
+  }
+  .courses-details-info .info {
+    padding-top: 30px;
+  }
+  .courses-details-info .info li,
+  .courses-sidebar-information .info li,
+  .events-details-info .info li {
+    font-size: 15px;
+    padding-top: 13px;
+    padding-bottom: 12px;
+  }
+  .courses-details-info .btn-box {
+    margin-top: 30px;
+  }
+  .courses-details-info .courses-share .share-info .social-link {
+    bottom: -44px;
+    opacity: 1;
+    visibility: visible;
+  }
+  .courses-details-header .courses-meta ul li {
+    display: block;
+    border-right: none;
+    font-size: 14px;
+    padding-right: 0;
+    margin-bottom: 15px;
+    margin-right: 0;
+  }
+  .courses-details-header .courses-meta ul li span {
+    margin-bottom: 2px;
+    font-size: 13px;
+  }
+  .courses-details-header .courses-price {
+    text-align: left;
+    margin-top: 22px;
+  }
+  .comments-area .comment-author,
+  .courses-details-header .courses-price .courses-review .review-stars i,
+  .courses-sidebar-information .btn-box .default-btn i,
+  .feedback-quote .client-info .title h3,
+  .products-details-desc .products-review .rating {
+    font-size: 16px;
+  }
+  .courses-details-desc-style-two h3 {
+    margin-bottom: 12px;
+    font-size: 19px;
+  }
+  .courses-details-desc-style-two .courses-review-comments h3 {
+    padding-bottom: 10px;
+    font-size: 19px;
+  }
+  .courses-sidebar-information {
+    margin-top: 40px;
+    padding: 15px;
+  }
+  .apply-instructor-image h2 {
+    margin-bottom: 20px;
+    font-size: 25px;
+  }
+  .apply-instructor-content {
+    padding: 10px 20px 20px;
+    margin-top: 30px;
+  }
+  .apply-instructor-content .react-tabs__tab-list,
+  .events-details-header,
+  .events-details-location,
+  .products-details-tabs .react-tabs__tab-list,
+  .program-list .single-program-box:nth-child(2),
+  .single-program-box {
+    margin-bottom: 30px;
+  }
+  .apply-instructor-content .react-tabs__tab-list .react-tabs__tab {
+    margin-right: 15px;
+    margin-top: 10px;
+    padding: 0 0 5px;
+    font-size: 15px;
+  }
+  .shorting-menu.shorting-menu-style-two {
+    margin-bottom: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+  }
+  .shorting-menu.shorting-menu-style-two .filter {
+    padding: 0 0 5px;
+  }
+  .events-details-image #timer {
+    position: relative;
+    top: 0;
+    left: 0;
+    transform: unset;
+  }
+  .events-details-image #timer div {
+    width: 95px;
+    height: 95px;
+    font-size: 35px;
+    margin-top: 20px;
+  }
+  .events-details-image #timer div span {
+    font-size: 14px;
+    margin-top: 0;
+  }
+  .events-details-image #timer div::before {
+    opacity: 1;
+  }
+  .events-details-header ul {
+    padding: 4px 20px 14px;
+  }
+  .events-details-desc,
+  .single-language-courses-box p {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .events-details-info {
+    margin-top: 30px;
+    padding: 20px 15px;
+  }
+  .cart-totals,
+  .order-details {
+    margin-top: 40px;
+  }
+  .cart-table table tbody tr td,
+  .cart-table table thead tr th {
+    font-size: 14.5px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .cart-buttons .shopping-coupon-code button {
+    position: relative;
+    right: 0;
+    top: 0;
+    height: auto;
+    padding: 12px 25px;
+    line-height: initial;
+    font-size: 15px;
+    border-radius: 5px;
+    margin-top: 15px;
+  }
+  .cart-buttons .text-right {
+    text-align: center !important;
+    margin-top: 15px;
+  }
+  .cart-totals {
+    padding: 20px;
+    max-width: 100%;
+  }
+  .products-details-desc {
+    padding-left: 0;
+    margin-top: 35px;
+  }
+  .products-details-desc .products-review .rating .rating-count {
+    top: -2px;
+  }
+  .products-details-desc .products-add-to-cart .input-counter {
+    max-width: 110px;
+    min-width: 110px;
+  }
+  .products-details-desc .products-add-to-cart .input-counter input {
+    height: 47px;
+    font-size: 16px;
+  }
+  .products-details-desc .products-add-to-cart .default-btn {
+    top: 0;
+  }
+  .products-details-desc .products-add-to-cart .default-btn i {
+    top: 13px;
+  }
+  .products-details-tabs .react-tabs__tab-list .react-tabs__tab {
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 16px;
+  }
+  .products-details-tabs .react-tabs__tab-panel .products-reviews .rating span {
+    font-size: 17px;
+  }
+  .comments-area .comment-respond .form-submit input,
+  .events-box .content .location,
+  .feedback-quote p,
+  .free-trial-form form button,
+  .next-link-wrapper .next-title,
+  .prev-link-wrapper .prev-title,
+  .products-details-tabs .react-tabs__tab-panel .products-reviews .side div,
+  .single-events-box-item .content .location,
+  .single-kindergarten-courses-box .courses-image .price span,
+  .widget-area .widget_edemy_posts_thumb .item .info .title,
+  .widget-area .widget_insight ul li a,
+  .widget-area .widget_popular_products .item .info .title,
+  .widget-area .widget_popular_products .item .info span,
+  .widget-area .widget_recent_courses .item .info span {
+    font-size: 15px;
+  }
+  .products-details-tabs
+    .react-tabs__tab-panel
+    .products-review-comments
+    .user-review
+    img {
+    position: relative;
+    left: 0;
+    top: 0;
+    margin-bottom: 15px;
+  }
+  .products-details-tabs
+    .react-tabs__tab-panel
+    .products-review-comments
+    .user-review
+    .review-rating
+    span {
+    display: block !important;
+    top: 0;
+    font-size: 16px;
+    margin-left: 0;
+    margin-top: 5px;
+  }
+  .products-details-tabs
+    .react-tabs__tab-panel
+    .review-form-wrapper
+    form
+    button {
+    margin-top: 20px;
+    padding: 12px 45px;
+    font-size: 15px;
+  }
+  .blog-details-desc .article-content .entry-meta ul {
+    margin-bottom: -13px;
+  }
+  .blog-details-desc .article-content .entry-meta ul li {
+    display: inline-block;
+    border-right: none;
+    font-size: 15px;
+    margin-bottom: 13px;
+    margin-right: 13px;
+    padding-right: 0;
+  }
+  .blog-details-desc .article-content .entry-meta ul li:last-child,
+  .health-coaching-feedback-image {
+    margin-right: 0;
+  }
+  .blog-details-desc .article-footer .article-share .social,
+  .footer-bottom-area ul {
+    text-align: center;
+    margin-top: 15px;
+  }
+  .blockquote,
+  blockquote {
+    padding: 20px !important;
+  }
+  .blockquote p,
+  blockquote p {
+    font-size: 17px !important;
+  }
+  .prev-link-wrapper {
+    padding-right: 0;
+  }
+  .next-link-wrapper {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding-left: 0;
+    margin-top: 30px;
+  }
+  .comments-area .comment-author .avatar {
+    height: 50px;
+    left: 0;
+    position: relative;
+    width: 50px;
+    display: block;
+    margin-bottom: 15px;
+  }
+  .comments-area .comment-respond .comment-form-author {
+    width: 100%;
+    padding-right: 0;
+  }
+  .comments-area .comment-respond .comment-form-email {
+    width: 100%;
+    padding-left: 0;
+  }
+  .widget-area {
+    margin-top: 40px;
+    padding-left: 0;
+  }
+  .widget-area .tagcloud a {
+    font-size: 13.5px !important;
+  }
+  .single-footer-widget.pl-5,
+  .single-footer-widget.px-5 {
+    padding-left: 0 !important;
+  }
+  .footer-bottom-area {
+    margin-top: 30px;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  .footer-bottom-area ul li::before {
+    top: 3px;
+  }
+  .go-top {
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    font-size: 35px;
+  }
+  .main-banner-wrapper {
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+  .main-banner-wrapper-content {
+    top: 0;
+    text-align: center;
+  }
+  .main-banner-wrapper-content h1 {
+    margin-bottom: 15px;
+    font-size: 30px;
+  }
+  .health-coaching-banner-content p,
+  .main-banner-wrapper-content p {
+    font-weight: 500;
+    font-size: 15px;
+  }
+  .single-language-courses-box h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+  .single-feedback-item-box::after {
+    right: 40px;
+    bottom: 125px;
+    font-size: 71px;
+  }
+  .information-content h2 {
+    font-size: 25px;
+    margin-bottom: 40px;
+  }
+  .information-content .apply-details li {
+    padding-left: 80px;
+  }
+  .information-content .apply-details li .icon {
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    top: 2px;
+    transform: translateY(0);
+    font-size: 25px;
+  }
+  .free-trial-form {
+    margin-top: 30px;
+    text-align: center;
+    padding: 30px 20px;
+  }
+  .free-trial-form form .form-group {
+    margin-bottom: 15px;
+  }
+  .newsletter-modal .newsletter-modal-content {
+    max-width: 100%;
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+  .newsletter-modal .newsletter-modal-content .modal-inner-content {
+    padding: 30px 25px;
+  }
+  .newsletter-modal .newsletter-modal-content .modal-inner-content .sub-text {
+    line-height: 1.6;
+    font-size: 15px;
+  }
+  .newsletter-modal .newsletter-modal-content .modal-inner-content h2 {
+    margin-bottom: 15px;
+    font-size: 25px;
+  }
+  .newsletter-modal .newsletter-modal-content .modal-inner-content form button {
+    height: auto;
+    position: relative;
+    font-size: 14px;
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+  }
+  .hero-banner-content p {
+    padding-right: 0;
+    font-weight: 500;
+    font-size: 15px;
+  }
+  .hero-banner-content h1,
+  .yoga-banner-content .content h1 {
+    margin-bottom: 15px;
+    line-height: 1.3;
+    font-size: 28px;
+  }
+  .single-courses-item.without-box-shadow .courses-image img,
+  .single-courses-item.without-box-shadow .courses-image::before {
+    border-radius: 5px;
+  }
+  .overview-box {
+    margin-top: 45px;
+  }
+  .overview-box .overview-content {
+    order: 2;
+    text-align: center;
+  }
+  .overview-box .overview-content .btn-box .playstore-btn {
+    font-size: 10px;
+    text-align: left;
+    padding: 7px 10px 5px 45px;
+  }
+  .overview-box .overview-content .btn-box .applestore-btn img,
+  .overview-box .overview-content .btn-box .playstore-btn img {
+    left: 10px;
+  }
+  .overview-box .overview-content .btn-box .applestore-btn {
+    font-size: 10px;
+    text-align: left;
+    margin-left: 8px;
+    padding: 7px 10px 5px 55px;
+  }
+  .overview-box .overview-image {
+    order: 1;
+    margin-bottom: 35px;
+  }
+  .yoga-main-banner {
+    padding-top: 60px;
+    padding-left: 0;
+    padding-bottom: 60px;
+  }
+  .yoga-banner-content::before {
+    display: block;
+  }
+  .yoga-banner-content .content {
+    padding: 30px 20px;
+    position: relative;
+    top: 0;
+    transform: unset;
+  }
+  .single-training-box h3 {
+    margin-bottom: 13px;
+    font-size: 19px;
+  }
+  .single-yoga-courses-box .courses-content h3 {
+    margin-bottom: 10px;
+    font-size: 19px;
+  }
+  .experience-image {
+    margin-top: 35px;
+    padding-left: 10px;
+    padding-top: 10px;
+  }
+  .experience-image::before {
+    margin-right: 10px;
+  }
+  .experience-image::after {
+    margin-left: 10px;
+    margin-top: 10px;
+  }
+  .experience-image .video-btn {
+    width: 60px;
+    height: 60px;
+    font-size: 30px;
+    line-height: 60px;
+  }
+  .experience-image .title {
+    font-size: 20px;
+    padding: 12px 30px 10px 25px;
+  }
+  .single-pricing-box .pricing-header h3 {
+    font-size: 18px;
+    padding-top: 15px;
+  }
+  .single-pricing-box .pricing-features ul li {
+    font-size: 15.5px;
+  }
+  .single-pricing-box .price span {
+    margin-top: 0;
+    font-size: 14px;
+  }
+  .health-coaching-banner-area {
+    margin-bottom: -25px;
+    padding-top: 80px;
+  }
+  .health-coaching-banner-area .col-lg-6:first-child,
+  .subscribe-area-two .col-lg-6:first-child {
+    order: 2;
+  }
+  .health-coaching-banner-area .col-lg-6:nth-child(2),
+  .subscribe-area-two .col-lg-6:nth-child(2) {
+    order: 1;
+  }
+  .health-coaching-banner-area .divider {
+    display: block;
+    bottom: 25px;
+    height: 70px;
+  }
+  .health-coaching-banner-area::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-color: #f5f7fa;
+    z-index: 1;
+    width: 100%;
+    height: 25px;
+  }
+  .health-coaching-banner-content {
+    text-align: center;
+    margin-bottom: 35px;
+  }
+  .health-coaching-banner-content h1 {
+    font-size: 27px;
+    margin-bottom: 18px;
+  }
+  .health-coaching-banner-content .btn-box .d-flex {
+    justify-content: center;
+  }
+  .health-coaching-banner-content .btn-box img {
+    margin-left: 15px;
+    max-width: 90px;
+  }
+  .single-lifestyle-box {
+    padding: 25px 15px;
+  }
+  .single-lifestyle-box .icon {
+    width: 65px;
+    height: 65px;
+    line-height: 65px;
+    font-size: 30px;
+    margin-bottom: 20px;
+  }
+  .single-lifestyle-box h3,
+  .single-program-box h3 {
+    margin-bottom: 15px;
+    font-size: 18px;
+  }
+  .program-section-title {
+    padding-right: 0;
+    text-align: center;
+  }
+  .single-program-box .icon {
+    font-size: 45px;
+    margin-bottom: 18px;
+  }
+  .single-health-services-box {
+    text-align: center;
+    padding-left: 0;
+  }
+  .health-coaching-inner,
+  .kindergarten-main-banner .container-fluid {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .single-health-services-box .icon {
+    position: relative;
+    top: 0;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+  }
+  .experience-img .title {
+    font-size: 22px;
+  }
+  .subscribe-area-two .subscribe-content {
+    max-width: 100%;
+    text-align: center;
+  }
+  .subscribe-area-two .subscribe-image {
+    margin-bottom: 0;
+    margin-top: 30px;
+  }
+  .health-coaching-inner {
+    max-width: 100%;
+    margin-top: 35px;
+    padding-bottom: 60px;
+  }
+  .health-coaching-inner h2 {
+    margin-bottom: 40px;
+    font-size: 25px;
+  }
+  .navbar-area.is-sticky.pb-0 {
+    padding-bottom: 20px !important;
+  }
+  .default-btn-style-two {
+    font-size: 14px;
+    padding: 13px 25px 13px 50px;
+  }
+  .default-btn-style-two i {
+    left: 25px;
+    top: 13px;
+  }
+  .default-btn-style-two::before {
+    margin: 2px;
+  }
+  .kindergarten-banner-content h1 {
+    margin-bottom: 15px;
+    line-height: 1.2;
+    font-size: 30px;
+  }
+  .kindergarten-banner-content h1 span {
+    display: inline;
+    font-size: 30px;
+  }
+  .kindergarten-banner-content .circle-shape {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 15px;
+    display: none;
+    z-index: -1;
+  }
+  .kindergarten-about-image {
+    margin-right: 0;
+    margin-bottom: 5px;
+  }
+  .kindergarten-about-image .main-image {
+    padding-bottom: 0;
+  }
+  .kindergarten-about-image .main-image img:nth-child(2) {
+    position: relative;
+    text-align: center;
+    margin-top: 20px;
+  }
+  .about-content .about-list li span {
+    padding-left: 30px;
+    padding-top: 3px;
+  }
+  .about-content .about-list li span i {
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    font-size: 18px;
+  }
+  .single-kindergarten-feedback-item,
+  .single-kindergarten-services-box {
+    background-color: #fff;
+    padding: 25px 15px;
+  }
+  .single-kindergarten-services-box .content {
+    position: relative;
+    top: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .single-kindergarten-services-box .content .icon {
+    font-size: 40px;
+    margin-bottom: 20px;
+  }
+  .single-kindergarten-courses-box .courses-image .price {
+    width: 50px;
+    height: 50px;
+    right: 15px;
+    bottom: -25px;
+    line-height: 52px;
+  }
+  .single-kindergarten-feedback-item .content p {
+    position: relative;
+    left: 0;
+    right: 0;
+    top: 0;
+    padding: 0;
+  }
+  .single-kindergarten-feedback-item .client-info {
+    margin-top: 15px;
+    margin-left: 0;
+  }
+  .single-kindergarten-feedback-item .client-info h3 {
+    font-size: 16px;
+    color: #000;
+  }
+  .single-kindergarten-feedback-item .client-info span {
+    color: #000;
+  }
+  .single-selected-ages-box h3 {
+    padding-top: 9px;
+    font-size: 20px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .events-area.bg-shape {
+    padding-top: 100px;
+    padding-bottom: 70px;
+  }
+  .events-box .image {
+    background-image: unset !important;
+    height: auto;
+  }
+  .events-box .image img {
+    display: inline-block;
+  }
+  .single-blog-item .post-content {
+    padding-top: 20px;
+  }
+  .subscribe-content.text-left {
+    text-align: center !important;
+  }
+  .edemy-nav .navbar .navbar-collapse {
+    overflow-y: auto;
+  }
+  .edemy-nav .navbar .navbar-nav .nav-item .col {
+    width: 50%;
+    flex-basis: inherit;
+  }
+  .edemy-nav
+    .navbar
+    .others-option
+    .option-item
+    .profile-dropdown
+    .dropdown-menu {
+    width: 245px;
+  }
+  .shopping-cart-list .content {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  .shopping-cart-list .action-button {
+    text-align: start;
+  }
+}
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+  .banner-section .container-fluid,
+  .container,
+  .hero-banner-area .container-fluid,
+  .kindergarten-main-banner .container-fluid,
+  .main-banner .container-fluid,
+  .main-banner-wrapper .container-fluid,
+  .view-all-courses-area .container-fluid,
+  .yoga-main-banner .container-fluid {
+    max-width: 540px;
+  }
+  .edemy-responsive-nav
+    .edemy-responsive-menu.mean-container
+    .navbar-nav
+    .nav-item.megamenu
+    .dropdown-menu
+    .nav-item
+    .row {
+    flex-wrap: wrap;
+    display: flex;
+  }
+  .blog-details-desc .article-footer .article-share,
+  .blog-details-desc .article-footer .article-tags,
+  .edemy-responsive-nav
+    .edemy-responsive-menu.mean-container
+    .navbar-nav
+    .nav-item.megamenu
+    .dropdown-menu
+    .nav-item
+    .row
+    .col {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+  .edemy-responsive-nav
+    .edemy-responsive-menu.mean-container
+    .navbar-nav
+    .nav-item.megamenu
+    .dropdown-menu
+    .nav-item
+    .row
+    .col:nth-child(2)
+    .megamenu-submenu
+    li {
+    border-top: none;
+  }
+  .edemy-responsive-nav
+    .edemy-responsive-menu.mean-container
+    .navbar-nav
+    .nav-item.megamenu
+    .dropdown-menu
+    .megamenu-submenu {
+    width: 70%;
+  }
+  .funfacts-area .col-lg-3:nth-child(2) .single-funfacts-item {
+    padding-top: 60px;
+  }
+  .funfacts-area .col-lg-3:nth-child(3) .single-funfacts-item,
+  .funfacts-area-two .col-lg-3:nth-child(3) .single-funfacts {
+    border-bottom: none;
+  }
+  .funfacts-area-two .col-lg-3:nth-child(2) .single-funfacts {
+    padding-top: 0;
+  }
+  .about-img .image {
+    padding-bottom: 45px;
+  }
+  .about-img .image img,
+  .kindergarten-about-image .main-image img {
+    width: auto;
+  }
+  .about-img .image img:nth-child(2) {
+    position: absolute;
+    left: 40px;
+    bottom: 0;
+    margin-top: 0;
+  }
+  .blog-details-desc .article-footer {
+    text-align: left;
+  }
+  .blog-details-desc .article-footer .article-share .social {
+    text-align: right;
+    margin-top: 0;
+  }
+  .health-coaching-banner-area {
+    margin-bottom: -35px;
+  }
+  .health-coaching-banner-area .divider {
+    bottom: 35px;
+  }
+  .health-coaching-banner-area::before {
+    height: 35px;
+  }
+  .health-coaching-inner {
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .kindergarten-about-image .main-image {
+    padding-bottom: 115px;
+    padding-right: 100px;
+  }
+  .kindergarten-about-image .main-image img:nth-child(2) {
+    position: absolute;
+    text-align: right;
+    margin-top: 0;
+  }
+  .about-content .about-list li {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+  }
+}
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  .about-content,
+  .about-content-box,
+  .banner-content,
+  .banner-wrapper-content,
+  .feedback-content,
+  .information-content,
+  .single-features-box.without-padding {
+    text-align: center;
+  }
+  .default-btn,
+  .default-btn-style-two,
+  .events-box .content .location,
+  .events-details-info .info li,
+  .newsletter-modal .newsletter-modal-content .modal-inner-content .sub-text,
+  .next-link-wrapper .next-title,
+  .prev-link-wrapper .prev-title,
+  .single-products-box .products-content .price,
+  body,
+  p {
+    font-size: 15px;
+  }
+  .partner-area.ptb-70,
+  .ptb-100,
+  .single-funfacts,
+  .single-funfacts-item,
+  .view-all-courses-area-two {
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+  .about-area-two.pt-70,
+  .experience-area.extra-padding,
+  .footer-area,
+  .pt-100,
+  .subscribe-area-two,
+  .view-all-courses-area {
+    padding-top: 80px;
+  }
+  .pt-70,
+  .ptb-70 {
+    padding-top: 50px;
+  }
+  .health-coaching-feedback-area,
+  .pb-100 {
+    padding-bottom: 80px;
+  }
+  .partner-area,
+  .pb-70,
+  .ptb-70 {
+    padding-bottom: 50px;
+  }
+  .banner-section .container-fluid,
+  .container,
+  .hero-banner-area .container-fluid,
+  .main-banner .container-fluid,
+  .view-all-courses-area .container-fluid,
+  .yoga-main-banner .container-fluid {
+    max-width: 720px;
+  }
+  .section-title {
+    max-width: 650px;
+    margin-bottom: 45px;
+  }
+  .about-content .sub-title,
+  .about-content-box .sub-title,
+  .experience-content .sub-title,
+  .feedback-content .sub-title,
+  .free-trial-form .sub-title,
+  .get-instant-courses-content .sub-title,
+  .information-content .sub-title,
+  .overview-box .overview-content .sub-title,
+  .premium-access-content .sub-title,
+  .program-section-title .sub-title,
+  .section-title .sub-title,
+  .subscribe-content .sub-title,
+  .view-all-courses-content .sub-title {
+    font-size: 13.5px;
+  }
+  .premium-access-content h2,
+  .section-title h2,
+  .subscribe-content h2 {
+    max-width: 520px;
+    font-size: 30px;
+  }
+  .premium-access-content p,
+  .section-title p,
+  .subscribe-content p {
+    max-width: 515px;
+  }
+  .default-btn i {
+    top: 11px;
+  }
+  .mtb-100 {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .main-banner-content {
+    max-width: 595px;
+    top: 0;
+    padding-right: 0;
+    text-align: center;
+    margin: 0 auto;
+  }
+  .hero-banner-content h1,
+  .main-banner-content h1 {
+    margin-bottom: 15px;
+    font-size: 35px;
+  }
+  .main-banner-content p {
+    max-width: 515px;
+    font-size: 15px;
+    margin: 0 auto 10px;
+  }
+  .main-banner-courses-list,
+  .yoga-banner-content .content .default-btn {
+    margin-top: 10px;
+  }
+  .main-banner-courses-list .single-courses-box {
+    margin-top: 30px !important;
+  }
+  .banner-shape1,
+  .banner-shape10,
+  .banner-shape11,
+  .banner-shape12,
+  .banner-shape13,
+  .banner-shape14,
+  .banner-shape15,
+  .banner-shape16,
+  .banner-shape17,
+  .banner-shape18,
+  .banner-shape19,
+  .banner-shape2,
+  .banner-shape3,
+  .banner-shape4,
+  .banner-shape5,
+  .banner-shape6,
+  .banner-shape7,
+  .banner-shape8,
+  .banner-shape9,
+  .divider,
+  .divider2,
+  .divider3,
+  .experience-shape1,
+  .experience-shape2,
+  .health-coaching-banner-content h1 br,
+  .health-coaching-shape1,
+  .health-coaching-shape2,
+  .health-coaching-shape3,
+  .health-coaching-shape4,
+  .health-coaching-shape5,
+  .health-coaching-shape6,
+  .health-coaching-shape7,
+  .kindergarten-banner-content .circle-shape,
+  .kindergarten-shape10,
+  .kindergarten-shape11,
+  .kindergarten-shape12,
+  .kindergarten-shape13,
+  .kindergarten-shape14,
+  .kindergarten-shape15,
+  .kindergarten-shape16,
+  .kindergarten-shape17,
+  .kindergarten-shape18,
+  .kindergarten-shape19,
+  .kindergarten-shape20,
+  .kindergarten-shape3,
+  .kindergarten-shape5,
+  .kindergarten-shape7,
+  .kindergarten-shape8,
+  .kindergarten-shape9,
+  .newsletter-modal .newsletter-modal-content .modal-image,
+  .shape1,
+  .shape10,
+  .shape11,
+  .shape12,
+  .shape13,
+  .shape14,
+  .shape15,
+  .shape16,
+  .shape17,
+  .shape18,
+  .shape19,
+  .shape2,
+  .shape20,
+  .shape21,
+  .shape22,
+  .shape23,
+  .shape3,
+  .shape4,
+  .shape5,
+  .shape6,
+  .shape7,
+  .shape8,
+  .shape9,
+  .tree-shape2,
+  .tree-shape3,
+  .yoga-banner-content .content .bottom-image {
+    display: none;
+  }
+  .banner-section {
+    padding-top: 110px;
+    padding-bottom: 100px;
+  }
+  .banner-content h1,
+  .yoga-banner-content .content h1 {
+    font-size: 35px;
+  }
+  .banner-content p {
+    font-size: 16px;
+    max-width: 535px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .banner-wrapper-content form,
+  .banner-wrapper-content p {
+    max-width: 550px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .banner-image,
+  .banner-wrapper-image,
+  .events-details-info,
+  .experience-image,
+  .free-trial-form,
+  .hero-banner-image,
+  .information-image,
+  .kindergarten-banner-image,
+  .main-banner-wrapper-image,
+  .order-details {
+    margin-top: 30px;
+  }
+  .banner-wrapper-area {
+    padding-top: 100px;
+  }
+  .banner-wrapper-area .divider,
+  .hero-banner-area .divider {
+    display: block;
+  }
+  .banner-wrapper-content h1 {
+    margin-bottom: 18px;
+    font-size: 32px;
+  }
+  .banner-wrapper-content p {
+    font-size: 16px;
+  }
+  .single-banner-box {
+    border-radius: 0 !important;
+    padding: 25px 20px 25px 80px;
+  }
+  .billing-details .title,
+  .courses-details-desc .react-tabs__tab-panel .courses-curriculum h3,
+  .courses-details-desc-style-two
+    .courses-author
+    .author-profile
+    .author-profile-title
+    .author-profile-title-details
+    .author-profile-details
+    h4,
+  .order-details .title,
+  .products-details-desc h3,
+  .single-advisor-box .advisor-content h3,
+  .single-advisor-item .advisor-content h3,
+  .single-banner-box h3,
+  .single-blog-post-item .post-content h3,
+  .single-box-item h3,
+  .single-courses-item .courses-content h3,
+  .single-courses-item-box .courses-content h3,
+  .single-testimonials-item h3,
+  .widget-area .widget .widget-title {
+    font-size: 19px;
+  }
+  .single-banner-box .icon {
+    left: 20px;
+    font-size: 40px;
+  }
+  .banner-inner-area .col-lg-4:nth-child(2) .single-banner-box {
+    border-right: none;
+  }
+  .banner-inner-area .col-lg-4:nth-child(3) .single-banner-box {
+    border-top: 1px solid #eee;
+  }
+  .banner-wrapper {
+    height: 920px;
+  }
+  .banner-wrapper-text {
+    margin-top: -150px;
+    max-width: 510px;
+  }
+  .banner-wrapper-text h1 {
+    margin-bottom: 20px;
+    font-size: 38px;
+  }
+  .banner-wrapper-text p {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+  .single-features-box,
+  .single-feedback-box {
+    padding: 25px;
+  }
+  .single-features-box h3 {
+    margin-bottom: 13px;
+    font-size: 19px;
+  }
+  .single-features-box .icon {
+    font-size: 35px;
+    margin-bottom: 17px;
+  }
+  .cart-table table thead tr th,
+  .comments-area .comment-respond .form-submit input,
+  .single-advisor-box .advisor-content .sub-title,
+  .single-advisor-item .advisor-content span,
+  .single-categories-box .content span,
+  .single-features-box .link-btn,
+  .single-funfacts-box p,
+  .single-testimonials-item span,
+  .slogan-content span,
+  .start-with-success-box .content span {
+    font-size: 14px;
+  }
+  .about-image .image img,
+  .apply-instructor-image img {
+    width: 100%;
+  }
+  .about-content {
+    margin-top: 30px;
+  }
+  .about-content h2,
+  .about-content-box h2,
+  .contact-form h2,
+  .download-syllabus-form h2,
+  .experience-content h2,
+  .experience-image .title,
+  .experience-img .title,
+  .feedback-content h2,
+  .free-trial-form h2,
+  .get-instant-courses-content h2,
+  .health-coaching-inner h2,
+  .information-content h2,
+  .login-form h2,
+  .overview-box .overview-content h2,
+  .program-section-title h2,
+  .register-form h2,
+  .single-pricing-box .price,
+  .teacher-register-box h2 {
+    font-size: 30px;
+  }
+  .about-content .about-list li,
+  .about-content .features-list li {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+  .about-content .features-list li span {
+    font-size: 16px;
+    padding-left: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .about-content .features-list li span i {
+    position: relative;
+    top: 0;
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    font-size: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+  }
+  .about-video-box,
+  .courses-details-info,
+  .program-list,
+  .view-all-courses-image {
+    margin-left: 0;
+    margin-top: 30px;
+  }
+  .courses-area.pt-100.pb-70 .courses-info,
+  .faq-accordion-tab .react-tabs__tab-list {
+    margin-bottom: 30px;
+  }
+  .single-courses-box .courses-content {
+    padding: 20px;
+  }
+  .single-courses-box .courses-content h3 {
+    margin-bottom: 12px;
+    font-size: 19px;
+  }
+  .single-courses-box.without-boxshadow {
+    box-shadow: 0 8px 16px 0 rgba(146, 184, 255, 0.2);
+  }
+  .courses-info,
+  .single-blog-post .post-content .post-content-footer,
+  .single-blog-post-box .post-content .post-content-footer {
+    margin-top: 15px;
+  }
+  .our-story-title h3 .number,
+  .single-courses-item .courses-content .price {
+    font-size: 24px;
+  }
+  .single-courses-item .courses-content .courses-content-footer {
+    padding-right: 70px;
+  }
+  .shorting-menu .filter {
+    font-size: 15px;
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+  .boxes-area .col-lg-4:first-child,
+  .boxes-area .col-lg-4:nth-child(2) {
+    top: -240px;
+    margin-bottom: -240px;
+    margin-top: 0;
+  }
+  .single-box-item {
+    padding: 60px 25px 30px;
+    top: 0;
+    margin-bottom: 0;
+    margin-top: 30px;
+  }
+  .single-box-item .icon {
+    font-size: 55px;
+    margin-bottom: 45px;
+  }
+  .single-box-item .icon img {
+    top: -25px;
+  }
+  .about-content .about-list,
+  .information-content .apply-details,
+  .overview-box .overview-content .btn-box .applestore-btn,
+  .overview-box .overview-content .btn-box .playstore-btn,
+  .single-feedback-item {
+    text-align: left;
+  }
+  .single-testimonials-item {
+    padding-left: 255px;
+  }
+  .courses-details-desc-style-two .courses-curriculum h3,
+  .feedback-quote p,
+  .products-details-tabs .react-tabs__tab-list .react-tabs__tab,
+  .single-kindergarten-feedback-item .client-info h3,
+  .single-testimonials-item p {
+    font-size: 17px;
+  }
+  .funfacts-list {
+    margin-top: 40px;
+  }
+  .single-funfacts-box {
+    padding: 80px 25px;
+  }
+  .coming-soon-content h2,
+  .error-content h3,
+  .single-funfacts h3,
+  .single-funfacts-box h3,
+  .single-funfacts-item h3 {
+    font-size: 36px;
+  }
+  .single-funfacts h3 span,
+  .single-funfacts-box h3 span,
+  .single-funfacts-item h3 span {
+    font-size: 40px;
+  }
+  .single-funfacts p,
+  .single-funfacts-item p {
+    font-size: 15px;
+    text-transform: capitalize;
+  }
+  .get-instant-courses-content {
+    text-align: center;
+    padding: 40px;
+  }
+  .slogan-image {
+    padding-right: 0;
+    margin-top: 0;
+    margin-bottom: 30px;
+  }
+  .slogan-content {
+    padding-left: 0;
+    text-align: center;
+  }
+  .cart-totals h3:last-child,
+  .single-products-box .products-content h3,
+  .single-testimonials-box p,
+  .slogan-content p {
+    font-size: 18px;
+  }
+  .apply-instructor-content h3,
+  .blog-details-desc .article-content h3,
+  .cart-totals h3,
+  .comments-area .comment-respond .comment-reply-title,
+  .comments-area .comments-title,
+  .courses-details-desc .react-tabs__tab-panel .courses-overview h3,
+  .events-box .content h3,
+  .events-details-desc h3,
+  .profile-box .content h3,
+  .shopping-cart-list .content h3,
+  .single-blog-item .post-content h3,
+  .single-events-box .content h3,
+  .single-kindergarten-courses-box .courses-content h3,
+  .single-kindergarten-services-box .content h3,
+  .slogan-content h3 {
+    font-size: 20px;
+  }
+  .slogan-content::before {
+    right: 0;
+    left: 0;
+    top: 0;
+    font-size: 160px;
+  }
+  .courses-details-desc-style-two h3,
+  .single-categories-box .content h3 {
+    font-size: 21px;
+  }
+  .contact-info .sub-title,
+  .single-blog-post .post-content .category,
+  .single-blog-post-box .post-content .category,
+  .single-blog-post-item .post-content .category {
+    font-size: 13px;
+  }
+  .single-blog-post .post-content h3,
+  .single-blog-post-box .post-content h3 {
+    margin-bottom: 0;
+    font-size: 19px;
+  }
+  .blog-post-info {
+    padding-top: 25px;
+  }
+  .view-all-courses-content {
+    max-width: 650px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .view-all-courses-content h2 {
+    max-width: 520px;
+    font-size: 30px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .subscribe-content.text-left p,
+  .view-all-courses-content p {
+    max-width: 515px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .coming-soon-content,
+  .premium-access-content,
+  .subscribe-content {
+    max-width: 650px;
+  }
+  .subscribe-content .newsletter-form {
+    max-width: 585px;
+  }
+  .page-title-content h2 {
+    max-width: 720px;
+    font-size: 30px;
+  }
+  .courses-details-header .courses-price {
+    text-align: left;
+    margin-top: 25px;
+  }
+  .courses-details-desc-style-two .courses-reviews h3,
+  .events-details-info .info li.price,
+  .related-courses h3 {
+    font-size: 22px;
+  }
+  .events-details-image #timer div {
+    width: 90px;
+    height: 90px;
+    font-size: 35px;
+    margin-left: 2px;
+    margin-right: 2px;
+  }
+  .events-details-image #timer div span {
+    font-size: 15px;
+    margin-top: -2px;
+  }
+  .single-testimonials-box {
+    max-width: 645px;
+    padding-right: 50px;
+  }
+  .our-story-title h3 {
+    padding-left: 28px;
+    font-size: 22px;
+  }
+  .our-story-content {
+    padding-right: 0;
+  }
+  .our-story-area .col-lg-8,
+  .our-story-area .col-lg-8:nth-child(2) {
+    margin-top: 20px;
+  }
+  .start-with-success-area .section-title h2 {
+    max-width: 640px;
+  }
+  .start-with-success-box .content h3 {
+    font-size: 19px;
+    margin-bottom: 6px;
+  }
+  .widget-area {
+    margin-top: 40px;
+    padding-left: 0;
+  }
+  .products-details-desc {
+    margin-top: 35px;
+    padding-left: 0;
+  }
+  .products-details-tabs .react-tabs__tab-panel {
+    max-width: 645px;
+  }
+  .blog-details-desc
+    .article-author
+    .author-profile
+    .author-profile-title
+    .author-profile-title-details
+    .author-profile-details
+    h4,
+  .contact-info ul li h3,
+  .privacy-policy-content h3,
+  .products-details-tabs .react-tabs__tab-panel .products-review-comments h3,
+  .products-details-tabs .react-tabs__tab-panel .products-reviews h3,
+  .products-details-tabs .react-tabs__tab-panel .review-form-wrapper h3,
+  .purchase-guide-content h3,
+  .single-events-box-item .content h3,
+  .single-health-services-box h3,
+  .single-lifestyle-box h3,
+  .single-pricing-box .pricing-header h3,
+  .single-program-box h3,
+  .single-training-box h3,
+  .single-yoga-courses-box .courses-content h3,
+  .terms-of-service-content h3 {
+    font-size: 19px;
+  }
+  .apply-instructor-image h2 {
+    margin-bottom: 25px;
+    font-size: 30px;
+    text-align: center;
+  }
+  .apply-instructor-content {
+    padding: 25px;
+    margin-top: 30px;
+  }
+  .apply-instructor-content .react-tabs__tab-list .react-tabs__tab {
+    margin-right: 35px;
+    font-size: 17px;
+  }
+  .blockquote,
+  blockquote {
+    padding: 30px !important;
+  }
+  .blockquote p,
+  blockquote p {
+    font-size: 19px !important;
+  }
+  .profile-box .content {
+    padding: 0 0 0 20px;
+  }
+  .teacher-register-box {
+    padding: 35px;
+  }
+  .register-form,
+  .yoga-main-banner {
+    padding-left: 0;
+  }
+  .coming-soon-area {
+    height: auto;
+    padding-top: 120px;
+    padding-bottom: 120px;
+  }
+  .health-coaching-feedback-image,
+  .kindergarten-about-image,
+  .login-form {
+    margin-right: 0;
+  }
+  .register-form {
+    margin-top: 40px;
+    padding-top: 0;
+  }
+  .contact-form {
+    margin-left: 0;
+    margin-top: 35px;
+  }
+  .faq-accordion-tab .react-tabs__tab-list li {
+    margin-bottom: 20px;
+  }
+  .faq-accordion .accordion .accordion-title,
+  .health-coaching-banner-content p,
+  .single-pricing-box .pricing-features ul li {
+    font-size: 16px;
+  }
+  .single-footer-widget h3 {
+    font-size: 21px;
+    margin-bottom: 19px;
+  }
+  .footer-bottom-area {
+    margin-top: 50px;
+  }
+  .hero-banner-content,
+  .main-banner-wrapper-content {
+    max-width: 595px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .main-banner-wrapper {
+    padding-top: 100px;
+    padding-bottom: 100px;
+  }
+  .main-banner-wrapper .container-fluid {
+    max-width: 768px;
+  }
+  .main-banner-wrapper-content {
+    top: 0;
+  }
+  .main-banner-wrapper-content h1 {
+    margin-bottom: 15px;
+    font-size: 38px;
+  }
+  .main-banner-wrapper-content p {
+    max-width: 515px;
+    font-size: 15.5px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .single-language-courses-box h3 {
+    margin-bottom: 10px;
+    font-size: 19px;
+  }
+  .single-language-courses-box p {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .single-language-courses-box .default-btn {
+    margin-top: 5px;
+  }
+  .information-content .apply-details li {
+    padding-left: 100px;
+  }
+  .information-content .apply-details li h3 {
+    margin-bottom: 8px;
+    font-size: 19px;
+  }
+  .information-content .apply-details li .icon {
+    width: 75px;
+    height: 75px;
+    line-height: 75px;
+    font-size: 35px;
+  }
+  .newsletter-modal .newsletter-modal-content {
+    max-width: 500px;
+  }
+  .newsletter-modal .newsletter-modal-content .modal-inner-content {
+    padding: 40px 35px;
+  }
+  .newsletter-modal .newsletter-modal-content .modal-inner-content h2 {
+    font-size: 30px;
+    margin-bottom: 12px;
+  }
+  .hero-banner-area {
+    padding-top: 100px;
+    padding-bottom: 200px;
+  }
+  .hero-banner-content p {
+    max-width: 515px;
+    font-size: 15px;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .single-kindergarten-services-box .content .icon,
+  .single-lifestyle-box .icon {
+    font-size: 40px;
+    margin-bottom: 20px;
+  }
+  .boxes-area.boxes-style-two .single-box-item {
+    top: 0;
+    margin-bottom: 0;
+  }
+  .boxes-area.boxes-style-two .col-lg-4:first-child,
+  .boxes-area.boxes-style-two .col-lg-4:nth-child(2) {
+    top: -150px;
+    margin-bottom: -150px;
+  }
+  .overview-box {
+    margin-top: 45px;
+  }
+  .overview-box .overview-content,
+  .overview-box .overview-image {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  .overview-box .overview-content {
+    order: 2;
+    text-align: center;
+  }
+  .overview-box .overview-image {
+    order: 1;
+    margin-bottom: 40px;
+  }
+  .yoga-banner-content {
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .yoga-banner-content .content {
+    padding: 100px;
+    margin-top: -10px;
+  }
+  .tree-shape {
+    bottom: 0;
+  }
+  .tree-shape img {
+    width: 120px;
+  }
+  .download-syllabus-form {
+    margin-top: 30px;
+    padding: 40px;
+  }
+  .single-pricing-box .price span {
+    margin-top: 0;
+    font-size: 15px;
+  }
+  .subscribe-image {
+    margin-bottom: 35px;
+  }
+  .health-coaching-banner-area {
+    margin-bottom: -40px;
+    padding-top: 100px;
+  }
+  .health-coaching-banner-area .col-lg-6:first-child,
+  .subscribe-area-two .col-lg-6:first-child {
+    order: 2;
+  }
+  .health-coaching-banner-area .col-lg-6:nth-child(2),
+  .subscribe-area-two .col-lg-6:nth-child(2) {
+    order: 1;
+  }
+  .health-coaching-banner-area .divider {
+    bottom: 40px;
+    height: 100px;
+    display: block;
+  }
+  .health-coaching-banner-area::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-color: #f5f7fa;
+    z-index: 1;
+    width: 100%;
+    height: 40px;
+  }
+  .health-coaching-banner-content {
+    text-align: center;
+    max-width: 540px;
+    margin-bottom: 35px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .health-coaching-banner-content h1 {
+    font-size: 40px;
+    margin-bottom: 25px;
+  }
+  .health-coaching-banner-content .btn-box {
+    margin-top: 25px;
+  }
+  .health-coaching-banner-content .btn-box .d-flex {
+    justify-content: center;
+  }
+  .single-lifestyle-box .icon {
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+  }
+  .program-section-title {
+    max-width: 555px;
+    padding-right: 0;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 40px;
+  }
+  .program-list .program-circle-shape {
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
+  .single-program-box .icon {
+    font-size: 45px;
+  }
+  .single-health-services-box {
+    text-align: center;
+    padding-left: 0;
+  }
+  .single-health-services-box .icon {
+    position: relative;
+    top: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+  }
+  .experience-img {
+    margin-top: 30px;
+    margin-left: 0;
+  }
+  .subscribe-area-two .subscribe-content {
+    text-align: center;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .subscribe-area-two .subscribe-image {
+    margin-bottom: 0;
+    margin-top: 30px;
+  }
+  .health-coaching-inner {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 35px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .default-btn-style-two i {
+    left: 35px;
+    top: 15px;
+  }
+  .navbar-area.is-sticky.pb-0 {
+    padding-bottom: 20px !important;
+  }
+  .kindergarten-main-banner {
+    padding-top: 130px;
+  }
+  .kindergarten-main-banner .container-fluid {
+    max-width: 720px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .kindergarten-banner-content {
+    max-width: 525px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .kindergarten-banner-content h1 {
+    margin-bottom: 15px;
+    line-height: 1.2;
+    font-size: 45px;
+  }
+  .kindergarten-banner-content h1 span {
+    display: inline;
+    font-size: 45px;
+  }
+  .kindergarten-about-image .shape {
+    right: 85px;
+  }
+  .kindergarten-services-area::before {
+    height: 160px;
+  }
+  .single-kindergarten-services-box {
+    background-color: #fff;
+    padding: 35px 20px;
+  }
+  .single-kindergarten-services-box img {
+    display: none !important;
+  }
+  .single-kindergarten-services-box .content {
+    position: relative;
+    top: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .kids-kite-image {
+    margin-top: -210px;
+  }
+  .single-kindergarten-courses-box .courses-content {
+    padding: 0 20px 20px;
+  }
+  .single-selected-ages-box h3 {
+    font-size: 22px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .events-box .content {
+    padding: 30px;
+  }
+  .subscribe-content.text-left {
+    text-align: center !important;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .subscribe-content.text-left .newsletter-form {
+    max-width: 585px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .shopping-cart-list .content {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  .shopping-cart-list .action-button {
+    text-align: start;
+  }
+}
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  .edemy-nav .navbar .navbar-nav .nav-item:hover .dropdown-menu,
+  .mtb-100,
+  .slogan-image,
+  .view-all-courses-area-two .view-all-courses-image {
+    margin-top: 0;
+  }
+  .container,
+  .hero-banner-area .container-fluid,
+  .main-banner-wrapper .container-fluid,
+  .view-all-courses-area .container-fluid,
+  .yoga-main-banner .container-fluid {
+    max-width: 960px;
+  }
+  .about-content h2,
+  .about-content-box h2,
+  .apply-instructor-image h2,
+  .contact-form h2,
+  .download-syllabus-form h2,
+  .experience-content h2,
+  .free-trial-form h2,
+  .get-instant-courses-content h2,
+  .information-content h2,
+  .login-form h2,
+  .overview-box .overview-content h2,
+  .premium-access-content h2,
+  .program-section-title h2,
+  .register-form h2,
+  .section-title h2,
+  .single-pricing-box .price,
+  .subscribe-content h2,
+  .teacher-register-box h2,
+  .view-all-courses-content h2 {
+    font-size: 30px;
+  }
+  .mtb-100 {
+    margin-bottom: 0;
+  }
+  .banner-shape14,
+  .banner-shape15,
+  .banner-shape16,
+  .banner-shape17,
+  .banner-shape18,
+  .edemy-nav .navbar .others-option .default-btn i,
+  .experience-content .shape,
+  .health-coaching-shape1,
+  .health-coaching-shape2,
+  .health-coaching-shape3,
+  .health-coaching-shape4,
+  .health-coaching-shape5,
+  .health-coaching-shape6,
+  .health-coaching-shape7,
+  .kindergarten-banner-content .circle-shape,
+  .kindergarten-shape15,
+  .kindergarten-shape16,
+  .kindergarten-shape18,
+  .kindergarten-shape7,
+  .object1,
+  .object2,
+  .object3,
+  .object4,
+  .shape1,
+  .shape10,
+  .shape11,
+  .shape12,
+  .shape13,
+  .shape14,
+  .shape15,
+  .shape16,
+  .shape17,
+  .shape18,
+  .shape19,
+  .shape2,
+  .shape20,
+  .shape21,
+  .shape22,
+  .shape23,
+  .shape3,
+  .shape4,
+  .shape5,
+  .shape6,
+  .shape7,
+  .shape8,
+  .shape9,
+  .single-advisor-box .advisor-content p,
+  .single-program-box .shape,
+  .slogan-area .divider2,
+  .slogan-area .divider3,
+  .yoga-main-banner .banner-shape2,
+  .yoga-main-banner .banner-shape3 {
+    display: none;
+  }
+  .main-banner .container-fluid {
+    max-width: 850px;
+  }
+  .banner-section .col-lg-5,
+  .banner-section .col-lg-7,
+  .main-banner .col-lg-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  .main-banner-content {
+    padding-right: 0;
+    margin-bottom: 60px;
+    max-width: 100%;
+  }
+  .main-banner-content p {
+    max-width: 565px;
+  }
+  .banner-section .container-fluid {
+    max-width: 800px;
+  }
+  .single-features-box {
+    padding: 30px 15px;
+  }
+  .hero-banner-content p,
+  .single-courses-item .courses-content .courses-content-footer,
+  .slogan-image {
+    padding-right: 0;
+  }
+  .single-features-box .icon,
+  .single-funfacts h3 span,
+  .single-funfacts-box h3 span,
+  .single-funfacts-item h3 span {
+    font-size: 40px;
+  }
+  .apply-instructor-content h3,
+  .blog-details-desc
+    .article-author
+    .author-profile
+    .author-profile-title
+    .author-profile-title-details
+    .author-profile-details
+    h4,
+  .contact-info ul li h3,
+  .courses-details-desc .react-tabs__tab-panel .courses-review-comments h3,
+  .courses-details-desc .react-tabs__tab-panel .courses-reviews h3,
+  .privacy-policy-content h3,
+  .purchase-guide-content h3,
+  .single-blog-post .post-content h3,
+  .single-blog-post-box .post-content h3,
+  .single-blog-post-item .post-content h3,
+  .single-courses-box .courses-content h3,
+  .single-courses-item .courses-content .price,
+  .single-courses-item-box .courses-content h3,
+  .single-events-box .content h3,
+  .single-events-box-item .content h3,
+  .single-features-box h3,
+  .single-program-box h3,
+  .single-testimonials-box p,
+  .terms-of-service-content h3,
+  .widget-area .widget .widget-title {
+    font-size: 20px;
+  }
+  .about-content .features-list li span,
+  .events-details-image #timer div span,
+  .feedback-quote p {
+    font-size: 17px;
+  }
+  .slogan-image {
+    margin-bottom: 0;
+  }
+  .feedback-content h2 {
+    font-size: 29px;
+  }
+  .single-feedback-item {
+    padding: 50px 80px 50px 40px;
+  }
+  .single-banner-box {
+    padding: 30px 20px 30px 80px;
+  }
+  .single-banner-box .icon {
+    left: 20px;
+    font-size: 40px;
+  }
+  .single-banner-box h3,
+  .single-box-item h3,
+  .single-courses-item .courses-content h3,
+  .single-products-box .products-content h3 {
+    font-size: 19px;
+  }
+  .single-funfacts-box {
+    padding: 75px 20px;
+  }
+  .single-funfacts h3,
+  .single-funfacts-box h3,
+  .single-funfacts-item h3 {
+    font-size: 35px;
+  }
+  .courses-details-desc
+    .react-tabs__tab-panel
+    .courses-curriculum
+    ul
+    li
+    a
+    .courses-name,
+  .edemy-nav
+    .navbar
+    .navbar-nav
+    .nav-item.megamenu
+    .dropdown-menu
+    .megamenu-submenu
+    li
+    a,
+  .edemy-nav
+    .navbar
+    .navbar-nav
+    .nav-item.megamenu
+    .dropdown-menu
+    .single-category-widget
+    .sub-title,
+  .edemy-nav .navbar .navbar-nav .nav-item:hover .dropdown-menu li a,
+  .single-funfacts p,
+  .single-funfacts-box p,
+  .single-funfacts-item p {
+    font-size: 14px;
+  }
+  .contact-form,
+  .download-syllabus-form,
+  .events-box .content,
+  .get-instant-courses-content {
+    padding: 30px;
+  }
+  .view-all-courses-image {
+    margin-top: 85px;
+  }
+  .single-footer-widget.pl-5,
+  .single-footer-widget.px-5 {
+    padding-left: 0 !important;
+  }
+  .billing-details .title,
+  .courses-details-desc .react-tabs__tab-panel .courses-overview h3,
+  .events-box .content h3,
+  .events-details-desc h3,
+  .order-details .title,
+  .products-details-desc h3,
+  .products-details-tabs .react-tabs__tab-panel .products-review-comments h3,
+  .products-details-tabs .react-tabs__tab-panel .products-reviews h3,
+  .products-details-tabs .react-tabs__tab-panel .review-form-wrapper h3,
+  .profile-box .content h3,
+  .single-blog-item .post-content h3,
+  .single-categories-box .content h3,
+  .single-kindergarten-courses-box .courses-content h3,
+  .single-kindergarten-services-box .content h3 {
+    font-size: 21px;
+  }
+  .single-box-item {
+    padding: 60px 15px 30px;
+  }
+  .courses-details-header .courses-price .price {
+    font-size: 30px;
+    display: block;
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+  .single-testimonials-box {
+    max-width: 800px;
+    padding-right: 50px;
+  }
+  .single-testimonials-box::before {
+    bottom: 120px;
+    font-size: 150px;
+  }
+  .single-testimonials-box .shape-img img.shape-2 {
+    left: -85px;
+    top: -55px;
+  }
+  .blog-details-desc .article-content h3,
+  .cart-totals h3,
+  .comments-area .comment-respond .comment-reply-title,
+  .comments-area .comments-title,
+  .courses-details-desc-style-two .courses-reviews h3,
+  .courses-details-desc-style-two h3,
+  .information-content .apply-details li h3,
+  .our-story-title h3,
+  .related-courses h3,
+  .single-health-services-box h3,
+  .single-language-courses-box h3,
+  .single-pricing-box .pricing-header h3,
+  .single-yoga-courses-box .courses-content h3 {
+    font-size: 22px;
+  }
+  .start-with-success-box .content h3 {
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+  .contact-info h2 {
+    font-size: 30px;
+    margin-bottom: 10px;
+  }
+  .login-form {
+    padding: 30px 40px;
+  }
+  .register-form {
+    padding-top: 25px;
+  }
+  .products-details-desc .products-meta span,
+  .widget-area .widget_popular_products .item .info .title,
+  .widget-area .widget_recent_courses .item .info .title,
+  .widget-area .widget_recent_courses .item .info span {
+    font-size: 15px;
+  }
+  .widget-area .tagcloud a {
+    padding: 7px 10px;
+    font-size: 13.5px !important;
+  }
+  .courses-details-info .info li,
+  .courses-sidebar-information .info li,
+  .events-details-info .info li,
+  .health-coaching-banner-content p,
+  .main-banner-wrapper-content p,
+  .next-link-wrapper .next-title,
+  .prev-link-wrapper .prev-title,
+  .single-pricing-box .pricing-features ul li,
+  .widget-area .widget_popular_products .item .info span {
+    font-size: 16px;
+  }
+  .courses-details-desc .react-tabs__tab-list .react-tabs__tab {
+    padding: 12px 0;
+    font-size: 17px;
+  }
+  .courses-details-desc .react-tabs__tab-panel .courses-curriculum h3,
+  .edemy-nav
+    .navbar
+    .navbar-nav
+    .nav-item.megamenu
+    .dropdown-menu
+    .single-category-widget
+    h3 {
+    font-size: 18px;
+  }
+  .courses-details-desc
+    .react-tabs__tab-panel
+    .courses-curriculum
+    ul
+    li
+    a::before {
+    top: 15px;
+    font-size: 17px;
+  }
+  .courses-details-desc
+    .react-tabs__tab-panel
+    .courses-instructor
+    .single-advisor-box
+    .advisor-content {
+    padding: 0 0 0 20px;
+  }
+  .courses-details-info {
+    margin-left: 0;
+    margin-top: -190px;
+  }
+  .courses-details-info .info {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .courses-details-info .info li.price,
+  .events-details-info .info li.price,
+  .experience-image .title,
+  .experience-img .title {
+    font-size: 25px;
+  }
+  .apply-instructor-content,
+  .courses-sidebar-information,
+  .events-details-info,
+  .feedback-quote,
+  .single-program-box {
+    padding: 20px;
+  }
+  .apply-instructor-content .react-tabs__tab-list .react-tabs__tab {
+    margin-right: 30px;
+    padding: 0 0 8px;
+    font-size: 16px;
+  }
+  .profile-box .content {
+    padding: 0 0 0 30px;
+  }
+  .events-details-image #timer div {
+    width: 110px;
+    height: 110px;
+    font-size: 45px;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  .products-details-desc,
+  .yoga-main-banner {
+    padding-left: 0;
+  }
+  .blockquote,
+  blockquote {
+    padding: 40px !important;
+  }
+  .blockquote p,
+  blockquote p {
+    font-size: 20px !important;
+  }
+  .main-banner-wrapper {
+    padding-bottom: 100px;
+  }
+  .main-banner-wrapper-content {
+    top: 50px;
+  }
+  .main-banner-wrapper-content h1,
+  .single-kindergarten-services-box .content .icon {
+    font-size: 45px;
+  }
+  .information-content .apply-details li {
+    padding-left: 100px;
+  }
+  .information-content .apply-details li .icon {
+    width: 75px;
+    height: 75px;
+    line-height: 75px;
+    font-size: 30px;
+  }
+  .hero-banner-area {
+    padding-bottom: 230px;
+    padding-top: 100px;
+  }
+  .hero-banner-content h1 {
+    margin-bottom: 20px;
+    font-size: 38px;
+  }
+  .yoga-banner-content {
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .single-training-box h3 {
+    margin-bottom: 12px;
+    font-size: 22px;
+  }
+  .single-pricing-box .price span {
+    margin-top: 0;
+    font-size: 15px;
+  }
+  .health-coaching-banner-area .divider {
+    height: 105px;
+  }
+  .health-coaching-banner-content h1 {
+    font-size: 50px;
+    margin-bottom: 30px;
+  }
+  .health-coaching-banner-content .btn-box {
+    margin-top: 20px;
+  }
+  .single-lifestyle-box {
+    padding: 30px 20px;
+  }
+  .single-lifestyle-box .icon {
+    width: 95px;
+    height: 95px;
+    line-height: 95px;
+    font-size: 60px;
+  }
+  .single-lifestyle-box h3 {
+    margin-bottom: 15px;
+    font-size: 22px;
+  }
+  .program-section-title {
+    padding-right: 20px;
+  }
+  .program-list .program-circle-shape img {
+    animation: unset !important;
+  }
+  .single-program-box .icon {
+    font-size: 50px;
+    margin-bottom: 15px;
+  }
+  .single-events-box-item .content {
+    padding: 17px;
+  }
+  .health-coaching-feedback-image {
+    margin-right: -230px;
+  }
+  .health-coaching-inner {
+    max-width: 475px;
+  }
+  .health-coaching-inner h2 {
+    font-size: 30px;
+    margin-bottom: 40px;
+  }
+  .kindergarten-main-banner {
+    padding-top: 150px;
+  }
+  .kindergarten-main-banner .container-fluid {
+    max-width: 960px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .kindergarten-main-banner::after {
+    bottom: -1px;
+  }
+  .kindergarten-banner-content .image img {
+    max-width: 60px;
+  }
+  .kindergarten-banner-content h1 {
+    line-height: 1.1;
+    font-size: 45px;
+  }
+  .kindergarten-banner-content h1 span {
+    display: inline;
+    font-size: 50px;
+  }
+  .kindergarten-banner-image {
+    margin-top: -15px;
+  }
+  .kindergarten-banner-image .mt-4,
+  .kindergarten-banner-image .my-4 {
+    margin-top: 0 !important;
+  }
+  .kindergarten-shape20 img,
+  .kindergarten-shape3 img {
+    max-width: 150px;
+  }
+  .kindergarten-about-image {
+    margin-right: 0;
+  }
+  .kindergarten-about-image .main-image {
+    padding-bottom: 115px;
+    padding-right: 80px;
+  }
+  .kindergarten-about-image .main-image img:nth-child(2) {
+    max-width: 300px;
+  }
+  .kindergarten-about-image .shape img {
+    max-width: 105px;
+  }
+  .single-kindergarten-feedback-item,
+  .single-kindergarten-services-box {
+    background-color: #fff;
+    padding: 35px 20px;
+  }
+  .single-kindergarten-feedback-item .content img,
+  .single-kindergarten-services-box img {
+    display: none !important;
+  }
+  .single-kindergarten-services-box .content {
+    position: relative;
+    top: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .single-kindergarten-courses-box .courses-content {
+    padding: 0 20px 20px;
+  }
+  .single-kindergarten-feedback-item .content p {
+    padding: 0;
+    top: 0;
+    position: relative;
+  }
+  .single-kindergarten-feedback-item .client-info {
+    margin-left: 0;
+    margin-top: 15px;
+  }
+  .single-kindergarten-feedback-item .client-info h3 {
+    color: #000;
+    font-size: 18px;
+  }
+  .single-kindergarten-feedback-item .client-info span {
+    color: #000;
+  }
+  .single-selected-ages-box h3 {
+    font-size: 21px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .kindergarten-shape19 img {
+    max-width: 50px;
+  }
+  .navbar-area {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+  .edemy-nav .navbar .navbar-nav .nav-item a {
+    font-size: 15px;
+    margin-left: 8px;
+    margin-right: 8px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+  .edemy-nav
+    .navbar
+    .navbar-nav
+    .nav-item.megamenu
+    .dropdown-menu
+    .single-category-widget
+    .icon {
+    width: 60px;
+    height: 60px;
+    font-size: 30px;
+  }
+  .edemy-nav .navbar .search-box {
+    margin-left: 30px;
+    width: 160px;
+  }
+  .edemy-nav .navbar .search-box .input-search {
+    height: 40px;
+    font-size: 12px;
+  }
+  .edemy-nav .navbar .search-box button {
+    height: 40px;
+  }
+  .edemy-nav .navbar .others-option {
+    margin-left: 15px;
+  }
+  .edemy-nav .navbar .others-option .option-item {
+    margin-left: 25px;
+  }
+  .edemy-nav .navbar .others-option .default-btn {
+    font-size: 13px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .blog-slides .single-blog-post-box .post-content .post-content-footer li,
+  .blog-slides
+    .single-blog-post-box
+    .post-content
+    .post-content-footer
+    li
+    .post-author
+    span {
+    font-size: 12px;
+  }
+}
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {
+  .container {
+    max-width: 1140px;
+  }
+  .edemy-nav .container-fluid,
+  .kindergarten-main-banner .container-fluid {
+    max-width: 1200px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .edemy-nav .navbar .search-box {
+    width: 250px;
+  }
+  .edemy-nav .navbar .others-option .option-item {
+    margin-left: 20px;
+  }
+  .edemy-nav .navbar .navbar-nav .nav-item a {
+    margin-left: 11px;
+    margin-right: 11px;
+  }
+  .edemy-nav .navbar .navbar-nav .nav-item .dropdown-menu {
+    left: auto;
+    right: 0;
+  }
+  .edemy-nav .navbar .navbar-nav .nav-item .dropdown-menu li .dropdown-menu {
+    left: -250px;
+    right: auto;
+  }
+  .edemy-nav
+    .navbar
+    .navbar-nav
+    .nav-item
+    .dropdown-menu
+    li
+    .dropdown-menu
+    li
+    .dropdown-menu,
+  .edemy-nav
+    .navbar
+    .navbar-nav
+    .nav-item
+    .dropdown-menu
+    li
+    .dropdown-menu
+    li
+    .dropdown-menu
+    li
+    .dropdown-menu
+    li
+    .dropdown-menu,
+  .edemy-nav
+    .navbar
+    .navbar-nav
+    .nav-item
+    .dropdown-menu
+    li
+    .dropdown-menu
+    li
+    .dropdown-menu
+    li
+    .dropdown-menu
+    li
+    .dropdown-menu
+    li
+    .dropdown-menu
+    li
+    .dropdown-menu {
+    left: 100%;
+  }
+  .edemy-nav
+    .navbar
+    .navbar-nav
+    .nav-item
+    .dropdown-menu
+    li
+    .dropdown-menu
+    li
+    .dropdown-menu
+    li
+    .dropdown-menu,
+  .edemy-nav
+    .navbar
+    .navbar-nav
+    .nav-item
+    .dropdown-menu
+    li
+    .dropdown-menu
+    li
+    .dropdown-menu
+    li
+    .dropdown-menu
+    li
+    .dropdown-menu
+    li
+    .dropdown-menu {
+    left: -100%;
+  }
+  .banner-section .container-fluid,
+  .main-banner .container-fluid {
+    max-width: 1165px;
+  }
+  .main-banner-courses-list .single-courses-box .courses-content h3 {
+    font-size: 22px;
+  }
+  .about-area .shape3,
+  .health-coaching-shape1,
+  .health-coaching-shape2,
+  .health-coaching-shape3,
+  .kindergarten-banner-content .circle-shape,
+  .slogan-area .shape3 {
+    display: none;
+  }
+  .hero-banner-area .container-fluid {
+    max-width: 1200px;
+  }
+  .hero-banner-content h1 {
+    margin-bottom: 20px;
+    font-size: 39px;
+  }
+  .health-coaching-banner-content h1 {
+    font-size: 65px;
+  }
+  .kindergarten-main-banner {
+    padding-top: 150px;
+  }
+  .kindergarten-banner-content .image img {
+    max-width: 100px;
+  }
+  .kindergarten-banner-content h1 {
+    font-size: 50px;
+  }
+  .kindergarten-banner-content h1 span {
+    font-size: 70px;
+    display: inline;
+  }
+  .kindergarten-banner-image {
+    margin-top: -50px;
+  }
+  .kindergarten-banner-image .mt-4,
+  .kindergarten-banner-image .my-4 {
+    margin-top: 0 !important;
+  }
+  .kindergarten-shape7 {
+    right: 5%;
+    top: 3%;
+  }
+  .single-kindergarten-feedback-item {
+    background-color: #fff;
+    padding: 35px 20px;
+  }
+  .single-kindergarten-feedback-item .content img {
+    display: none !important;
+  }
+  .single-kindergarten-feedback-item .content p {
+    padding: 0;
+    top: 0;
+    position: relative;
+  }
+  .single-kindergarten-feedback-item .client-info {
+    margin-left: 0;
+    margin-top: 15px;
+  }
+  .single-kindergarten-feedback-item .client-info h3,
+  .single-kindergarten-feedback-item .client-info span {
+    color: #000;
+  }
+  .kindergarten-shape19 {
+    bottom: 220px;
+  }
+  .kindergarten-shape19 img {
+    max-width: 150px;
+  }
+  .kindergarten-shape20 img {
+    max-width: 240px;
+  }
+}
+@media only screen and (min-width: 1550px) {
+  .edemy-nav .container-fluid,
+  .kindergarten-main-banner .container-fluid {
+    padding-left: 120px;
+    padding-right: 120px;
+  }
+  .edemy-nav .navbar .search-box {
+    margin-left: 90px;
+  }
+  .hero-banner-area .container-fluid,
+  .main-banner .container-fluid,
+  .main-banner-wrapper .container-fluid {
+    max-width: 1480px;
+  }
+  .banner-section .container-fluid {
+    max-width: 1500px;
+  }
+  .main-banner-wrapper-content h1 {
+    font-size: 55px;
+  }
+  .health-coaching-shape1 img,
+  .health-coaching-shape2 img,
+  .health-coaching-shape3 img,
+  .kindergarten-banner-content .image img,
+  .kindergarten-shape19 img,
+  .kindergarten-shape20 img {
+    max-width: 100%;
+  }
+  .kindergarten-banner-content h1 {
+    font-size: 60px;
+  }
+  .kindergarten-banner-content h1 span {
+    font-size: 80px;
+  }
+}
+@media only screen and (max-width: 575px) {
+  .edemy-nav .navbar .navbar-nav .nav-item .col {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .edemy-nav .navbar .navbar-nav .nav-item .col:last-child {
+    margin-bottom: 0;
+  }
+  .edemy-nav .navbar .others-option {
+    right: 65px !important;
+  }
+  .edemy-nav .navbar .others-option .option-item {
+    margin-left: 15px;
+  }
+  .edemy-nav .navbar .others-option .option-item .default-btn {
+    font-size: 11px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .edemy-nav .navbar .others-option .option-item .default-btn i {
+    display: none;
+  }
+}
+@media only screen and (max-width: 991px) {
+  .edemy-nav .container-fluid {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .edemy-nav .navbar .navbar-toggler:focus {
+    outline: 0;
+    box-shadow: none;
+  }
+  .edemy-nav .navbar .search-box {
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+  .edemy-nav .navbar .search-box .input-search {
+    height: 45px;
+    font-size: 14px;
+  }
+  .edemy-nav .navbar .navbar-collapse {
+    max-height: 70vh;
+    overflow-y: scroll;
+    margin-top: 20px;
+    padding-right: 20px;
+  }
+  .edemy-nav .navbar .navbar-collapse::-webkit-scrollbar {
+    width: 10px;
+  }
+  .edemy-nav .navbar .navbar-collapse::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  .edemy-nav .navbar .navbar-collapse::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  .edemy-nav .navbar .navbar-collapse::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  .edemy-nav .navbar .navbar-nav .nav-item a {
+    font-size: 15px;
+    padding: 10px 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .edemy-nav .navbar .navbar-nav .nav-item a i,
+  .edemy-nav
+    .navbar
+    .navbar-nav
+    .nav-item.megamenu
+    .dropdown-menu
+    .mobile-none {
+    display: none;
+  }
+  .edemy-nav .navbar .navbar-nav .nav-item .dropdown-menu {
+    border: none;
+    top: 0;
+    border-top: 1px solid #fe4a55;
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+    margin-top: 0;
+    width: 100%;
+    border-left: 1px solid #eee;
+    margin-bottom: 10px;
+  }
+  .edemy-nav .navbar .navbar-nav .nav-item .dropdown-menu li a {
+    padding: 6px 20px;
+    font-size: 14px;
+  }
+  .edemy-nav .navbar .navbar-nav .nav-item .dropdown-menu li .dropdown-menu {
+    left: 20px;
+    border: none;
+    top: 0;
+    border-top: 1px solid #fe4a55;
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+    margin-top: 0;
+    width: 88%;
+    margin-bottom: 10px;
+  }
+  .edemy-nav .navbar .navbar-nav .nav-item.megamenu .dropdown-menu {
+    padding: 15px 0;
+    left: 0;
+    border: none;
+    top: 0;
+    border-top: 1px solid #fe4a55;
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+    margin-top: 0;
+    width: 100%;
+    border-left: 1px solid #eee;
+  }
+  .edemy-nav
+    .navbar
+    .navbar-nav
+    .nav-item.megamenu
+    .dropdown-menu
+    .megamenu-submenu
+    li
+    a {
+    margin-top: 10px;
+    font-size: 13px;
+  }
+  .edemy-nav .navbar .others-option {
+    margin-left: 0;
+    position: absolute;
+    top: 8px;
+    right: 70px;
+  }
+  .edemy-nav .navbar .others-option .cart-btn .dropdown .dropdown-menu {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 1920px) {
+  .main-banner {
+    padding-top: 150px;
+    padding-bottom: 150px;
+  }
+  .banner-shape1 {
+    left: 80px;
+    bottom: 70px;
+  }
+  .banner-shape2 {
+    bottom: 60px;
+    right: 60px;
+  }
+  .banner-shape3 {
+    top: 90px;
+    left: 100px;
+  }
+}

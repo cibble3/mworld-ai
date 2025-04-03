@@ -1,0 +1,57 @@
+/* @import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap"); */
+/* @import url("https://fonts.googleapis.com/css2?family=HP+Simplified+Jpan:wght@400&display=swap"); */
+body {
+  margin: 0;
+  line-height: normal;
+  overflow: hidden;
+}
+:root {
+  /* fonts */
+  --font-lato: Lato;
+  --font-hp-simplified-jpan: "HP Simplified Jpan";
+
+  /* font sizes */
+  --font-size-4xl: 23px;
+  --font-size-lg: 18px;
+  --font-size-6xl: 25px;
+  --font-size-xl: 20px;
+  --font-size-base: 16px;
+  --font-size-mini: 15px;
+  --font-size-11xl: 30px;
+  --font-size-21xl: 40px;
+  --font-size-24xl: 43px;
+  --font-size-7xl: 26px;
+  --font-size-20xl: 39px;
+
+  /* Colors */
+  /* --color-white: #fff; */
+  --color-crimson: #ed135d;
+  --color-black: #000;
+  --color-darkslategray-100: #484747;
+  --color-darkslategray-200: #414141;
+  --color-darkslategray-300: #3d3d3d;
+  --color-darkslategray-400: #303030;
+  --color-whitesmoke-100: #f6f6f6;
+  --color-whitesmoke-200: #f4f4f4;
+  --color-dimgray: #707070;
+  --color-gray-100: #858585;
+  --color-gray-200: #818181;
+  --color-gray-300: #16181c;
+  --color-gray-400: #161616;
+  --color-gray-500: #0c0c0c;
+  --color-gainsboro-100: #e6e6e6;
+  --color-gainsboro-200: #d8d8d8;
+  --color-limegreen: #3ac93f;
+  --color-darkorange: #de7e00;
+  --color-darkgray: #9a9a9a;
+  --color-silver: #b9b9b9;
+
+  /* border radiuses */
+  --br-5xl: 24px;
+  --br-5xs: 8px;
+  --br-lgi: 19px;
+  --br-xl: 20px;
+  --br-base: 16px;
+  --br-mini: 15px;
+  --br-9xs: 4px;
+}

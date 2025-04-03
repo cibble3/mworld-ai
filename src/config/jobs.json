@@ -1,0 +1,33 @@
+{
+  "schedules": {
+    "daily": {
+      "models": {
+        "limit": 10,
+        "hotOnly": true
+      },
+      "categories": {
+        "limit": 5
+      },
+      "blog": {
+        "limit": 2
+      },
+      "pages": {
+        "sections": ["featured", "trending"]
+      }
+    },
+    "weekly": {
+      "models": {
+        "limit": 50
+      },
+      "categories": {
+        "limit": 20
+      },
+      "blog": {
+        "limit": 5
+      },
+      "pages": {
+        "sections": ["featured", "trending", "new"]
+      }
+    }
+  }
+} 

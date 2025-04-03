@@ -1,0 +1,124 @@
+.mobileMenu {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 70px);
+  background-color: #111;
+  z-index: 999;
+  overflow-y: auto;
+}
+
+.mobileMenuContent {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  height: 100%;
+}
+
+.mobileLanguageSelector {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.mobileNav {
+  flex: 1;
+}
+
+.mobileNavList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mobileNavItem {
+  margin-bottom: 20px;
+}
+
+.mobileNavLink {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  padding: 10px 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mobileNavLink.active {
+  color: #e74c3c;
+}
+
+.mobileSectionTitle {
+  color: #e74c3c;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 5px;
+}
+
+.mobileSubNav {
+  list-style: none;
+  padding: 0 0 0 15px;
+  margin: 0;
+}
+
+.mobileNavSubLink {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  color: #ddd;
+  font-size: 1rem;
+  padding: 8px 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mobileNavSubLink:hover {
+  color: #e74c3c;
+}
+
+.mobileMenuFooter {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #333;
+}
+
+.joinButton, 
+.loginButton {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.joinButton {
+  background-color: #e74c3c;
+  color: #fff;
+  margin-right: 10px;
+}
+
+.joinButton:hover {
+  background-color: #c0392b;
+}
+
+.loginButton {
+  background-color: transparent;
+  color: #fff;
+  border: 1px solid #e74c3c;
+  margin-left: 10px;
+}
+
+.loginButton:hover {
+  background-color: rgba(231, 76, 60, 0.1);
+} 

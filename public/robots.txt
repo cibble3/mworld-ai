@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.mistressworld.xxx/
+
+# Sitemaps
+Sitemap: https://www.mistressworld.xxx/sitemap.xml

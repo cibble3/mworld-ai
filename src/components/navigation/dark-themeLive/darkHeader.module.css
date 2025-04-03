@@ -1,0 +1,11 @@
+.languageSelector {
+  margin-left: 15px;
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .languageSelector {
+    display: none;
+  }
+} 

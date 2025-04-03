@@ -1,0 +1,60 @@
+/**
+ * Theme CSS Variables
+ *
+ * These variables provide default values that will be overridden
+ * by JavaScript when the theme context changes.
+ */
+
+:root {
+  /* Default theme (dark) */
+  --primary-bg: #121212;
+  --secondary-bg: #1e1e1e;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --accent-color: #e0006c;
+  --border-color: #2a2a2a;
+}
+
+/* Class-based theme overrides (optional fallback) */
+.theme-light {
+  --primary-bg: #f5f5f5;
+  --secondary-bg: #ffffff;
+  --text-primary: #121212;
+  --text-secondary: #505050;
+  --accent-color: #e0006c;
+  --border-color: #e0e0e0;
+}
+
+.theme-legacyDark {
+  --primary-bg: #0f0f0f;
+  --secondary-bg: #1a1a1a;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --accent-color: #e0006c;
+  --border-color: #2a2a2a;
+}
+
+/* Theme-specific utility classes */
+.bg-primary {
+  background-color: var(--primary-bg);
+}
+
+.bg-secondary {
+  background-color: var(--secondary-bg);
+}
+
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-accent {
+  color: var(--accent-color);
+}
+
+.border-theme {
+  border-color: var(--border-color);
+} 

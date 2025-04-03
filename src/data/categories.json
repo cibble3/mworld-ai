@@ -1,0 +1,53 @@
+{
+  "categories": [
+    {
+      "id": "girls",
+      "slug": "girls",
+      "name": "Girls",
+      "description": "Paid cam models",
+      "filters": [
+        {"type": "ethnicity", "name": "Ethnicity", "options": ["asian", "ebony", "latin", "white"]},
+        {"type": "age", "name": "Age", "options": ["teen", "milf", "twenties"]},
+        {"type": "breasts", "name": "Breasts", "options": ["big-boobs", "huge-breasts", "normal-tits", "tiny-breast"]},
+        {"type": "build", "name": "Build", "options": ["average-built", "bbw", "petite", "sporty"]}
+      ]
+    },
+    {
+      "id": "trans",
+      "slug": "trans",
+      "name": "Trans",
+      "description": "Trans cam models",
+       "filters": [
+        {"type": "ethnicity", "name": "Ethnicity", "options": ["asian", "ebony", "latin", "white"]},
+        {"type": "age", "name": "Age", "options": ["teen", "milf", "twenties"]}
+      ]
+    },
+    {
+      "id": "free",
+      "slug": "free",
+      "name": "Free",
+      "description": "Free cam models (e.g., Chaturbate)",
+       "filters": [
+        {"type": "ethnicity", "name": "Ethnicity", "options": ["asian", "ebony", "latin", "white"]},
+        {"type": "age", "name": "Age", "options": ["teen", "milf", "twenties"]}
+      ]
+    },
+    {
+      "id": "videos",
+      "slug": "videos",
+      "name": "Videos",
+      "description": "Adult videos",
+      "filters": [
+        {"type": "category", "name": "Category", "options": ["anal", "lesbian", "threesome"]},
+        {"type": "duration", "name": "Duration", "options": ["short", "medium", "long"]}
+      ]
+    },
+    {
+      "id": "blog",
+      "slug": "blog",
+      "name": "Blog",
+      "description": "Blog posts",
+      "filters": []
+    }
+  ]
+}
