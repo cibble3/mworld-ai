@@ -144,53 +144,57 @@ const LegacyTopbar = () => {
                       onMouseEnter={hasFilters ? () => handleMouseEnter(cat.slug) : undefined}
                       onMouseLeave={hasFilters ? handleMouseLeave : undefined}
                     >
-                      <Link
-                        href={`/${cat.slug}`}
-                        className={`flex items-center px-3 py-2 text-sm font-medium transition-all duration-200 rounded-lg ${isActive
-                          ? 'text-primary bg-primary/10'
-                          : 'text-gray-300 hover:text-white hover:bg-gray-800/50'
-                          }`}
-                      >
-                        {getIcon(cat.slug)}
-                        {cat.name}
-                        {hasFilters && (
-                          <span className="ml-1.5 text-xs opacity-60 group-hover:opacity-100 transition-all duration-200 group-hover:rotate-180">▼</span>
-                        )}
-                      </Link>
+                      <div className="flex items-center">
+                        <Link
+                          href={`/${cat.slug}`}
+                          className={`flex items-center px-3 py-2 text-sm font-medium transition-all duration-200 rounded-lg ${isActive
+                              ? 'text-primary bg-primary/10'
+                              : 'text-gray-300 hover:text-white hover:bg-gray-800/50'
+                            }`}
+                        >
+                          {getIcon(cat.slug)}
+                          {cat.name}
+                          {hasFilters && (
+                            <span className="ml-1.5 text-xs opacity-60 group-hover:opacity-100 transition-all duration-200 group-hover:rotate-180">▼</span>
+                          )}
+                        </Link>
+                      </div>
 
                       {hasFilters && openDropdown === cat.slug && (
-                        <div
-                          className="absolute left-0 mt-2 w-72 rounded-xl shadow-2xl z-30 border border-gray-800/50 bg-gray-900/95 backdrop-blur-sm"
-                          style={dropdownStyle}
-                        >
-                          {cat.filters.map((filter) => (
-                            <div key={filter.type} className="py-2">
-                              <span className="block px-4 pt-1 pb-2 text-xs font-semibold uppercase tracking-wider text-gray-400 border-b border-gray-800/50">
-                                {formatFilterName(filter.name)}
-                              </span>
-                              <div className="grid grid-cols-2 gap-2 px-4 py-2">
-                                {filter.options.map((option) => {
-                                  const filterSlug = slugify(filter.type);
-                                  const optionSlug = slugify(option);
-                                  const href = `/${cat.slug}/${filterSlug}/${optionSlug}`;
-                                  const isFilterActive = router.asPath.includes(href);
-                                  return (
-                                    <Link
-                                      key={optionSlug}
-                                      href={href}
-                                      className={`block py-1.5 px-2 text-xs rounded-lg transition-all duration-200 ${isFilterActive
-                                        ? 'bg-primary/10 text-primary font-medium ring-1 ring-primary/20'
-                                        : 'text-gray-300 hover:text-white hover:bg-gray-800/30'
-                                        }`}
-                                      onClick={handleMouseLeave}
-                                    >
-                                      {capitalizeString(option)}
-                                    </Link>
-                                  );
-                                })}
+                        <div className="absolute left-0 top-full pt-2">
+                          <div
+                            className="w-72 rounded-xl shadow-2xl z-30 border border-gray-800/50 bg-gray-900/95 backdrop-blur-sm"
+                            style={dropdownStyle}
+                          >
+                            {cat.filters.map((filter) => (
+                              <div key={filter.type} className="py-2">
+                                <span className="block px-4 pt-1 pb-2 text-xs font-semibold uppercase tracking-wider text-gray-400 border-b border-gray-800/50">
+                                  {formatFilterName(filter.name)}
+                                </span>
+                                <div className="grid grid-cols-2 gap-2 px-4 py-2">
+                                  {filter.options.map((option) => {
+                                    const filterSlug = slugify(filter.type);
+                                    const optionSlug = slugify(option);
+                                    const href = `/${cat.slug}/${filterSlug}/${optionSlug}`;
+                                    const isFilterActive = router.asPath.includes(href);
+                                    return (
+                                      <Link
+                                        key={optionSlug}
+                                        href={href}
+                                        className={`block py-1.5 px-2 text-xs rounded-lg transition-all duration-200 ${isFilterActive
+                                            ? 'bg-primary/10 text-primary font-medium ring-1 ring-primary/20'
+                                            : 'text-gray-300 hover:text-white hover:bg-gray-800/30'
+                                          }`}
+                                        onClick={handleMouseLeave}
+                                      >
+                                        {capitalizeString(option)}
+                                      </Link>
+                                    );
+                                  })}
+                                </div>
                               </div>
-                            </div>
-                          ))}
+                            ))}
+                          </div>
                         </div>
                       )}
                     </div>
