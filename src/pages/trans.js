@@ -5,8 +5,11 @@ import ModelGrid from '@/theme/components/grid/ModelGrid';
 import ModelCard from '@/theme/components/common/ModelCard';
 import DynamicSidebar from '@/components/navigation/DynamicSidebar';
 import axios from 'axios';
+import { useSearchParams } from 'next/navigation'
+
 
 const TransPage = () => {
+  const searchParams = useSearchParams();
   const [models, setModels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,13 +19,20 @@ const TransPage = () => {
       try {
         console.log('[TransPage] Fetching models...');
         setLoading(true);
+        // Read query params
+        const hairColor = searchParams.get('hair_color');
+        const tags = searchParams.get('tags');
+        const willingness = searchParams.get('willingness');
 
         const response = await axios.get('/api/models', {
           params: {
             provider: 'awe',
             category: 'trans',
             limit: 24,
-            debug: true
+            debug: true,
+            ...(hairColor && { hair_color: hairColor }),
+            ...(tags && { tags }),
+            ...(willingness && { willingness }),
           }
         });
 
@@ -84,7 +94,7 @@ const TransPage = () => {
     };
 
     fetchModels();
-  }, []);
+  }, [searchParams]);
 
   // Prepare page metadata
   const pageContent = {

@@ -23,25 +23,34 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { MdKeyboardArrowUp, MdKeyboardArrowDown } from "react-icons/md";
 import dynamic from "next/dynamic";
+import DynamicSidebar from "@/components/navigation/DynamicSidebar";
+import { useSearchParams } from "next/navigation";
 
 const HomeLiveScreenPhoto = dynamic(() =>
   import("@/components/NewHomeLiveScreenPhone")
 );
 
 const GirlsTypePage = () => {
+  const searchParams = useSearchParams();
   const router = useRouter();
   const { type } = router.query;
 
   if (!type) {
-    return <ThemeLayout meta={{title: "Loading..."}}><div>Loading category...</div></ThemeLayout>;
+    return <ThemeLayout meta={{ title: "Loading..." }}><div>Loading category...</div></ThemeLayout>;
   }
+  const hairColor = searchParams.get('hair_color');
+  const tags = searchParams.get('tags');
+  const willingness = searchParams.get('willingness');
 
   const { models, isLoading, error, hasMore, loadMore } = useModelFeed({
     category: 'girls',
     subcategory: type,
     limit: 24,
+    ...(hairColor && { hair_color: hairColor }),
+    ...(tags && { tags }),
+    ...(willingness && { willingness }),
   });
-
+  console.log('models :>> ', models);
   // Get the content for this subcategory
   const content = girlsTransContent?.girls?.[type] || {
     title: `${capitalizeString(type || '')} Cam Girls`,
@@ -52,13 +61,13 @@ const GirlsTypePage = () => {
   };
 
   // Extract content fields for better access
-  const { 
-    title = `${capitalizeString(type || '')} Cam Girls`, 
-    desc = `Experience amazing ${type} models`, 
-    meta_title, 
-    meta_desc, 
+  const {
+    title = `${capitalizeString(type || '')} Cam Girls`,
+    desc = `Experience amazing ${type} models`,
+    meta_title,
+    meta_desc,
     meta_keywords,
-    about = [] 
+    about = []
   } = content;
 
   // Prepare metadata for SEO
@@ -86,21 +95,40 @@ const GirlsTypePage = () => {
         </div>
       ))}
     </div>
-  ) : null; 
+  ) : null;
 
   return (
-    <ThemeLayout 
-      meta={meta} 
-      title={title}           // Pass title prop
-      description={desc} // Pass description prop
-      bottomContentChildren={bottomContentJSX} // Pass children for BottomContent
-    >
+    <div className="bg-[#16181c] text-textlight">
+      {/* <ThemeLayout
+        meta={meta}
+        title={title}           // Pass title prop
+        description={desc} // Pass description prop
+        bottomContentChildren={bottomContentJSX} // Pass children for BottomContent
+      > */}
       {/* Cookies modal should ideally be part of the layout or a global provider */}
       {/* <CookiesModal /> */}
-      
+      <div className="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] bg-[#1a1a1a] overflow-y-auto z-10 pointer-events-auto lg:block hidden">
+        <DynamicSidebar />
+      </div>
+
       {/* Models Grid Section */}
       <section className="py-8">
-        <ModelGrid
+        <ModelGrid models={models} isLoading={false}>
+          {(model) => (
+            <ModelCard
+              key={model.id || model.slug}
+              performerId={model.id || model.slug}
+              name={model.name}
+              age={model.age}
+              ethnicity={model.ethnicity}
+              tags={model.tags || []}
+              image={model.thumbnail}
+              isOnline={model.isOnline !== false}
+              viewerCount={model.viewerCount || 0}
+            />
+          )}
+        </ModelGrid>
+        {/* <ModelGrid
           models={models}
           isLoading={isLoading}
           error={error}
@@ -119,7 +147,7 @@ const GirlsTypePage = () => {
               preload={index < 4}
             />
           )}
-        />
+        /> */}
 
         {/* Load More Button */}
         {hasMore && (
@@ -134,7 +162,8 @@ const GirlsTypePage = () => {
           </div>
         )}
       </section>
-    </ThemeLayout>
+      {/* </ThemeLayout> */}
+    </div>
   );
 };
 

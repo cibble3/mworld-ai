@@ -5,8 +5,10 @@ import ModelGrid from '@/theme/components/grid/ModelGrid';
 import ModelCard from '@/theme/components/common/ModelCard';
 import DynamicSidebar from '@/components/navigation/DynamicSidebar';
 import axios from 'axios';
+import { useSearchParams } from 'next/navigation'
 
 const GirlsPage = () => {
+  const searchParams = useSearchParams();
   const [models, setModels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -14,67 +16,43 @@ const GirlsPage = () => {
   useEffect(() => {
     const fetchModels = async () => {
       try {
-        console.log('[GirlsPage] Fetching models...');
         setLoading(true);
+
+        // Read query params
+        const hairColor = searchParams.get('hair_color');
+        const tags = searchParams.get('tags');
+        const willingness = searchParams.get('willingness');
 
         const response = await axios.get('/api/models', {
           params: {
             provider: 'awe',
             category: 'girls',
-            // ethnicity: 'asian',
-            // hair_color: 'red',
-            // willingness: 'group',
             limit: 24,
-            debug: true
+            debug: true,
+            ...(hairColor && { hair_color: hairColor }),
+            ...(tags && { tags }),
+            ...(willingness && { willingness }),
           }
         });
 
-        console.log(`[GirlsPage] API response:`,
-          response.data?.success ?
-            `Success - ${response.data.data?.models?.length || 0} models` :
-            `Failed - ${response.data.error || 'Unknown error'}`
-        );
-
         if (response.data?.success) {
+          const data = response.data.data;
           let items = [];
 
-          if (response.data.data?.models && Array.isArray(response.data.data.models)) {
-            items = response.data.data.models;
-          } else if (response.data.data?.items && Array.isArray(response.data.data.items)) {
-            items = response.data.data.items;
-          } else if (Array.isArray(response.data.data)) {
-            items = response.data.data;
-          } else {
-            console.warn(`[GirlsPage] Unexpected API response structure`);
-            items = [];
+          if (Array.isArray(data?.models)) {
+            items = data.models;
+          } else if (Array.isArray(data?.items)) {
+            items = data.items;
+          } else if (Array.isArray(data)) {
+            items = data;
           }
 
-          if (items.length > 0) {
-            console.log('[GirlsPage] First model:', JSON.stringify(items[0]).substring(0, 100));
-          }
           setModels(items);
         } else {
           setError(response.data?.error || 'Failed to fetch models');
-
-          // In development, use fallback models
-          if (process.env.NODE_ENV === 'development') {
-            const fallbackModels = Array.from({ length: 24 }, (_, i) => ({
-              id: `fallback-${i}`,
-              performerId: `fallback-${i}`,
-              name: `Girl Model ${i + 1}`,
-              age: 20 + (i % 10),
-              ethnicity: ['asian', 'latin', 'ebony', 'white'][i % 4],
-              tags: ['beautiful', 'sexy'],
-              thumbnail: `https://picsum.photos/id/${100 + i}/300/400`,
-              isOnline: true,
-              viewerCount: Math.floor(Math.random() * 100)
-            }));
-            setModels(fallbackModels);
-            console.log('[GirlsPage] Using fallback models for development');
-          }
         }
       } catch (err) {
-        console.error('[GirlsPage] Error:', err);
+        console.error('Fetch error:', err);
         setError(err.message || 'Failed to fetch models');
       } finally {
         setLoading(false);
@@ -82,7 +60,7 @@ const GirlsPage = () => {
     };
 
     fetchModels();
-  }, []);
+  }, [searchParams]);
 
   // Prepare page metadata
   const pageContent = {

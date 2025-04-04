@@ -9,6 +9,7 @@ import DynamicSidebar from '@/components/navigation/DynamicSidebar';
 import useWindowSize from '@/hooks/useWindowSize';
 import { MdKeyboardArrowUp, MdKeyboardArrowDown } from 'react-icons/md';
 import dynamic from 'next/dynamic';
+import { useSearchParams } from 'next/navigation';
 
 // Dynamically import components to reduce initial bundle size
 const ModelCard = dynamic(() => import('@/components/cards/ModelCard'));
@@ -23,12 +24,17 @@ const DEFAULT_LIMIT = 32;
  */
 export default function FreePage({ initialData }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { width } = useWindowSize();
   const [models, setModels] = useState(initialData?.data?.models || []);
   const [loading, setLoading] = useState(models.length === 0);
   const [error, setError] = useState(null);
   const [pagination, setPagination] = useState(initialData?.data?.pagination || {});
   const [dropdown, setDropdown] = useState(true);
+
+  const tags = searchParams.get('tags');
+  const hairColor = searchParams.get('hair_color');
+  const willingness = searchParams.get('willingness');
 
   // Determine if we're using mobile layout
   const isMobile = width < 700;
@@ -40,7 +46,7 @@ export default function FreePage({ initialData }) {
       console.log('[FREE PAGE] No initial models, fetching from client side');
       fetchModels();
     }
-  }, []);
+  }, [tags, hairColor, willingness]);
 
   // Function to fetch models (used for initial load if server-side fails)
   const fetchModels = async () => {
@@ -54,7 +60,10 @@ export default function FreePage({ initialData }) {
           category: 'girls',
           limit: DEFAULT_LIMIT,
           offset: 0,
-          _timestamp: Date.now()
+          _timestamp: Date.now(),
+          ...(tags && { tags }),
+          ...(hairColor && { hair_color: hairColor }),
+          ...(willingness && { willingness })
         }
       });
 
@@ -86,7 +95,10 @@ export default function FreePage({ initialData }) {
           category: 'girls', // Default to girls
           limit: DEFAULT_LIMIT,
           offset: nextOffset,
-          _timestamp: Date.now()
+          _timestamp: Date.now(),
+          ...(tags && { tags }),
+          ...(hairColor && { hair_color: hairColor }),
+          ...(willingness && { willingness })
         }
       });
 

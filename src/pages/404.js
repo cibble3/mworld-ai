@@ -3,7 +3,7 @@ import React from "react";
 
 export default function Notfound() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-black">
+    <div className="flex lg:-ml-80 relative z-20 min-h-screen items-center justify-center bg-black">
       <div className="text-center">
         <Image
           src={"/images/404-page-not-found.png"}
@@ -16,7 +16,7 @@ export default function Notfound() {
         <p className="text-xl text-white mt-4">
           Oops! Looks like you've reached a dead end.
         </p>
-        <p className="text-xl text-white mt-4">Explore our top categories!</p>
+        <p className="text-xl text-white my-4">Explore our top categories!</p>
         <div className="flex justify-center items-center gap-4 flex-wrap">
           <a
             href="/girls/asian"

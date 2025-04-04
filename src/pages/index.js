@@ -6,6 +6,7 @@ import ModelCard from '@/theme/components/common/ModelCard';
 import DynamicSidebar from '@/components/navigation/DynamicSidebar';
 import Link from 'next/link';
 import axios from 'axios';
+import { useSearchParams } from 'next/navigation';
 
 const HomePage = () => {
   const [girlModels, setGirlModels] = useState([]);
@@ -13,13 +14,15 @@ const HomePage = () => {
   const [fetishModels, setFetishModels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const searchParams = useSearchParams();
   useEffect(() => {
     const fetchModels = async () => {
       try {
         console.log('[HomePage] Fetching models...');
         setLoading(true);
-
+        const hairColor = searchParams.get('hair_color');
+        const tags = searchParams.get('tags');
+        const willingness = searchParams.get('willingness');
         // Fetch girls, trans, and fetish models in parallel
         const [girlsResponse, transResponse, fetishResponse] = await Promise.all([
           axios.get('/api/models', {
@@ -27,7 +30,10 @@ const HomePage = () => {
               provider: 'awe',
               category: 'girls',
               limit: 6,
-              debug: true
+              debug: true,
+              ...(hairColor && { hair_color: hairColor }),
+              ...(tags && { tags }),
+              ...(willingness && { willingness }),
             }
           }),
           axios.get('/api/models', {
@@ -35,7 +41,10 @@ const HomePage = () => {
               provider: 'awe',
               category: 'trans',
               limit: 6,
-              debug: true
+              debug: true,
+              ...(hairColor && { hair_color: hairColor }),
+              ...(tags && { tags }),
+              ...(willingness && { willingness }),
             }
           }),
           axios.get('/api/models', {
@@ -43,7 +52,10 @@ const HomePage = () => {
               provider: 'awe',
               category: 'fetish',
               limit: 6,
-              debug: true
+              debug: true,
+              ...(hairColor && { hair_color: hairColor }),
+              ...(tags && { tags }),
+              ...(willingness && { willingness }),
             }
           })
         ]);
@@ -163,7 +175,7 @@ const HomePage = () => {
     };
 
     fetchModels();
-  }, []);
+  }, [searchParams]);
 
   // Check if we have any models from either category
   const hasModels = girlModels.length > 0 || transModels.length > 0 || fetishModels.length > 0;

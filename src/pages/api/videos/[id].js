@@ -170,15 +170,19 @@ export default async function handler(req, res) {
     detailsUrl.searchParams.append('psid', VPAPI_CONFIG.PSID || 'mikeeyy3');
     detailsUrl.searchParams.append('accessKey', VPAPI_CONFIG.API_KEY || 'a0163de9298e6c0fb2699b73b41da52e');
     detailsUrl.searchParams.append('clientIp', clientIp);
-    detailsUrl.searchParams.append('cobrandId', '201300');
-    detailsUrl.searchParams.append('site', 'wl3');
+    detailsUrl.searchParams.append('cobrandId', '201300'); // Add cobrandId from Laravel code
+    detailsUrl.searchParams.append('site', 'wl3'); // Add site from Laravel code
 
     console.log(`[API /videos/${id}] Request URL: ${detailsUrl.toString()}`);
 
     const response = await axios.get(detailsUrl.toString(), {
-      timeout: 15000,
+      timeout: 15000, // Increase timeout for potentially slow APIs
       headers: {
-        'Accept': 'application/json'
+        'Accept': 'application/json' // Only send Accept header
+        // 'User-Agent': 'MistressWorld/1.0', 
+        // 'X-Forwarded-For': clientIp,
+        // 'Client-IP': clientIp, 
+        // 'X-Client-IP': clientIp
       }
     });
 
@@ -203,19 +207,39 @@ export default async function handler(req, res) {
       });
     }
 
-    // Format the video data before sending to client
-    const formattedVideoData = {
-      ...videoData,
-      // Ensure the playerEmbedUrl is properly formatted
-      playerEmbedUrl: videoData.playerEmbedUrl ? new URL(videoData.playerEmbedUrl.startsWith('//') ?
-        `https:${videoData.playerEmbedUrl}` : videoData.playerEmbedUrl).toString() : null,
-      // Include any other necessary fields
-      performerId: videoData.performerId || null
+    // Map VPAPI response to our standardized format according to the API docs
+    // The details endpoint has a different structure than the list endpoint
+    const normalizedVideo = {
+      id: cleanId,
+      title: videoData.title || 'Untitled Video',
+      description: videoData.description || '',
+      thumbnail: videoData.profileImage || videoData.coverImage ||
+        (videoData.previewImages && videoData.previewImages.length > 0 ? videoData.previewImages[0] : ''),
+      previewImages: Array.isArray(videoData.previewImages) ? videoData.previewImages : [],
+      coverImage: videoData.coverImage || '',
+      duration: parseInt(videoData.duration, 10) || 0,
+      views: parseInt(videoData.views, 10) || 0,
+      category: videoData.sexualOrientation || req.query.category || 'popular',
+      tags: Array.isArray(videoData.tags) ? videoData.tags : [],
+      uploadDate: videoData.createdAt || new Date().toISOString(),
+      uploader: videoData.uploader || 'Unknown',
+      uploaderLink: videoData.uploaderLink || '',
+      targetUrl: videoData.targetUrl || '',
+      // For protocol-relative URLs, ensure we add https:
+      playerEmbedUrl: videoData.playerEmbedUrl ? (
+        videoData.playerEmbedUrl.startsWith('//') ?
+          `https:${videoData.playerEmbedUrl}` : videoData.playerEmbedUrl
+      ) : '',
+      // Keep the original script with {CONTAINER} placeholder
+      playerEmbedScript: videoData.playerEmbedScript || '',
+      quality: videoData.quality || 'sd',
+      isHd: !!videoData.isHd,
+      performerId: videoData.performerId || ''
     };
 
     return res.status(200).json({
       success: true,
-      data: formattedVideoData
+      data: normalizedVideo
     });
     // END OF REAL API CALL LOGIC
 

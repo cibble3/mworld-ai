@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
 import Image from 'next/image';
-
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 /**
  * DynamicSidebar component that displays trending models and other dynamic content
  * This appears on the left side of the page
@@ -11,11 +11,22 @@ export const popularTags = [
   'asian', 'ebony', 'latina', 'white', 'teen', 'milf',
   'bbw', 'mature', 'lesbian', 'squirt', 'anal', 'fetish'
 ];
+
+const filterData = [{
+  "category": ["girls", "trans",
+    "free"], "ethnicity": ["asian", "latina", "white"],
+  "hair_color": ["blonde", "black", "red"], "tags": ["milf",
+    "petite", "bdsm"], "willingness": ["group", "anal"],
+  "source": ["aweapi", "freeapi", "vpapi"]
+}
+]
 const DynamicSidebar = () => {
   const [trendingModels, setTrendingModels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const route = useRouter()
+  const pathname = usePathname();
+  const searchParams = useSearchParams()
   useEffect(() => {
     const fetchTrendingModels = async () => {
       try {
@@ -84,15 +95,132 @@ const DynamicSidebar = () => {
         setLoading(false);
       }
     };
-
     fetchTrendingModels();
   }, []);
 
-  // Popular tags that could be fetched from API in the future
+  // const toggleQueryParam = (key, value) => {
+  //   const params = new URLSearchParams(searchParams.toString())
+  //   const current = params.getAll(key)
 
+  //   if (current.includes(value)) {
+  //     const filtered = current.filter((item) => item !== value)
+  //     params.delete(key)
+  //     filtered.forEach(v => params.append(key, v))
+  //   } else {
+  //     params.append(key, value)
+  //   }
+
+  //   return params.toString()
+  // }
+  const toggleQueryParam = (key, value) => {
+    const params = new URLSearchParams(searchParams.toString())
+    const current = params.get(key)
+
+    if (current === value) {
+      // If clicked again, remove the param
+      params.delete(key)
+    } else {
+      // Otherwise, set it (replace existing)
+      params.set(key, value)
+    }
+
+    return params.toString()
+  }
+
+  const isActive = (key, value) => {
+    return searchParams.getAll(key).includes(value)
+  }
+  // Popular tags that could be fetched from API in the future
+  console.log('filterData :>> ', filterData);
 
   return (
     <div className="p-4 border-r border-[#333] bg-background lg:block hidden">
+      <div>
+        <h3 className="text-primary font-bold text-xl mb-4">Filter Models</h3>
+
+        <>
+          <h4 className='mb-2'>Ethnicity :</h4>
+          <div className='flex justify-start gap-4 items-center mb-4'>
+            {
+              filterData[0]?.category?.map((item) => (
+                <Link
+                  key={item}
+                  href={`/${item}?${searchParams.toString()}`}
+                  className={`border px-3 py-1 rounded ${pathname.includes(item) ? 'bg-primary' : ''}`}
+                >
+                  {item}
+                </Link>
+              ))
+            }
+          </div>
+
+          <h4 className='mb-2'>Tags :</h4>
+          <div className='flex justify-start gap-4 items-center mb-4'>
+            {
+              filterData[0]?.tags?.map((item) => (
+                <Link
+                  key={item}
+                  href={`${pathname}?${toggleQueryParam('tags', item)}`}
+                  // href={`${pathname && pathname !== '/' ? pathname : '/girls'
+                  //   }?${toggleQueryParam('tags', item)}`}
+
+                  className={`border px-3 py-1 rounded ${isActive('tags', item) ? 'bg-primary' : ''}`}
+                >
+                  {item}
+                </Link>
+              ))
+            }
+          </div>
+
+          <h4 className='mb-2'>Hair Color :</h4>
+          <div className='flex justify-start gap-4 items-center mb-4'>
+            {
+              filterData[0]?.hair_color?.map((item) => (
+                <Link
+                  key={item}
+                  href={`${pathname}?${toggleQueryParam('hair_color', item)}`}
+                  className={`border px-3 py-1 rounded ${isActive('hair_color', item) ? 'bg-primary' : ''}`}
+                >
+                  {item}
+                </Link>
+              ))
+            }
+          </div>
+
+          <h4 className='mb-2'>Willingness :</h4>
+          <div className='flex justify-start gap-4 items-center mb-4'>
+            {
+              filterData[0]?.willingness?.map((item) => (
+                <Link
+                  key={item}
+                  href={`${pathname}?${toggleQueryParam('willingness', item)}`}
+                  className={`border px-3 py-1 rounded ${isActive('willingness', item) ? 'bg-primary' : ''}`}
+                >
+                  {item}
+                </Link>
+              ))
+            }
+          </div>
+
+          <button
+            onClick={() => route.push(pathname)}
+            className="border px-3 py-1 rounded bg-primary mb-4 text-sm"
+          >
+            Reset Filters
+          </button>
+          {/* <h4 className="mb-2">Online Only :</h4>
+          <div className="flex justify-start gap-4 items-center mb-4">
+            <Link
+              href={`${pathname && pathname !== '/' ? pathname : '/girls'}?${toggleQueryParam('online', 'true')}`}
+              className={`border px-3 py-1 rounded ${isActive('online', 'true') ? 'bg-primary' : ''}`}
+            >
+              Online Only
+            </Link>
+          </div> */}
+        </>
+
+      </div>
+
       <h3 className="text-primary font-bold text-xl mb-4">Trending Models</h3>
 
       {loading ? (
