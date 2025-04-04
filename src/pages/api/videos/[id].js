@@ -12,7 +12,7 @@ const generateEnhancedMockVideoDetail = (id, category) => {
   // Generate consistent mock data based on the ID
   const idNum = parseInt(id.replace(/[^0-9]/g, '').substring(0, 3) || '100', 10);
   const imageId = (idNum % 50) + 100;
-  
+
   // Determine category-specific data
   const categories = {
     'popular': {
@@ -56,11 +56,11 @@ const generateEnhancedMockVideoDetail = (id, category) => {
       sexualOrientation: 'shemale'
     }
   };
-  
+
   // Use category-specific data or default to popular
   const categoryData = categories[category] || categories['popular'];
   const titleIndex = idNum % categoryData.titles.length;
-  
+
   // Generate the mock video detail in VPAPI format
   return {
     id: id,
@@ -110,8 +110,8 @@ const generateEnhancedMockVideoDetail = (id, category) => {
 export default async function handler(req, res) {
   // Only allow GET requests
   if (req.method !== 'GET') {
-    return res.status(405).json({ 
-      success: false, 
+    return res.status(405).json({
+      success: false,
       error: 'Method Not Allowed',
       data: null
     });
@@ -119,7 +119,7 @@ export default async function handler(req, res) {
 
   const { id } = req.query;
   const category = req.query.category || 'popular';
-  
+
   if (!id) {
     return res.status(400).json({
       success: false,
@@ -127,25 +127,25 @@ export default async function handler(req, res) {
       data: null
     });
   }
-  
+
   // Extract just the ID part if this is an SEO URL (id-slug format)
   const cleanId = id.split('-')[0];
-  
+
   console.log(`[API /videos/${id}] Processing request for ID: ${cleanId} (original request: ${id})`);
 
   try {
     // Real API Call Logic - Enabled
-    
+
     // Check if VPAPI is configured
     const vpapiConfigured = VPAPI_CONFIG.BASE_URL && VPAPI_CONFIG.API_KEY && VPAPI_CONFIG.PSID;
-    
+
     // For fallback/debugging in development or if VPAPI is not configured
-    const shouldUseMock = req.query.useMock === 'true' || 
-                          (process.env.NODE_ENV === 'development' && !vpapiConfigured);
-    
+    const shouldUseMock = req.query.useMock === 'true' ||
+      (process.env.NODE_ENV === 'development' && !vpapiConfigured);
+
     if (shouldUseMock) {
       console.log(`[API /videos/${id}] Using mock data for video ID: ${cleanId}`);
-      
+
       // Return enhanced mock data
       const mockVideo = generateEnhancedMockVideoDetail(cleanId, category);
       return res.status(200).json({
@@ -153,51 +153,47 @@ export default async function handler(req, res) {
         data: mockVideo
       });
     }
-    
+
     // Log warning if VPAPI not fully configured but continue trying
     if (!vpapiConfigured) {
       console.warn(`[API /videos/${id}] VPAPI not fully configured. Attempting anyway.`);
     }
-    
+
     // According to the API documentation, for video details we need to use the details endpoint
     console.log(`[API /videos/${id}] Fetching video details for ID: ${cleanId}`);
-    
+
     // Based on the API docs, build the details request URL with required parameters
     const detailsUrl = new URL(`${VPAPI_CONFIG.BASE_URL}${VPAPI_CONFIG.DETAILS_ENDPOINT}/${cleanId}`);
-    
+
     // Required parameters according to the API docs and Laravel code
     const clientIp = process.env.VPAPI_CLIENT_IP || '223.177.55.88';
     detailsUrl.searchParams.append('psid', VPAPI_CONFIG.PSID || 'mikeeyy3');
     detailsUrl.searchParams.append('accessKey', VPAPI_CONFIG.API_KEY || 'a0163de9298e6c0fb2699b73b41da52e');
     detailsUrl.searchParams.append('clientIp', clientIp);
-    detailsUrl.searchParams.append('cobrandId', '201300'); // Add cobrandId from Laravel code
-    detailsUrl.searchParams.append('site', 'wl3'); // Add site from Laravel code
-    
+    detailsUrl.searchParams.append('cobrandId', '201300');
+    detailsUrl.searchParams.append('site', 'wl3');
+
     console.log(`[API /videos/${id}] Request URL: ${detailsUrl.toString()}`);
-    
+
     const response = await axios.get(detailsUrl.toString(), {
-      timeout: 15000, // Increase timeout for potentially slow APIs
+      timeout: 15000,
       headers: {
-        'Accept': 'application/json' // Only send Accept header
-        // 'User-Agent': 'MistressWorld/1.0', 
-        // 'X-Forwarded-For': clientIp,
-        // 'Client-IP': clientIp, 
-        // 'X-Client-IP': clientIp
+        'Accept': 'application/json'
       }
     });
-    
+
     // Check VPAPI specific success flag
     if (response.status !== 200 || !response.data?.success) {
       console.error(`[API /videos/${id}] VPAPI response error:`, response.data);
       throw new Error(`VPAPI request failed with status ${response.status} or success=false`);
     }
-    
+
     // Log response data for debugging
     console.log(`[API /videos/${id}] Response received. Success: ${response.data?.success}`);
-    
+
     // For video details, the API returns a direct 'data' object, not an array of videos
     const videoData = response.data?.data;
-    
+
     if (!videoData) {
       console.warn(`[API /videos/${id}] Video details not found in VPAPI response`);
       return res.status(404).json({
@@ -206,40 +202,20 @@ export default async function handler(req, res) {
         data: null
       });
     }
-    
-    // Map VPAPI response to our standardized format according to the API docs
-    // The details endpoint has a different structure than the list endpoint
-    const normalizedVideo = {
-      id: cleanId,
-      title: videoData.title || 'Untitled Video',
-      description: videoData.description || '',
-      thumbnail: videoData.profileImage || videoData.coverImage || 
-                (videoData.previewImages && videoData.previewImages.length > 0 ? videoData.previewImages[0] : ''),
-      previewImages: Array.isArray(videoData.previewImages) ? videoData.previewImages : [],
-      coverImage: videoData.coverImage || '',
-      duration: parseInt(videoData.duration, 10) || 0,
-      views: parseInt(videoData.views, 10) || 0,
-      category: videoData.sexualOrientation || req.query.category || 'popular',
-      tags: Array.isArray(videoData.tags) ? videoData.tags : [],
-      uploadDate: videoData.createdAt || new Date().toISOString(),
-      uploader: videoData.uploader || 'Unknown',
-      uploaderLink: videoData.uploaderLink || '',
-      targetUrl: videoData.targetUrl || '',
-      // For protocol-relative URLs, ensure we add https:
-      playerEmbedUrl: videoData.playerEmbedUrl ? (
-        videoData.playerEmbedUrl.startsWith('//') ? 
-          `https:${videoData.playerEmbedUrl}` : videoData.playerEmbedUrl
-      ) : '',
-      // Keep the original script with {CONTAINER} placeholder
-      playerEmbedScript: videoData.playerEmbedScript || '',
-      quality: videoData.quality || 'sd',
-      isHd: !!videoData.isHd,
-      performerId: videoData.performerId || ''
+
+    // Format the video data before sending to client
+    const formattedVideoData = {
+      ...videoData,
+      // Ensure the playerEmbedUrl is properly formatted
+      playerEmbedUrl: videoData.playerEmbedUrl ? new URL(videoData.playerEmbedUrl.startsWith('//') ?
+        `https:${videoData.playerEmbedUrl}` : videoData.playerEmbedUrl).toString() : null,
+      // Include any other necessary fields
+      performerId: videoData.performerId || null
     };
-    
+
     return res.status(200).json({
       success: true,
-      data: normalizedVideo
+      data: formattedVideoData
     });
     // END OF REAL API CALL LOGIC
 
@@ -248,20 +224,20 @@ export default async function handler(req, res) {
     if (error.response) {
       console.error(`[API /videos/${id}] Error response data:`, error.response.data);
     }
-    
+
     const useFallback = process.env.NODE_ENV !== 'production';
     if (useFallback) {
       console.warn(`[API /videos/${id}] Returning fallback data after error`);
-      
+
       // Generate enhanced mock fallback
       const mockVideo = generateEnhancedMockVideoDetail(cleanId, category);
-      
+
       return res.status(200).json({
         success: true,
         data: mockVideo
       });
     }
-    
+
     return res.status(500).json({
       success: false,
       error: `Failed to fetch video: ${error.message}`,

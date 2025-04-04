@@ -11,6 +11,8 @@ import VideoCard from '@/theme/components/common/VideoCard';
 import useModelFeed from '@/hooks/useModelFeed';
 import { ApiProviders } from '@/services/api';
 import { getSafeImageUrl, slugify } from '@/utils/image-helpers';
+import VideoWidget from '@/components/VideoWidget';
+import ChatWidget from '@/components/ChatWidget';
 
 // Video player component that handles VPAPI script format
 const VideoEmbed = ({ embedUrl, embedScript }) => {
@@ -74,6 +76,55 @@ const VideoEmbed = ({ embedUrl, embedScript }) => {
   return <div id={containerId.current} ref={containerRef} className="w-full h-full"></div>;
 };
 
+// New VideoPlayer component to handle VPAPI player
+const VideoPlayer = ({ video }) => {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Clear previous content
+    container.innerHTML = '';
+    console.log('video.playerEmbedUrl :>> ', video.playerEmbedUrl);
+    // If we have playerEmbedUrl from VPAPI
+    if (video.playerEmbedUrl) {
+      if (video.playerEmbedUrl.includes('{CONTAINER}')) {
+        // Replace {CONTAINER} placeholder with our container ID
+        const embedUrl = video.playerEmbedUrl.replace('{CONTAINER}', container.id);
+
+        // Create script element for VPAPI player
+        const script = document.createElement('script');
+        script.src = embedUrl;
+        container.appendChild(script);
+      } else {
+        // Direct iframe URL (like Vimeo for testing)
+        container.innerHTML = `<iframe src="${video.playerEmbedUrl}" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>`;
+      }
+    }
+    // If we have playerEmbedScript from VPAPI
+    else if (video.playerEmbedScript) {
+      if (video.playerEmbedScript.includes('{CONTAINER}')) {
+        // Replace {CONTAINER} placeholder with our container ID
+        const scriptContent = video.playerEmbedScript.replace(/{CONTAINER}/g, container.id);
+
+        // Extract the script source
+        const srcMatch = scriptContent.match(/src=["']([^"']+)["']/);
+        if (srcMatch && srcMatch[1]) {
+          const scriptEl = document.createElement('script');
+          scriptEl.src = srcMatch[1].startsWith('//') ? `https:${srcMatch[1]}` : srcMatch[1];
+          document.body.appendChild(scriptEl);
+        }
+      } else {
+        // For regular iframe HTML
+        container.innerHTML = video.playerEmbedScript;
+      }
+    }
+  }, [video]);
+
+  return <div ref={containerRef} id="video-container" className="w-full h-full"></div>;
+};
+
 // Format views (e.g., "1.2K views")
 const formatViews = (views) => {
   if (!views) return '0 views';
@@ -109,7 +160,7 @@ const VideoDetailPage = () => {
   const [error, setError] = useState(null);
   const [showVideoModal, setShowVideoModal] = useState(false);
   const videoModalRef = useRef(null);
-
+  console.log('video :>> ', video?.playerEmbedUrl);
   // Fetch related videos
   const {
     models: relatedVideos,
@@ -309,7 +360,7 @@ const VideoDetailPage = () => {
   };
 
   return (
-    <div className="bg-[#16181c] min-h-screen">
+    <div className="bg-background text-textlight min-h-screen">
       <HeadMeta pageContent={pageContent} />
       <CookiesModal />
 
@@ -350,56 +401,16 @@ const VideoDetailPage = () => {
           <div className="aspect-video bg-black overflow-hidden rounded-lg">
             {/* Video Embed / Player */}
             {video.playerEmbedUrl || video.playerEmbedScript ? (
-              <div className="w-full h-full" id="video-container">
-                {/* VPAPI Player Implementation */}
-                {(() => {
-                  // Create a script element to load the VPAPI player
-                  useEffect(() => {
-                    const container = document.getElementById('video-container');
-                    if (!container) return;
-
-                    // Clear previous content
-                    container.innerHTML = '';
-
-                    // If we have playerEmbedUrl from VPAPI
-                    if (video.playerEmbedUrl) {
-                      if (video.playerEmbedUrl.includes('{CONTAINER}')) {
-                        // Replace {CONTAINER} placeholder with our container ID
-                        const embedUrl = video.playerEmbedUrl.replace('{CONTAINER}', 'video-container');
-
-                        // Create script element for VPAPI player
-                        const script = document.createElement('script');
-                        script.src = embedUrl;
-                        container.appendChild(script);
-                      } else {
-                        // Direct iframe URL (like Vimeo for testing)
-                        container.innerHTML = `<iframe src="${video.playerEmbedUrl}" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>`;
-                      }
-                    }
-                    // If we have playerEmbedScript from VPAPI
-                    else if (video.playerEmbedScript) {
-                      if (video.playerEmbedScript.includes('{CONTAINER}')) {
-                        // Replace {CONTAINER} placeholder with our container ID
-                        const scriptContent = video.playerEmbedScript.replace(/{CONTAINER}/g, 'video-container');
-
-                        // Extract the script source
-                        const srcMatch = scriptContent.match(/src=["']([^"']+)["']/);
-                        if (srcMatch && srcMatch[1]) {
-                          const scriptEl = document.createElement('script');
-                          scriptEl.src = srcMatch[1].startsWith('//') ?
-                            `https:${srcMatch[1]}` : srcMatch[1];
-                          document.body.appendChild(scriptEl);
-                        }
-                      } else {
-                        // For regular iframe HTML
-                        container.innerHTML = video.playerEmbedScript;
-                      }
-                    }
-                  }, [video]);
-
-                  return null;
-                })()}
-              </div>
+              // <VideoPlayer video={video} />
+              <>
+                <VideoWidget
+                  playerEmbedUrl={video?.playerEmbedUrl}
+                  performerId={video?.performerId}
+                //this is for test perpose link
+                // playerEmbedUrl={'https://wptcd.com/tube-player/?cobrandId=201300&site=wl3&psid=mikeeyy3&accessKey=a0163de9298e6c0fb2699b73b41da52e&contentHash=34fcf2e9f6df3205ff21023e562bdd33&psprogram=VPAPI&primaryColor=FFEEEE&labelColor=EEFFEE&c={CONTAINER}&pstool=421_3&disableOverlayClick=0'}
+                />
+                {/* <ChatWidget performerId={video?.performerId} /> */}
+              </>
             ) : video.targetUrl ? (
               /* If only targetUrl is available, create a custom player that loads video in modal */
               <div className="w-full h-full relative group cursor-pointer">
