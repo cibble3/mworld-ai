@@ -135,6 +135,24 @@ body {
   font-family: var(--font);
   color: var(--color-text-light);
 }
+/* global scrollbar style */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fffafa;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 
 .box,
 .box-content {
