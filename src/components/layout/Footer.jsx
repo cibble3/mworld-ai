@@ -2,18 +2,18 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Translatable from '@/components/Translatable';
-import { 
-  AiFillFacebook, 
-  AiFillInstagram, 
-  AiFillYoutube, 
-  AiOutlineTwitter 
+import {
+  AiFillFacebook,
+  AiFillInstagram,
+  AiFillYoutube,
+  AiOutlineTwitter
 } from 'react-icons/ai';
 import styles from './Footer.module.css';
 
 const Footer = () => {
   const router = useRouter();
   const currentYear = new Date().getFullYear();
-  
+
   return (
     <footer className={styles.footer}>
       <div className={styles.footerContainer}>
@@ -40,7 +40,7 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-          
+
           <div className={styles.footerSection}>
             <h3 className={styles.footerHeading}>
               <Translatable>Categories</Translatable>
@@ -63,7 +63,7 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-          
+
           <div className={styles.footerSection}>
             <h3 className={styles.footerHeading}>
               <Translatable>Legal</Translatable>
@@ -91,43 +91,43 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-          
+
           <div className={styles.footerSection}>
             <h3 className={styles.footerHeading}>
               <Translatable>Follow Us</Translatable>
             </h3>
             <div className={styles.socialLinks}>
-              <a 
-                href="https://www.instagram.com/mistressworldcams/" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://www.instagram.com/mistressworldcams/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className={styles.socialLink}
                 aria-label="Instagram"
               >
                 <AiFillInstagram />
               </a>
-              <a 
-                href="https://www.youtube.com/channel/UCaGwZy3QLT5wMnzvQIwMJwA" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://www.youtube.com/channel/UCaGwZy3QLT5wMnzvQIwMJwA"
+                target="_blank"
+                rel="noopener noreferrer"
                 className={styles.socialLink}
                 aria-label="YouTube"
               >
                 <AiFillYoutube />
               </a>
-              <a 
-                href="https://twitter.com/mistressworld4u/" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://twitter.com/mistressworld4u/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className={styles.socialLink}
                 aria-label="Twitter"
               >
                 <AiOutlineTwitter />
               </a>
-              <a 
-                href="https://www.facebook.com/livefetishcams/" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://www.facebook.com/livefetishcams/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className={styles.socialLink}
                 aria-label="Facebook"
               >
@@ -136,7 +136,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        
+
         <div className={styles.footerBottom}>
           <p className={styles.copyright}>
             © {currentYear} <Translatable>MistressWorld. All rights reserved.</Translatable>

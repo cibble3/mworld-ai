@@ -9,6 +9,27 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        primary: "var(--color-primary)",
+        secondary: "var(--color-secondary)",
+
+        textPrimary: "var(--color-text-primary)",
+        textSecondary: "var(--color-text-secondary)",
+        textlight: "var(--color-text-light)",
+        textblack: "var(--color-text-black)",
+
+        sidebar: "var(--color-sidebar)",
+
+        background: "var(--color-background)",
+        backgrounddark: "var(--color-background-dark)",
+        backgroundcard: "var(--color-background-card)",
+        backgroundfooter: "var(--color-background-footer)",
+
+        card: "var(--color-card)",
+      },
+      fontFamily: {
+        themefont: "var(--font)",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

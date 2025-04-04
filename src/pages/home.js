@@ -15,7 +15,7 @@ const HomePage = () => {
       try {
         console.log('[HomePage] Fetching models...');
         setLoading(true);
-        
+
         const response = await axios.get('/api/models', {
           params: {
             provider: 'awe',
@@ -24,13 +24,13 @@ const HomePage = () => {
             debug: true
           }
         });
-        
-        console.log(`[HomePage] API response:`, 
-          response.data?.success ? 
-            `Success - ${response.data.data?.models?.length || 0} models` : 
+
+        console.log(`[HomePage] API response:`,
+          response.data?.success ?
+            `Success - ${response.data.data?.models?.length || 0} models` :
             `Failed - ${response.data.error || 'Unknown error'}`
         );
-        
+
         if (response.data?.success) {
           const items = response.data.data?.models || [];
           if (items.length > 0) {
@@ -47,7 +47,7 @@ const HomePage = () => {
         setLoading(false);
       }
     };
-    
+
     fetchModels();
   }, []);
 
@@ -59,13 +59,13 @@ const HomePage = () => {
           <p className="text-xl text-gray-300 mb-8">
             Explore our collection of beautiful cam models ready for private chat experiences.
           </p>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Link href="/girls" className="bg-pink-600 hover:bg-pink-700 text-white p-6 rounded-lg transition-colors">
               <h2 className="text-2xl font-bold mb-2">Cam Girls</h2>
               <p>Explore our collection of stunning cam girls ready for private chat.</p>
             </Link>
-            
+
             <Link href="/trans" className="bg-purple-600 hover:bg-purple-700 text-white p-6 rounded-lg transition-colors">
               <h2 className="text-2xl font-bold mb-2">Trans Models</h2>
               <p>Discover our beautiful trans models available for private sessions.</p>
@@ -80,7 +80,7 @@ const HomePage = () => {
               View All
             </Link>
           </div>
-          
+
           {loading ? (
             <div className="flex justify-center py-10">
               <div className="animate-pulse text-xl">Loading models...</div>
@@ -96,8 +96,8 @@ const HomePage = () => {
           ) : (
             <ModelGrid models={models} isLoading={false}>
               {(model) => (
-                <ModelCard 
-                  key={model.id || model.slug} 
+                <ModelCard
+                  key={model.id || model.slug}
                   performerId={model.id || model.slug}
                   name={model.name}
                   age={model.age}

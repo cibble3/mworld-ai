@@ -320,9 +320,9 @@ const ThemeContext = createContext({
 // Theme provider component
 export const ThemeProvider = ({ children, initialTheme = THEMES.DEFAULT }) => {
   // Get theme from localStorage or use default
-  const [theme, setThemeState] = useState(initialTheme);
+  const [theme, setThemeState] = useState(THEMES.DEFAULT);
   const [themeConfig, setThemeConfig] = useState(THEME_MAP[initialTheme] || defaultThemeConfig);
-
+  console.log('thememain :>> ', theme);
   // Effect to load theme from localStorage on initial render
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
@@ -331,7 +331,8 @@ export const ThemeProvider = ({ children, initialTheme = THEMES.DEFAULT }) => {
       setThemeConfig(THEME_MAP[savedTheme]);
       document.documentElement.setAttribute('data-theme', savedTheme);
     } else {
-      document.documentElement.setAttribute('data-theme', initialTheme);
+      // localStorage.setItem('theme', THEMES.DEFAULT)
+      document.documentElement.setAttribute('data-theme', THEMES.DEFAULT);
     }
   }, [initialTheme]);
 
@@ -344,6 +345,10 @@ export const ThemeProvider = ({ children, initialTheme = THEMES.DEFAULT }) => {
       document.documentElement.setAttribute('data-theme', newTheme);
     }
   };
+  useEffect(() => {
+    // setThemeState(THEMES.LUXURY)
+  }, [])
+
 
   // Provide theme context to children
   return (
@@ -355,7 +360,7 @@ export const ThemeProvider = ({ children, initialTheme = THEMES.DEFAULT }) => {
         availableThemes: Object.keys(THEMES)
       }}
     >
-      <div className={`theme-${theme}`}>
+      <div className={`theme-${theme} font-themefont`}>
         {children}
       </div>
     </ThemeContext.Provider>

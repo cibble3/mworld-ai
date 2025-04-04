@@ -5,6 +5,136 @@
 /* Import theme variables */
 @import "./themes.css";
 
+:root {
+  --color-primary: #e41b64;
+  --color-secondary: #3d3d3d;
+
+  --color-text-primary: #212121;
+  --color-text-secondary: #616161;
+  --color-text-light: #f9f9f9;
+
+  --color-background: #ffffff;
+  --color-background-dark: #16181c;
+  --color-background-card: #f5f5f5;
+  --color-background-footer: #121212;
+
+  --color-card: #f5f5f5;
+
+  --font: "Inter", "Roboto", sans-serif;
+}
+.theme-default {
+  --color-primary: #e41b64;
+  --color-secondary: #3d3d3d;
+
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #616161;
+  --color-text-light: #f9f9f9;
+
+  --color-text-black: #ffffff;
+
+  --color-sidebar: #1a1a1a;
+
+  --color-background: #16181c;
+  --color-background-dark: #16181c;
+  --color-background-card: #f5f5f5;
+  --color-background-footer: #121212;
+
+  --color-card: #f5f5f5;
+
+  --font: "Inter", "Roboto", sans-serif;
+}
+.theme-dark {
+  /* --color-primary: #e41b64; */
+  --color-primary: #ec4899;
+  --color-secondary: #bb86fc;
+
+  --color-text-primary: #f5f5f5;
+  --color-text-secondary: #b0b0b0;
+  --color-text-light: #ffffff;
+
+  --color-text-black: #ffffff;
+
+  --color-sidebar: #1a1a1a;
+
+  --color-background: #121212;
+  --color-background-dark: #0a0a0a;
+  --color-background-card: #1e1e1e;
+  --color-background-footer: #0a0a0a;
+
+  --color-card: #1e1e1e;
+
+  --font: "Inter", "Roboto", sans-serif;
+}
+
+.theme-luxury {
+  --color-primary: #d4af37;
+  --color-secondary: #111111;
+
+  --color-text-primary: #111111;
+  --color-text-secondary: #333333;
+  --color-text-light: #ffffff;
+
+  --color-text-black: #111111;
+
+  --color-sidebar: #fafafa;
+
+  --color-background: #ffffff;
+  --color-background-dark: #0a0a0a;
+  --color-background-card: #f8f8f8;
+  --color-background-footer: #111111;
+
+  --color-card: #f8f8f8;
+
+  --font: "Playfair Display", "Georgia", serif;
+}
+
+.theme-retro {
+  --color-primary: #ff6b6b;
+  --color-secondary: #4ecdc4;
+
+  --color-text-primary: #333333;
+  --color-text-secondary: #555555;
+  --color-text-light: #ffffff;
+
+  --color-text-black: #000000;
+
+  --color-sidebar: #fafafa;
+
+  --color-background: #fafffd;
+  --color-background-dark: #1a535c;
+  --color-background-card: #ffe66d;
+  --color-background-footer: #1a535c;
+
+  --color-card: #ffe66d;
+
+  --font: "VT323", "Courier New", monospace;
+}
+
+.theme-minimal {
+  --color-primary: #000000;
+  --color-secondary: #ffffff;
+
+  --color-text-primary: #000000;
+  --color-text-secondary: #555555;
+  --color-text-light: #000000;
+
+  --color-text-black: #000000;
+
+  --color-sidebar: #fafafa;
+
+  --color-background: #ffffff;
+  --color-background-dark: #f5f5f5;
+  --color-background-card: #ffffff;
+  --color-background-footer: #000000;
+
+  --color-card: #ffffff;
+
+  --font: "Helvetica Neue", "Arial", sans-serif;
+}
+body {
+  font-family: var(--font);
+}
+
 .box,
 .box-content {
   gap: 20px;
@@ -58,8 +188,7 @@
   margin-top: 10px;
 }
 
-:root {
-  /* Base theme colors - will be overridden by theme-specific CSS */
+/* :root {
   --color-primary: #16181c;
   --color-secondary: #1a1c21;
   --color-text-primary: #ffffff;
@@ -78,7 +207,6 @@
   --color-tag-text: #ffffff;
 }
 
-/* Dark theme (modern) */
 .theme-dark {
   --color-primary: #16181c;
   --color-secondary: #1a1c21;
@@ -94,7 +222,6 @@
   --color-card-hover: #2a2c31;
 }
 
-/* Light theme (modern) */
 .theme-light {
   --color-primary: #ffffff;
   --color-secondary: #f5f5f5;
@@ -110,7 +237,6 @@
   --color-card-hover: #e0e0e0;
 }
 
-/* Legacy dark theme */
 .theme-legacyDark {
   --color-primary: #1a1a1a;
   --color-secondary: #2a2a2a;
@@ -128,7 +254,7 @@
   --color-status-offline: #ff5252;
   --color-tag-background: #333333;
   --color-tag-text: #ffffff;
-}
+} */
 
 /* Theme transition effects */
 body,
@@ -1101,5 +1227,6 @@ li.categories_items a:hover {
   color: white;
 }
 .EZDrawer .EZDrawer__container {
-  background-color: black !important;
+  background-color: var(--color-secondary) !important;
+  color: var(--color-text-light) !important;
 }

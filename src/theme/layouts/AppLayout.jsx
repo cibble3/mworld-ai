@@ -31,11 +31,11 @@ const LegacyLayout = ({
       <Meta {...meta} />
 
       <div
-        className={`min-h-screen flex flex-col ${className}`}
-        style={{
-          backgroundColor: '#16181c',
-          color: '#ffffff',
-        }}
+        className={`min-h-screen  bg-background flex flex-col ${className}`}
+        // style={{
+        //   backgroundColor: '#16181c',
+        //   color: '#ffffff',
+        // }}
         {...props}
       >
         {/* Top Navigation */}
@@ -71,76 +71,76 @@ const LegacyLayout = ({
 
         {/* Footer */}
         <footer
-          className={`border-t py-8 ${showSidebar ? 'lg:ml-64 ml-0' : ''}`}
-          style={{
-            backgroundColor: '#1a1a1a',
-            borderColor: '#333',
-          }}
+          className={`border-t bg-background py-8 ${showSidebar ? 'lg:ml-64 ml-0' : ''}`}
+        // style={{
+        //   backgroundColor: '#1a1a1a',
+        //   borderColor: '#333',
+        // }}
         >
           <Container>
             {/* Footer content */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div>
-                <h3 className="text-pink-500 font-bold mb-4">Company</h3>
+                <h3 className="text-primary font-bold mb-4">Company</h3>
                 <ul className="space-y-2">
-                  <li><a href="/about-us" className="text-gray-300 hover:text-white">About Us</a></li>
-                  <li><a href="/contact" className="text-gray-300 hover:text-white">Contact</a></li>
-                  <li><a href="/models-wanted" className="text-gray-300 hover:text-white">Models Wanted</a></li>
+                  <li><a href="/about-us" className="text-textPrimary">About Us</a></li>
+                  <li><a href="/contact" className="text-textPrimary">Contact</a></li>
+                  <li><a href="/models-wanted" className="text-textPrimary">Models Wanted</a></li>
                 </ul>
               </div>
               <div>
-                <h3 className="text-pink-500 font-bold mb-4">Categories</h3>
+                <h3 className="text-primary font-bold mb-4">Categories</h3>
                 <ul className="space-y-2">
-                  <li><a href="/girls" className="text-gray-300 hover:text-white">Cam Girls</a></li>
-                  <li><a href="/trans" className="text-gray-300 hover:text-white">Trans Cams</a></li>
-                  <li><a href="/free" className="text-gray-300 hover:text-white">Free Cams</a></li>
+                  <li><a href="/girls" className="text-textPrimary">Cam Girls</a></li>
+                  <li><a href="/trans" className="text-textPrimary">Trans Cams</a></li>
+                  <li><a href="/free" className="text-textPrimary">Free Cams</a></li>
                 </ul>
               </div>
               <div>
-                <h3 className="text-pink-500 font-bold mb-4">Legal</h3>
+                <h3 className="text-primary font-bold mb-4">Legal</h3>
                 <ul className="space-y-2">
-                  <li><a href="/terms" className="text-gray-300 hover:text-white">Terms of Service</a></li>
-                  <li><a href="/privacy" className="text-gray-300 hover:text-white">Privacy Policy</a></li>
-                  <li><a href="/dmca" className="text-gray-300 hover:text-white">DMCA</a></li>
-                  <li><a href="/2257" className="text-gray-300 hover:text-white">2257 Statement</a></li>
+                  <li><a href="/terms" className="text-textPrimary">Terms of Service</a></li>
+                  <li><a href="/privacy" className="text-textPrimary">Privacy Policy</a></li>
+                  <li><a href="/dmca" className="text-textPrimary">DMCA</a></li>
+                  <li><a href="/2257" className="text-textPrimary">2257 Statement</a></li>
                 </ul>
               </div>
               <div>
-                <h3 className="text-pink-500 font-bold mb-4">Follow Us</h3>
+                <h3 className="text-primary font-bold mb-4">Follow Us</h3>
                 <div className="flex space-x-4">
-                  <a href="#" className="text-gray-300 hover:text-white text-2xl">
+                  <a href="#" className="text-textPrimary text-2xl">
                     <FaInstagram />
                   </a>
-                  <a href="#" className="text-gray-300 hover:text-white text-2xl">
+                  <a href="#" className="text-textPrimary text-2xl">
                     <IoLogoYoutube />
                   </a>
-                  <a href="#" className="text-gray-300 hover:text-white text-2xl">
+                  <a href="#" className="text-textPrimary text-2xl">
                     <FaTwitter />
                   </a>
                 </div>
               </div>
               <div className="lg:hidden block">
-                <h3 className="text-pink-500 font-bold text-xl mb-4">Quick Links</h3>
+                <h3 className="text-primary font-bold text-xl mb-4">Quick Links</h3>
                 <ul className="space-y-2">
                   <li>
-                    <Link href="/girls" className="text-gray-300 hover:text-white">Girls</Link>
+                    <Link href="/girls" className="text-textPrimary">Girls</Link>
                   </li>
                   <li>
-                    <Link href="/trans" className="text-gray-300 hover:text-white">Trans</Link>
+                    <Link href="/trans" className="text-textPrimary">Trans</Link>
                   </li>
                   <li>
-                    <Link href="/fetish" className="text-gray-300 hover:text-white">Fetish</Link>
+                    <Link href="/fetish" className="text-textPrimary">Fetish</Link>
                   </li>
                   <li>
-                    <Link href="/free" className="text-gray-300 hover:text-white">Free Cams</Link>
+                    <Link href="/free" className="text-textPrimary">Free Cams</Link>
                   </li>
                   <li>
-                    <Link href="/videos" className="text-gray-300 hover:text-white">Videos</Link>
+                    <Link href="/videos" className="text-textPrimary">Videos</Link>
                   </li>
                 </ul>
               </div>
               <div className="lg:hidden block">
-                <h3 className="text-pink-500 font-bold text-xl mb-4">Popular Tags</h3>
+                <h3 className="text-primary font-bold text-xl mb-4">Popular Tags</h3>
                 <div className="flex flex-wrap gap-2">
                   {popularTags.map((tag) => (
                     <Link href={`/tag/${tag}`} key={tag}>

@@ -92,8 +92,8 @@ const DynamicSidebar = () => {
 
 
   return (
-    <div className="p-4 border-r border-[#333] lg:block hidden">
-      <h3 className="text-pink-500 font-bold text-xl mb-4">Trending Models</h3>
+    <div className="p-4 border-r border-[#333] bg-background lg:block hidden">
+      <h3 className="text-primary font-bold text-xl mb-4">Trending Models</h3>
 
       {loading ? (
         <div className="space-y-4">
@@ -110,7 +110,7 @@ const DynamicSidebar = () => {
       ) : error ? (
         <p className="text-red-500 text-sm">{error}</p>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-4 text-textPrimary">
           {trendingModels.map((model) => (
             <Link href={`/chat/${model.performerId}`} key={model.id} className="flex items-center hover:bg-gray-800 p-2 rounded transition-colors">
               <div className="relative w-12 h-12 rounded-full overflow-hidden mr-3">
@@ -127,8 +127,8 @@ const DynamicSidebar = () => {
                 )}
               </div>
               <div>
-                <p className="font-medium text-white">{model.name}</p>
-                <p className="text-xs text-gray-400">{model.viewerCount} viewers</p>
+                <p className="font-medium ">{model.name}</p>
+                <p className="text-xs text-textSecondary">{model.viewerCount} viewers</p>
               </div>
             </Link>
           ))}
@@ -136,11 +136,11 @@ const DynamicSidebar = () => {
       )}
 
       <div className="mt-8">
-        <h3 className="text-pink-500 font-bold text-xl mb-4">Popular Tags</h3>
+        <h3 className="text-primary font-bold text-xl mb-4">Popular Tags</h3>
         <div className="flex flex-wrap gap-2">
           {popularTags.map((tag) => (
             <Link href={`/tag/${tag}`} key={tag}>
-              <span className="px-2 py-1 bg-gray-800 text-sm rounded hover:bg-gray-700 transition-colors">
+              <span className="px-2 py-1 bg-primary text-white text-sm rounded transition-colors">
                 {tag}
               </span>
             </Link>
@@ -149,22 +149,22 @@ const DynamicSidebar = () => {
       </div>
 
       <div className="mt-8">
-        <h3 className="text-pink-500 font-bold text-xl mb-4">Quick Links</h3>
-        <ul className="space-y-2">
+        <h3 className="text-primary font-bold text-xl mb-4">Quick Links</h3>
+        <ul className="space-y-2 text-textSecondary">
           <li>
-            <Link href="/girls" className="text-gray-300 hover:text-white">Girls</Link>
+            <Link href="/girls" className=" hover:text-primary">Girls</Link>
           </li>
           <li>
-            <Link href="/trans" className="text-gray-300 hover:text-white">Trans</Link>
+            <Link href="/trans" className=" hover:text-primary">Trans</Link>
           </li>
           <li>
-            <Link href="/fetish" className="text-gray-300 hover:text-white">Fetish</Link>
+            <Link href="/fetish" className=" hover:text-primary">Fetish</Link>
           </li>
           <li>
-            <Link href="/free" className="text-gray-300 hover:text-white">Free Cams</Link>
+            <Link href="/free" className=" hover:text-primary">Free Cams</Link>
           </li>
           <li>
-            <Link href="/videos" className="text-gray-300 hover:text-white">Videos</Link>
+            <Link href="/videos" className=" hover:text-primary">Videos</Link>
           </li>
         </ul>
       </div>

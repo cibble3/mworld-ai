@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useTheme } from '@/context/ThemeContext';
+import { THEMES, useTheme } from '@/context/ThemeContext';
 import { themes } from '@/theme/config';
 import Container from '../grid/Container';
 import useCategories from '@/hooks/useCategories';
@@ -10,6 +10,7 @@ import Drawer from "react-modern-drawer";
 import "react-modern-drawer/dist/index.css";
 import { IoLanguageOutline, IoMenuSharp } from 'react-icons/io5';
 import { CiLogin } from "react-icons/ci";
+import { FaUser } from 'react-icons/fa6';
 
 const formatFilterName = (name) => {
   return capitalizeString(name.replace(/_/g, ' '));
@@ -85,23 +86,23 @@ const LegacyTopbar = () => {
 
   return (
     <nav
-      className="fixed  top-0 left-0 w-full h-16 z-20 shadow-md"
-      style={navStyle}
+      className="fixed bg-background top-0 left-0 w-full h-16 z-20 shadow-md"
+    // style={navStyle}
     >
       <Container fluid={true}>
         <div className="h-16 flex items-center justify-between gap-10">
           {/* Logo */}
-          <div className="flex items-center">
+          <div className="flex items-center ">
             <Link href="/" className="text-2xl font-bold flex items-center">
-              <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden mr-3">
+              <div className="w-10 text-textlight h-10 rounded-full bg-white flex items-center justify-center overflow-hidden mr-3">
                 <span className="text-black font-bold text-lg">MW</span>
               </div>
-              <span className="hidden md:block">MistressWorld</span>
+              <span className="hidden md:block text-textblack">MistressWorld</span>
             </Link>
           </div>
 
           {/* Center Navigation & Search */}
-          <div className="hidden xl:flex flex-grow items-center justify-end xl:space-x-10  space-x-3">
+          <div className="hidden text-textlight xl:flex flex-grow items-center justify-end xl:space-x-10  space-x-3">
             {isLoading ? (
               <span className="text-sm">Loading Nav...</span>
             ) : isError ? (
@@ -121,8 +122,8 @@ const LegacyTopbar = () => {
                     >
                       <Link
                         href={`/${cat.slug}`}
-                        className={`px-3 py-1 text-md transition-colors ${isActive ? '' : 'hover:text-gray-300'}`}
-                        style={isActive ? activeLinkStyle : {}}
+                        className={`px-3 py-1 text-md transition-colors ${isActive ? 'text-primary' : 'hover:text-gray-300 text-textSecondary'}`}
+                      // style={isActive ? activeLinkStyle : {}}
                       >
                         {cat.name}
                         {hasFilters && <span className="ml-1 text-xs">▼</span>}
@@ -167,7 +168,7 @@ const LegacyTopbar = () => {
               <input
                 type="text"
                 placeholder="Search..."
-                className="px-3 py-1 rounded-full bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-pink-500 text-sm w-40"
+                className="px-3 py-1 rounded-full bg-secondary text-textlight placeholder:text-textlight  border border-gray-700 focus:outline-none focus:border-primary text-sm w-40"
               />
             </div>
           </div>
@@ -251,18 +252,29 @@ const LegacyTopbar = () => {
               </div>
             </Drawer>
 
-            {/* Language Dropdown */}
-            {/* <div>
-              <button>Theme</button>
+            {/* Theme Dropdown */}
+            {/* <div className="p-3 text-white">
+              <select
+                value={theme}
+                onChange={(e) => setTheme(THEMES[e.target.value.toUpperCase()])}
+                className="text-sm  p-1.5 rounded bg-primary"
+              >
+                {availableThemes.map((t) => (
+                  <option key={t} value={t.toLowerCase()}>
+                    {t}
+                  </option>
+                ))}
+              </select>
             </div> */}
-            <div className="relative">
+
+            <div className="relative text-white ">
               <button
                 onClick={() => setIsLanguageOpen(!isLanguageOpen)}
-                className="text-sm flex items-center justify-between border border-gray-700 rounded px-2 py-1 md:min-w-[120px] "
+                className="text-sm flex items-center justify-between border border-gray-700 rounded px-2 py-1.5 2xl:min-w-[120px] "
                 style={buttonStyle}
               >
-                <span className='md:block hidden'>Select Language</span>
-                <span className='md:hidden block'><IoLanguageOutline /></span>
+                <span className='2xl:block hidden'>Select Language</span>
+                <span className='2xl:hidden block'><IoLanguageOutline /></span>
                 <span className="ml-2">▼</span>
               </button>
 
@@ -287,40 +299,23 @@ const LegacyTopbar = () => {
             {/* Login */}
             <Link
               href="/login"
-              className="text-sm px-3 py-1.5 border border-gray-700 rounded"
+              className="text-sm px-3 py-1.5 border text-white border-gray-700 rounded"
               style={buttonStyle}
             >
               <div className='md:block hidden' > Login</div>
-              <div className='md:hidden block' > <CiLogin /></div>
+              <div className='md:hidden block py-1' > <CiLogin /></div>
             </Link>
 
             {/* Join Now */}
             <Link
               href="/join"
-              className="md:text-sm text-[10px] px-3 py-1.5 rounded text-white"
-              style={primaryButtonStyle}
+              className="md:text-sm text-[10px] px-3 py-1.5 rounded text-white bg-primary"
+            // style={primaryButtonStyle}
             >
-              Join Now for FREE
-            </Link>
 
-            {/* Theme Switcher Dropdown */}
-            {/*
-            <div className="relative">
-              <select 
-                value={theme} 
-                onChange={handleThemeChange}
-                className="text-sm px-3 py-1.5 border border-gray-700 rounded appearance-none focus:outline-none focus:border-pink-500 cursor-pointer"
-                style={dropdownStyle}
-              >
-                <option value="" disabled>Select Theme</option>
-                {availableThemes.map((themeKey) => (
-                  <option key={themeKey} value={themeKey}>
-                    {themeKey.charAt(0).toUpperCase() + themeKey.slice(1)}
-                  </option>
-                ))}
-              </select>
-            </div>
-            */}
+              <div className='md:block hidden' >    Join Now for FREE</div>
+              <div className='md:hidden block py-1.5' > <FaUser /></div>
+            </Link>
           </div>
         </div>
       </Container>

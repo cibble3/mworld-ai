@@ -25,8 +25,8 @@ export default function App({ Component, pageProps }) {
   // --- END TEMPORARY ---
 
   // Get initial theme from query param or cookies (SSR-friendly way)
-  const initialTheme = pageProps.initialTheme || THEMES.DARK;
-
+  const initialTheme = pageProps.initialTheme || THEMES.RETRO;
+  console.log('initialTheme :>> ', initialTheme);
   return (
     <>
       {/* Google Analytics */}

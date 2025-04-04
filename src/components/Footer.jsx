@@ -51,7 +51,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="mt-8 pt-8 border-t text-center text-[#a0a0a0] border-[#333]">
           <p>&copy; {new Date().getFullYear()} MistressWorld. All rights reserved.</p>
         </div>

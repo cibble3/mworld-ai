@@ -25,16 +25,16 @@ const ModelCard = ({
 
   // Limit tags to display
   const displayTags = tags?.slice(0, 3) || [];
-  
+
   // Determine model category based on tags
   const isTrans = tags?.some(tag => tag.toLowerCase() === 'trans' || tag.toLowerCase() === 'transgender');
   const isFetish = tags?.some(tag => tag.toLowerCase() === 'fetish' || tag.toLowerCase() === 'bdsm' || tag.toLowerCase() === 'dominatrix');
-  
+
   // Calculate chat URL based on model type
-  const chatUrl = isTrans 
-    ? `/trans/model/${performerId}` 
-    : isFetish 
-      ? `/fetish/${performerId}` 
+  const chatUrl = isTrans
+    ? `/trans/model/${performerId}`
+    : isFetish
+      ? `/fetish/${performerId}`
       : `/girls/model/${performerId}`;
 
   // Fallback image
@@ -61,24 +61,23 @@ const ModelCard = ({
   };
 
   const statusStyle = {
-    backgroundColor: isOnline 
-      ? currentTheme?.status?.online || '#4caf50' 
+    backgroundColor: isOnline
+      ? currentTheme?.status?.online || '#4caf50'
       : currentTheme?.status?.offline || '#ff5252',
   };
 
   return (
-    <div 
-      className={`relative group overflow-hidden rounded-lg transition-all duration-200 ${
-        isLegacy ? 'border border-gray-800' : 'hover:shadow-xl'
-      } model-card`}
+    <div
+      className={`relative group overflow-hidden rounded-lg transition-all duration-200 ${isLegacy ? 'border border-gray-800' : 'hover:shadow-xl'
+        } model-card`}
       style={cardStyle}
     >
       {/* Image Container */}
       <Link href={chatUrl} className="block relative aspect-video overflow-hidden">
         {processedImageUrl ? (
-          <Image 
-            src={processedImageUrl} 
-            alt={name || 'Model'} 
+          <Image
+            src={processedImageUrl}
+            alt={name || 'Model'}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-110"
             loading={preload ? "eager" : "lazy"}
@@ -94,16 +93,16 @@ const ModelCard = ({
             <span className="text-gray-500">No image</span>
           </div>
         )}
-        
+
         {/* Online status indicator */}
-        <div 
+        <div
           className="absolute top-2 right-2 w-3 h-3 rounded-full z-10"
           style={statusStyle}
         />
-        
+
         {/* Viewer count for online models */}
         {isOnline && viewerCount > 0 && (
-          <div 
+          <div
             className="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded z-10"
           >
             {viewerCount} viewers
@@ -112,23 +111,23 @@ const ModelCard = ({
       </Link>
 
       {/* Model Info */}
-      <div className="p-3">
+      <div className="p-3  bg-background">
         <div className="flex justify-between items-center mb-2">
           <h3 className="font-semibold truncate">
             {name || 'Unknown Model'}{age ? ` (${age})` : ''}
           </h3>
-          
+
           {ethnicity && isLegacy && (
             <span className="text-xs opacity-70">{ethnicity}</span>
           )}
         </div>
-        
+
         {/* Tags */}
         {displayTags.length > 0 && (
           <div className="flex flex-wrap gap-1 mt-2">
             {displayTags.map((tag, index) => (
-              <span 
-                key={index} 
+              <span
+                key={index}
                 className="text-xs px-2 py-0.5 rounded"
                 style={tagStyle}
               >
@@ -141,9 +140,9 @@ const ModelCard = ({
 
       {/* Quick actions overlay - only visible on hover */}
       <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-        <Link 
+        <Link
           href={chatUrl}
-          className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-full text-sm transition-colors"
+          className="bg-primary  text-white px-4 py-2 rounded-full text-sm transition-colors"
         >
           Watch Live Stream
         </Link>

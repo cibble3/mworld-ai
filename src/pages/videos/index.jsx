@@ -69,30 +69,30 @@ const videoCategories = [
 const CategoryCard = ({ category }) => {
   const { theme } = useTheme();
   const currentTheme = themes[theme] || themes[THEMES.DARK];
-  
+
   const cardStyle = {
     backgroundColor: currentTheme?.secondary || '#1a1c21',
     borderColor: currentTheme?.border || '#2d3748',
   };
-  
+
   return (
     <Link href={`/videos/${category.id}`}>
-      <div 
+      <div
         className="relative rounded-lg overflow-hidden group transition-all hover:shadow-lg"
         style={cardStyle}
       >
         <div className="aspect-video relative">
           {/* Use a placeholder image if the category image is missing */}
-          <Image 
-            src={category.image || '/images/placeholder.jpg'} 
-            alt={category.name} 
+          <Image
+            src={category.image || '/images/placeholder.jpg'}
+            alt={category.name}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-110"
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
         </div>
-        
+
         <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
           <h3 className="text-lg font-semibold">{category.name}</h3>
           <p className="text-sm text-gray-300 mt-1 line-clamp-2">{category.description}</p>
@@ -112,7 +112,7 @@ const VideosPage = () => {
       sort: 'popular'
     }
   }), []); // Empty dependency array means these params never change
-  
+
   const newVideosParams = useMemo(() => ({
     provider: ApiProviders.VPAPI,
     category: 'new',
@@ -123,15 +123,15 @@ const VideosPage = () => {
   }), []); // Empty dependency array means these params never change
 
   // Fetch trending videos with stable parameters
-  const { 
-    models: trendingVideos, 
-    isLoading: trendingLoading 
+  const {
+    models: trendingVideos,
+    isLoading: trendingLoading
   } = useModelFeed(trendingParams);
 
   // Fetch new videos with stable parameters
-  const { 
-    models: newVideos, 
-    isLoading: newVideosLoading 
+  const {
+    models: newVideos,
+    isLoading: newVideosLoading
   } = useModelFeed(newVideosParams);
 
   // Ensure we have arrays even if data is missing
@@ -145,35 +145,35 @@ const VideosPage = () => {
   };
 
   return (
-    <div className="bg-[#16181c] min-h-screen">
+    <div className="bg-background text-textblack min-h-screen">
       <HeadMeta pageContent={pageContent} />
       <CookiesModal />
-      
+
       {/* Sidebar as an overlay that doesn't affect main content flow */}
       <div className="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] bg-[#1a1a1a] overflow-y-auto z-10 pointer-events-auto">
         <DynamicSidebar />
       </div>
-      
+
       <div className="py-4 px-3">
         <h1 className="text-2xl md:text-3xl font-bold mb-6">Adult Videos</h1>
         <p className="text-gray-400 mb-6">
           Explore our extensive collection of high-quality adult videos. Browse by category or check out our featured content below.
         </p>
-    
+
         {/* Main Content */}
         <section className="py-4">
           <h2 className="text-2xl font-bold mb-6">Video Categories</h2>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {videoCategories.map(category => (
               <CategoryCard key={category.id} category={category} />
             ))}
           </div>
-          
+
           {/* Featured Section - Now using actual video data */}
           <div className="mt-12">
             <h2 className="text-2xl font-bold mb-6">Trending This Week</h2>
-            
+
             <VideoGrid
               videos={safeTrendingVideos.slice(0, 4)}
               isLoading={trendingLoading}
@@ -191,18 +191,18 @@ const VideosPage = () => {
                 />
               )}
             />
-            
+
             <div className="text-center mt-6">
               <Link href="/videos/popular" className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-2 rounded-md inline-block transition-colors">
                 View All Trending Videos
               </Link>
             </div>
           </div>
-          
+
           {/* New Releases Section */}
           <div className="mt-12">
             <h2 className="text-2xl font-bold mb-6">New Releases</h2>
-            
+
             <VideoGrid
               videos={safeNewVideos.slice(0, 4)}
               isLoading={newVideosLoading}
@@ -220,7 +220,7 @@ const VideosPage = () => {
                 />
               )}
             />
-            
+
             <div className="text-center mt-6">
               <Link href="/videos/new" className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-2 rounded-md inline-block transition-colors">
                 View All New Videos
@@ -228,7 +228,7 @@ const VideosPage = () => {
             </div>
           </div>
         </section>
-        
+
         {/* Additional Info Section */}
         <div className="mt-12 grid md:grid-cols-2 gap-8">
           <div className="bg-[#1a1c21] rounded-lg p-6">

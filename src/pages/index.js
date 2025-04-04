@@ -176,18 +176,18 @@ const HomePage = () => {
   };
 
   return (
-    <div className="bg-[#16181c] min-h-screen">
+    <div className="bg-background text-textblack min-h-screen">
       <HeadMeta pageContent={pageContent} />
       <CookiesModal />
 
       {/* Sidebar as an overlay that doesn't affect main content flow */}
-      <div className="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] bg-[#1a1a1a] overflow-y-auto z-10 pointer-events-auto lg:block hidden">
+      <div className="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] bg-sidebar overflow-y-auto z-10 pointer-events-auto lg:block hidden">
         <DynamicSidebar />
       </div>
 
       <div className="py-4 px-3">
         <div className="mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">Welcome to MistressWorld</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4  ">Welcomes to MistressWorld</h1>
           <p className="text-xl text-gray-300 mb-8">
             Explore our collection of beautiful cam models ready for private chat experiences.
           </p>
@@ -210,7 +210,7 @@ const HomePage = () => {
           <section className="mb-12">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold">Featured Girls</h2>
-              <Link href="/girls" className="text-pink-500 hover:text-pink-400">
+              <Link href="/girls" className="text-primary ">
                 View All Girls
               </Link>
             </div>
@@ -238,7 +238,7 @@ const HomePage = () => {
           <section className="mb-12">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold">Featured Trans Models</h2>
-              <Link href="/trans" className="text-purple-500 hover:text-purple-400">
+              <Link href="/trans" className="text-purple-500 ">
                 View All Trans
               </Link>
             </div>
@@ -266,7 +266,7 @@ const HomePage = () => {
           <section>
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold">Featured Fetish Models</h2>
-              <Link href="/fetish" className="text-pink-500 hover:text-pink-400">
+              <Link href="/fetish" className="text-primary ">
                 View All Fetish
               </Link>
             </div>
