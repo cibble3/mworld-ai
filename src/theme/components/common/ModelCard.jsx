@@ -68,8 +68,7 @@ const ModelCard = ({
 
   return (
     <div
-      className={`relative group overflow-hidden rounded-lg transition-all duration-200 ${isLegacy ? 'border border-gray-800' : 'hover:shadow-xl'
-        } model-card`}
+      className={`relative group overflow-hidden rounded-xl transition-all duration-300 ${isLegacy ? 'border border-gray-800' : 'hover:shadow-2xl hover:-translate-y-1'}`}
       style={cardStyle}
     >
       {/* Image Container */}
@@ -79,7 +78,7 @@ const ModelCard = ({
             src={processedImageUrl}
             alt={name || 'Model'}
             fill
-            className="object-cover transition-transform duration-300 group-hover:scale-110"
+            className="object-cover transition-transform duration-500 group-hover:scale-110"
             loading={preload ? "eager" : "lazy"}
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
             unoptimized={true}
@@ -96,24 +95,34 @@ const ModelCard = ({
 
         {/* Online status indicator */}
         <div
-          className="absolute top-2 right-2 w-3 h-3 rounded-full z-10"
+          className="absolute top-2 right-2 w-3 h-3 rounded-full z-10 ring-2 ring-gray-900/50"
           style={statusStyle}
         />
 
         {/* Viewer count for online models */}
         {isOnline && viewerCount > 0 && (
           <div
-            className="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded z-10"
+            className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-2 py-1 rounded-full z-10 backdrop-blur-sm"
           >
             {viewerCount} viewers
           </div>
         )}
+
+        {/* Quick actions overlay - only visible on hover */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+          <Link
+            href={chatUrl}
+            className="bg-primary text-white px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:bg-primary/90 hover:scale-105 transform"
+          >
+            Watch Live Stream
+          </Link>
+        </div>
       </Link>
 
       {/* Model Info */}
-      <div className="p-3  bg-background">
+      <div className="p-4 bg-background">
         <div className="flex justify-between items-center mb-2">
-          <h3 className="font-semibold truncate">
+          <h3 className="font-semibold truncate group-hover:text-primary transition-colors duration-300">
             {name || 'Unknown Model'}{age ? ` (${age})` : ''}
           </h3>
 
@@ -124,28 +133,17 @@ const ModelCard = ({
 
         {/* Tags */}
         {displayTags.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-2">
+          <div className="flex flex-wrap gap-1.5 mt-2">
             {displayTags.map((tag, index) => (
               <span
                 key={index}
-                className="text-xs px-2 py-0.5 rounded"
-                style={tagStyle}
+                className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium transition-all duration-200 bg-gray-800/50 text-gray-300 hover:bg-gray-700/50 hover:text-white ring-1 ring-gray-700/50"
               >
                 {tag}
               </span>
             ))}
           </div>
         )}
-      </div>
-
-      {/* Quick actions overlay - only visible on hover */}
-      <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-        <Link
-          href={chatUrl}
-          className="bg-primary  text-white px-4 py-2 rounded-full text-sm transition-colors"
-        >
-          Watch Live Stream
-        </Link>
       </div>
     </div>
   );

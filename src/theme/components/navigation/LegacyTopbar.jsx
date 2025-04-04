@@ -148,8 +148,8 @@ const LegacyTopbar = () => {
                         <Link
                           href={`/${cat.slug}`}
                           className={`flex items-center px-3 py-2 text-sm font-medium transition-all duration-200 rounded-lg ${isActive
-                              ? 'text-primary bg-primary/10'
-                              : 'text-gray-300 hover:text-white hover:bg-gray-800/50'
+                            ? 'text-primary bg-primary/10'
+                            : 'text-gray-300 hover:text-white hover:bg-gray-800/50'
                             }`}
                         >
                           {getIcon(cat.slug)}
@@ -181,13 +181,20 @@ const LegacyTopbar = () => {
                                       <Link
                                         key={optionSlug}
                                         href={href}
-                                        className={`block py-1.5 px-2 text-xs rounded-lg transition-all duration-200 ${isFilterActive
-                                            ? 'bg-primary/10 text-primary font-medium ring-1 ring-primary/20'
-                                            : 'text-gray-300 hover:text-white hover:bg-gray-800/30'
+                                        className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${isFilterActive
+                                          ? 'bg-primary/20 text-primary ring-1 ring-primary/30 shadow-sm hover:bg-primary/30'
+                                          : 'bg-gray-800/30 text-gray-300 hover:bg-gray-700/50 hover:text-white ring-1 ring-gray-700/50'
                                           }`}
-                                        onClick={handleMouseLeave}
+                                        onClick={() => setOpenCategory(null)}
                                       >
-                                        {capitalizeString(option)}
+                                        <span className="flex items-center gap-1.5">
+                                          {isFilterActive && (
+                                            <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                            </svg>
+                                          )}
+                                          {capitalizeString(option)}
+                                        </span>
                                       </Link>
                                     );
                                   })}
@@ -295,13 +302,20 @@ const LegacyTopbar = () => {
                                             <Link
                                               key={optionSlug}
                                               href={href}
-                                              className={`block py-1.5 px-2 text-xs rounded-lg transition-all duration-200 ${isFilterActive
-                                                ? 'bg-primary/10 text-primary font-medium'
-                                                : 'text-gray-300 hover:text-white hover:bg-gray-800/30'
+                                              className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${isFilterActive
+                                                ? 'bg-primary/20 text-primary ring-1 ring-primary/30 shadow-sm hover:bg-primary/30'
+                                                : 'bg-gray-800/30 text-gray-300 hover:bg-gray-700/50 hover:text-white ring-1 ring-gray-700/50'
                                                 }`}
                                               onClick={() => setOpenCategory(null)}
                                             >
-                                              {capitalizeString(option)}
+                                              <span className="flex items-center gap-1.5">
+                                                {isFilterActive && (
+                                                  <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                  </svg>
+                                                )}
+                                                {capitalizeString(option)}
+                                              </span>
                                             </Link>
                                           );
                                         })}

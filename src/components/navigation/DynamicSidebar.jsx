@@ -148,11 +148,16 @@ const DynamicSidebar = () => {
                   <Link
                     key={item}
                     href={`/${item}?${searchParams.toString()}`}
-                    className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${pathname.includes(item)
-                      ? 'bg-primary/10 text-primary border border-primary/20'
-                      : 'text-gray-400 hover:text-primary hover:bg-primary/5'
+                    className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full ${pathname.includes(item)
+                      ? 'bg-primary text-white shadow-lg shadow-primary/25'
+                      : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700 hover:text-white'
                       }`}
                   >
+                    {pathname.includes(item) && (
+                      <svg className="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    )}
                     {item}
                   </Link>
                 ))}
@@ -166,11 +171,16 @@ const DynamicSidebar = () => {
                   <Link
                     key={item}
                     href={`${pathname}?${toggleQueryParam('tags', item)}`}
-                    className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${isActive('tags', item)
-                      ? 'bg-primary/10 text-primary border border-primary/20'
-                      : 'text-gray-400 hover:text-primary hover:bg-primary/5'
+                    className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full ${isActive('tags', item)
+                      ? 'bg-primary text-white shadow-lg shadow-primary/25'
+                      : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700 hover:text-white'
                       }`}
                   >
+                    {isActive('tags', item) && (
+                      <svg className="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    )}
                     {item}
                   </Link>
                 ))}
@@ -184,11 +194,16 @@ const DynamicSidebar = () => {
                   <Link
                     key={item}
                     href={`${pathname}?${toggleQueryParam('hair_color', item)}`}
-                    className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${isActive('hair_color', item)
-                      ? 'bg-primary/10 text-primary border border-primary/20'
-                      : 'text-gray-400 hover:text-primary hover:bg-primary/5'
+                    className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full ${isActive('hair_color', item)
+                      ? 'bg-primary text-white shadow-lg shadow-primary/25'
+                      : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700 hover:text-white'
                       }`}
                   >
+                    {isActive('hair_color', item) && (
+                      <svg className="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    )}
                     {item}
                   </Link>
                 ))}
@@ -202,11 +217,16 @@ const DynamicSidebar = () => {
                   <Link
                     key={item}
                     href={`${pathname}?${toggleQueryParam('willingness', item)}`}
-                    className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${isActive('willingness', item)
-                      ? 'bg-primary/10 text-primary border border-primary/20'
-                      : 'text-gray-400 hover:text-primary hover:bg-primary/5'
+                    className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full ${isActive('willingness', item)
+                      ? 'bg-primary text-black shadow-lg shadow-primary/25'
+                      : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700 hover:text-white'
                       }`}
                   >
+                    {isActive('willingness', item) && (
+                      <svg className="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    )}
                     {item}
                   </Link>
                 ))}
