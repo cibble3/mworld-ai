@@ -57,7 +57,7 @@ const GirlModelProfile = ({ model, similar }) => {
   // If model data couldn't be found
   if (!model) {
     return (
-      <div className="bg-[#16181c] min-h-screen">
+      <div className="bg-[#16181c] text-textlight min-h-screen">
         <HeadMeta pageContent={{
           meta_title: "Model Not Found - MistressWorld",
           meta_desc: "The model you're looking for couldn't be found."
@@ -136,7 +136,7 @@ const GirlModelProfile = ({ model, similar }) => {
             </div>
 
             {/* Model info */}
-            <div className="w-full md:w-2/3 p-6">
+            <div className="w-full md:w-2/3 p-6 text-textlight">
               <div className="flex justify-between items-start">
                 <h1 className="text-3xl font-bold mb-2">{model.name}</h1>
                 <div className="text-sm bg-[#333] px-2 py-1 rounded">
@@ -182,7 +182,7 @@ const GirlModelProfile = ({ model, similar }) => {
         </div>
 
         {/* About section - Generated content for SEO */}
-        <div className="bg-[#1a1c21] rounded-lg overflow-hidden shadow-lg p-6 mb-8">
+        <div className="bg-[#1a1c21] rounded-lg text-textlight overflow-hidden shadow-lg p-6 mb-8">
           <h2 className="text-2xl font-bold mb-4">About {model.name}</h2>
           <p className="mb-4">
             Welcome to {model.name}'s profile on MistressWorld.xxx. {model.name} is a {model.age}-year-old {model.ethnicity || ''} cam model
@@ -199,7 +199,7 @@ const GirlModelProfile = ({ model, similar }) => {
 
         {/* Similar models section */}
         {similar && similar.length > 0 && (
-          <div className="mb-8">
+          <div className="mb-8 text-textlight">
             <h2 className="text-2xl font-bold mb-4">Similar Cam Girls</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {similar.map((model, i) => (

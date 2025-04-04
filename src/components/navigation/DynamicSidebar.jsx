@@ -134,167 +134,192 @@ const DynamicSidebar = () => {
   console.log('filterData :>> ', filterData);
 
   return (
-    <div className="p-4 border-r border-[#333] bg-background lg:block hidden">
-      <div>
-        <h3 className="text-primary font-bold text-xl mb-4">Filter Models</h3>
+    <div className="p-6 border-r border-gray-800/30 bg-background lg:block hidden min-h-screen">
+      <div className="space-y-10">
+        {/* Filter Section */}
+        <div className="space-y-8">
+          <h3 className="text-primary font-semibold text-base tracking-wide uppercase">Filter Models</h3>
 
-        <>
-          <h4 className='mb-2'>Ethnicity :</h4>
-          <div className='flex justify-start gap-4 items-center mb-4'>
-            {
-              filterData[0]?.category?.map((item) => (
-                <Link
-                  key={item}
-                  href={`/${item}?${searchParams.toString()}`}
-                  className={`border px-3 py-1 rounded ${pathname.includes(item) ? 'bg-primary' : ''}`}
-                >
-                  {item}
-                </Link>
-              ))
-            }
-          </div>
-
-          <h4 className='mb-2'>Tags :</h4>
-          <div className='flex justify-start gap-4 items-center mb-4'>
-            {
-              filterData[0]?.tags?.map((item) => (
-                <Link
-                  key={item}
-                  href={`${pathname}?${toggleQueryParam('tags', item)}`}
-                  // href={`${pathname && pathname !== '/' ? pathname : '/girls'
-                  //   }?${toggleQueryParam('tags', item)}`}
-
-                  className={`border px-3 py-1 rounded ${isActive('tags', item) ? 'bg-primary' : ''}`}
-                >
-                  {item}
-                </Link>
-              ))
-            }
-          </div>
-
-          <h4 className='mb-2'>Hair Color :</h4>
-          <div className='flex justify-start gap-4 items-center mb-4'>
-            {
-              filterData[0]?.hair_color?.map((item) => (
-                <Link
-                  key={item}
-                  href={`${pathname}?${toggleQueryParam('hair_color', item)}`}
-                  className={`border px-3 py-1 rounded ${isActive('hair_color', item) ? 'bg-primary' : ''}`}
-                >
-                  {item}
-                </Link>
-              ))
-            }
-          </div>
-
-          <h4 className='mb-2'>Willingness :</h4>
-          <div className='flex justify-start gap-4 items-center mb-4'>
-            {
-              filterData[0]?.willingness?.map((item) => (
-                <Link
-                  key={item}
-                  href={`${pathname}?${toggleQueryParam('willingness', item)}`}
-                  className={`border px-3 py-1 rounded ${isActive('willingness', item) ? 'bg-primary' : ''}`}
-                >
-                  {item}
-                </Link>
-              ))
-            }
-          </div>
-
-          <button
-            onClick={() => route.push(pathname)}
-            className="border px-3 py-1 rounded bg-primary mb-4 text-sm"
-          >
-            Reset Filters
-          </button>
-          {/* <h4 className="mb-2">Online Only :</h4>
-          <div className="flex justify-start gap-4 items-center mb-4">
-            <Link
-              href={`${pathname && pathname !== '/' ? pathname : '/girls'}?${toggleQueryParam('online', 'true')}`}
-              className={`border px-3 py-1 rounded ${isActive('online', 'true') ? 'bg-primary' : ''}`}
-            >
-              Online Only
-            </Link>
-          </div> */}
-        </>
-
-      </div>
-
-      <h3 className="text-primary font-bold text-xl mb-4">Trending Models</h3>
-
-      {loading ? (
-        <div className="space-y-4">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="animate-pulse flex items-center">
-              <div className="w-12 h-12 bg-gray-700 rounded-full mr-3"></div>
-              <div className="flex-1">
-                <div className="h-4 bg-gray-700 rounded w-3/4 mb-2"></div>
-                <div className="h-3 bg-gray-700 rounded w-1/2"></div>
+          <div className="space-y-8">
+            <div>
+              <h4 className='text-xs font-medium text-gray-500 mb-3 tracking-wider uppercase'>Ethnicity</h4>
+              <div className='flex flex-wrap gap-2'>
+                {filterData[0]?.category?.map((item) => (
+                  <Link
+                    key={item}
+                    href={`/${item}?${searchParams.toString()}`}
+                    className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${pathname.includes(item)
+                      ? 'bg-primary/10 text-primary border border-primary/20'
+                      : 'text-gray-400 hover:text-primary hover:bg-primary/5'
+                      }`}
+                  >
+                    {item}
+                  </Link>
+                ))}
               </div>
             </div>
-          ))}
-        </div>
-      ) : error ? (
-        <p className="text-red-500 text-sm">{error}</p>
-      ) : (
-        <div className="space-y-4 text-textPrimary">
-          {trendingModels.map((model) => (
-            <Link href={`/chat/${model.performerId}`} key={model.id} className="flex items-center hover:bg-gray-800 p-2 rounded transition-colors">
-              <div className="relative w-12 h-12 rounded-full overflow-hidden mr-3">
-                <Image
-                  src={model.thumbnail || '/images/placeholder.jpg'}
-                  alt={model.name}
-                  width={48}
-                  height={48}
-                  className="object-cover"
-                  unoptimized
+
+            <div>
+              <h4 className='text-xs font-medium text-gray-500 mb-3 tracking-wider uppercase'>Tags</h4>
+              <div className='flex flex-wrap gap-2'>
+                {filterData[0]?.tags?.map((item) => (
+                  <Link
+                    key={item}
+                    href={`${pathname}?${toggleQueryParam('tags', item)}`}
+                    className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${isActive('tags', item)
+                      ? 'bg-primary/10 text-primary border border-primary/20'
+                      : 'text-gray-400 hover:text-primary hover:bg-primary/5'
+                      }`}
+                  >
+                    {item}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h4 className='text-xs font-medium text-gray-500 mb-3 tracking-wider uppercase'>Hair Color</h4>
+              <div className='flex flex-wrap gap-2'>
+                {filterData[0]?.hair_color?.map((item) => (
+                  <Link
+                    key={item}
+                    href={`${pathname}?${toggleQueryParam('hair_color', item)}`}
+                    className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${isActive('hair_color', item)
+                      ? 'bg-primary/10 text-primary border border-primary/20'
+                      : 'text-gray-400 hover:text-primary hover:bg-primary/5'
+                      }`}
+                  >
+                    {item}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h4 className='text-xs font-medium text-gray-500 mb-3 tracking-wider uppercase'>Willingness</h4>
+              <div className='flex flex-wrap gap-2'>
+                {filterData[0]?.willingness?.map((item) => (
+                  <Link
+                    key={item}
+                    href={`${pathname}?${toggleQueryParam('willingness', item)}`}
+                    className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${isActive('willingness', item)
+                      ? 'bg-primary/10 text-primary border border-primary/20'
+                      : 'text-gray-400 hover:text-primary hover:bg-primary/5'
+                      }`}
+                  >
+                    {item}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <button
+              onClick={() => route.push(pathname)}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-800/30 hover:bg-gray-800/50 text-gray-400 hover:text-white rounded-lg text-xs font-medium tracking-wide transition-all duration-200 group"
+            >
+              <svg
+                className="w-4 h-4 group-hover:rotate-180 transition-transform duration-200"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                 />
-                {model.isOnline && (
-                  <div className="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full border border-gray-900"></div>
-                )}
-              </div>
-              <div>
-                <p className="font-medium ">{model.name}</p>
-                <p className="text-xs text-textSecondary">{model.viewerCount} viewers</p>
-              </div>
-            </Link>
-          ))}
+              </svg>
+              Reset Filters
+            </button>
+          </div>
         </div>
-      )}
 
-      <div className="mt-8">
-        <h3 className="text-primary font-bold text-xl mb-4">Popular Tags</h3>
-        <div className="flex flex-wrap gap-2">
-          {popularTags.map((tag) => (
-            <Link href={`/tag/${tag}`} key={tag}>
-              <span className="px-2 py-1 bg-primary text-white text-sm rounded transition-colors">
+        {/* Trending Models Section */}
+        <div className="space-y-8">
+          <h3 className="text-primary font-semibold text-base tracking-wide uppercase">Trending Models</h3>
+
+          {loading ? (
+            <div className="space-y-4">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="animate-pulse flex items-center">
+                  <div className="w-10 h-10 bg-gray-800/30 rounded-full mr-3"></div>
+                  <div className="flex-1">
+                    <div className="h-3 bg-gray-800/30 rounded w-3/4 mb-2"></div>
+                    <div className="h-2 bg-gray-800/30 rounded w-1/2"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : error ? (
+            <p className="text-red-500 text-xs">{error}</p>
+          ) : (
+            <div className="space-y-4">
+              {trendingModels.map((model) => (
+                <Link
+                  href={`/chat/${model.performerId}`}
+                  key={model.id}
+                  className="flex items-center hover:bg-gray-800/30 p-2 rounded-md transition-all duration-200 group"
+                >
+                  <div className="relative w-10 h-10 rounded-full overflow-hidden  mr-3">
+                    <Image
+                      src={model?.thumbnail || '/images/placeholder.jpg'}
+                      alt={model?.name}
+                      width={40}
+                      height={40}
+                      className="object-cover size-10"
+                      unoptimized
+                    />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-300 group-hover:text-primary transition-colors">{model.name}</p>
+                    <p className="text-xs text-gray-500">{model?.viewerCount} viewers</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Popular Tags Section */}
+        <div className="space-y-8">
+          <h3 className="text-primary font-semibold text-base tracking-wide uppercase">Popular Tags</h3>
+          <div className="flex flex-wrap gap-2">
+            {popularTags.map((tag) => (
+              <Link
+                href={`/tag/${tag}`}
+                key={tag}
+                className="px-3 py-1.5 bg-gray-800/30 hover:bg-primary/10 text-gray-400 hover:text-primary text-xs font-medium rounded-md transition-all duration-200"
+              >
                 {tag}
-              </span>
-            </Link>
-          ))}
+              </Link>
+            ))}
+          </div>
         </div>
-      </div>
 
-      <div className="mt-8">
-        <h3 className="text-primary font-bold text-xl mb-4">Quick Links</h3>
-        <ul className="space-y-2 text-textSecondary">
-          <li>
-            <Link href="/girls" className=" hover:text-primary">Girls</Link>
-          </li>
-          <li>
-            <Link href="/trans" className=" hover:text-primary">Trans</Link>
-          </li>
-          <li>
-            <Link href="/fetish" className=" hover:text-primary">Fetish</Link>
-          </li>
-          <li>
-            <Link href="/free" className=" hover:text-primary">Free Cams</Link>
-          </li>
-          <li>
-            <Link href="/videos" className=" hover:text-primary">Videos</Link>
-          </li>
-        </ul>
+        {/* Quick Links Section */}
+        <div className="space-y-8">
+          <h3 className="text-primary font-semibold text-base tracking-wide uppercase">Quick Links</h3>
+          <ul className="space-y-3">
+            {[
+              { href: '/girls', label: 'Girls' },
+              { href: '/trans', label: 'Trans' },
+              { href: '/fetish', label: 'Fetish' },
+              { href: '/free', label: 'Free Cams' },
+              { href: '/videos', label: 'Videos' }
+            ].map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="text-gray-400 hover:text-primary text-sm font-medium flex items-center transition-colors duration-200"
+                >
+                  <span className="w-1 h-1 bg-primary rounded-full mr-2 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
