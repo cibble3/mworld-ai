@@ -179,7 +179,7 @@ const LegacyTopbar = () => {
 
           {/* Right Actions */}
           <div className="flex items-center space-x-2">
-            <div onClick={toggleDrawer} className="block xl:hidden">
+            <div onClick={toggleDrawer} className="block xl:hidden text-textlight">
               <IoMenuSharp fontSize={24} />
             </div>
             <Drawer

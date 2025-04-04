@@ -144,7 +144,7 @@ const LegacyLayout = ({
                 <div className="flex flex-wrap gap-2">
                   {popularTags.map((tag) => (
                     <Link href={`/tag/${tag}`} key={tag}>
-                      <span className="px-2 py-1 bg-gray-800 text-sm rounded hover:bg-gray-700 transition-colors">
+                      <span className="px-2 py-1 bg-primary text-sm rounded text-white transition-colors">
                         {tag}
                       </span>
                     </Link>

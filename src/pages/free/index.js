@@ -131,7 +131,7 @@ export default function FreePage({ initialData }) {
   ];
 
   return (
-    <div className="bg-[#16181c] min-h-screen">
+    <div className="bg-[#16181c] text-textlight min-h-screen">
       <HeadMeta pageContent={pageContent} />
       <CookiesModal />
 

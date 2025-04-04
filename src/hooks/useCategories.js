@@ -13,10 +13,15 @@ const fetcher = async (url) => {
 };
 
 export default function useCategories() {
-  const { data, error, isLoading } = useSWR('/api/categories', fetcher, { 
+  const { data, error, isLoading } = useSWR('/api/categories', fetcher, {
     revalidateOnFocus: false, // Disable revalidation on window focus
     shouldRetryOnError: false // Optional: Disable retries on error
   });
+  const { data: filterData } = useSWR('/api/models?extractAttributes=true', fetcher, {
+    revalidateOnFocus: false, // Disable revalidation on window focus
+    shouldRetryOnError: false // Optional: Disable retries on error
+  });
+  console.log('data :>> ', filterData);
 
   return {
     categories: data?.data?.categories || [],

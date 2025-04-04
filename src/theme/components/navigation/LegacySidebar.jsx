@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { useLanguage } from "@/context/LanguageContext";
 import useCategories from '@/hooks/useCategories';
 import { capitalizeString, slugify } from '@/utils/string-helpers';
+import axios from 'axios';
 
 // Helper function to format filter names (e.g., 'body_size' -> 'Body Size')
 // Consider moving this to string-helpers if used elsewhere
@@ -33,6 +34,17 @@ const LegacySidebar = () => {
   // State for expanded filter sections (e.g., { girls: { ethnicity: true, age: false }, videos: { category: true } })
   const [expandedFilters, setExpandedFilters] = useState({});
 
+  const fetchData = async () => {
+    try {
+      const res = await axios.get('/api/models?extractAttributes=true')
+      console.log('resdata :>> ', res);
+    } catch (error) {
+      console.log('error :>> ', error);
+    }
+  }
+  useEffect(() => {
+    fetchData()
+  }, [])
   // Initialize expanded state when categories load
   useEffect(() => {
     if (categories.length > 0) {
@@ -104,7 +116,7 @@ const LegacySidebar = () => {
 
   // Find the current category object based on the slug
   const currentCategory = categories.find(cat => cat.slug === currentMainCategorySlug);
-
+  console.log('currentCategory :>> ', currentCategory);
   return (
     <aside
       className="h-full fixed left-0 top-0 pt-16 w-64 overflow-y-auto z-10"

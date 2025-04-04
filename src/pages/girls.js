@@ -10,7 +10,7 @@ const GirlsPage = () => {
   const [models, setModels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  console.log('models :>> ', models);
   useEffect(() => {
     const fetchModels = async () => {
       try {
@@ -21,6 +21,9 @@ const GirlsPage = () => {
           params: {
             provider: 'awe',
             category: 'girls',
+            // ethnicity: 'asian',
+            // hair_color: 'red',
+            // willingness: 'group',
             limit: 24,
             debug: true
           }
@@ -89,7 +92,7 @@ const GirlsPage = () => {
   };
 
   return (
-    <div className="bg-[#16181c] min-h-screen">
+    <div className="bg-[#16181c] text-textlight min-h-screen">
       <HeadMeta pageContent={pageContent} />
       <CookiesModal />
 
