@@ -53,7 +53,7 @@ const FreeModelProfile = ({ model, similar }) => {
   // If page is in fallback state
   if (router.isFallback) {
     return (
-      <div className="bg-[#16181c] min-h-screen">
+      <div className="bg-[#16181c]  text-textlight min-h-screen">
         <div className="text-center p-10">Loading...</div>
       </div>
     );
@@ -110,7 +110,7 @@ const FreeModelProfile = ({ model, similar }) => {
   };
 
   return (
-    <div className="bg-[#16181c] min-h-screen">
+    <div className="bg-[#16181c]  text-textlight min-h-screen">
       <HeadMeta pageContent={pageContent} />
       <CookiesModal />
 

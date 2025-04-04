@@ -133,7 +133,7 @@
 }
 body {
   font-family: var(--font);
-  columns: var(--color-text-light);
+  color: var(--color-text-light);
 }
 
 .box,

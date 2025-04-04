@@ -93,7 +93,7 @@ const GirlModelProfile = ({ model, similar }) => {
   };
 
   return (
-    <div className="bg-[#16181c] min-h-screen">
+    <div className="bg-[#16181c] text-textlight min-h-screen">
       <HeadMeta pageContent={pageContent} />
       <CookiesModal />
 
@@ -117,7 +117,7 @@ const GirlModelProfile = ({ model, similar }) => {
         )}
 
         {/* Model header section */}
-        <div className="bg-[#1a1c21] rounded-lg overflow-hidden shadow-lg mb-8">
+        <div className="bg-[#1a1c21]  text-textlight rounded-lg overflow-hidden shadow-lg mb-8">
           <div className="flex flex-col md:flex-row">
             {/* Model image */}
             <div className="w-full md:w-1/3 relative h-[300px] md:h-auto">
@@ -182,7 +182,7 @@ const GirlModelProfile = ({ model, similar }) => {
         </div>
 
         {/* About section - Generated content for SEO */}
-        <div className="bg-[#1a1c21] rounded-lg overflow-hidden shadow-lg p-6 mb-8">
+        <div className="bg-[#1a1c21]  text-textlight rounded-lg overflow-hidden shadow-lg p-6 mb-8">
           <h2 className="text-2xl font-bold mb-4">About {model.name}</h2>
           <p className="mb-4">
             Welcome to {model.name}'s profile on MistressWorld.xxx. {model.name} is a {model.age}-year-old {model.ethnicity || ''} cam model
@@ -199,7 +199,7 @@ const GirlModelProfile = ({ model, similar }) => {
 
         {/* Similar models section */}
         {similar && similar.length > 0 && (
-          <div className="mb-8">
+          <div className="mb-8  text-textlight">
             <h2 className="text-2xl font-bold mb-4">Similar Cam Girls</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {similar.map((model, i) => (
