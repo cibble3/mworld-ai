@@ -150,7 +150,7 @@ const VideosPage = () => {
       <CookiesModal />
 
       {/* Sidebar as an overlay that doesn't affect main content flow */}
-      <div className="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] bg-[#1a1a1a] overflow-y-auto z-10 pointer-events-auto">
+      <div className="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] bg-[#1a1a1a] overflow-y-auto z-10 pointer-events-auto lg:block hidden">
         <DynamicSidebar />
       </div>
 
