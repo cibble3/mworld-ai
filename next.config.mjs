@@ -122,6 +122,81 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // Redirect singular 'girl' to plural 'girls'
+      {
+        source: '/girl/:subcategory',
+        destination: '/girls/:subcategory',
+        permanent: true,
+      },
+      {
+        source: '/girl',
+        destination: '/girls',
+        permanent: true,
+      },
+      
+      // Fetish path redirects - new mixed API approach
+      {
+        source: '/free/fetish',
+        destination: '/fetish',
+        permanent: true,
+      },
+      {
+        source: '/free/fetish/:slug',
+        destination: '/fetish/:slug',
+        permanent: true,
+      },
+      
+      // Redirect old path-based filtering to new query parameter filtering
+      {
+        source: '/girls/asian',
+        destination: '/girls?ethnicity=asian',
+        permanent: true,
+      },
+      {
+        source: '/girls/ebony',
+        destination: '/girls?ethnicity=ebony',
+        permanent: true,
+      },
+      {
+        source: '/girls/latina',
+        destination: '/girls?ethnicity=latina',
+        permanent: true,
+      },
+      {
+        source: '/girls/blonde',
+        destination: '/girls?hair_color=blonde',
+        permanent: true,
+      },
+      {
+        source: '/girls/brunette',
+        destination: '/girls?hair_color=brunette',
+        permanent: true,
+      },
+      {
+        source: '/girls/teen',
+        destination: '/girls?tags=teen',
+        permanent: true,
+      },
+      {
+        source: '/girls/milf',
+        destination: '/girls?tags=milf',
+        permanent: true,
+      },
+      {
+        source: '/girls/bbw',
+        destination: '/girls?tags=bbw',
+        permanent: true,
+      },
+      {
+        source: '/girls/mature',
+        destination: '/girls?tags=mature',
+        permanent: true,
+      },
+      {
+        source: '/girls/fetish',
+        destination: '/girls?tags=fetish',
+        permanent: true,
+      },
       {
         source: "/tranny",
         destination: "/trans",
@@ -196,6 +271,58 @@ const nextConfig = {
         source: "/en/trans",
         destination: "/trans",
         permanent: true,
+      },
+      // Redirect old path-based filtering to new query parameter filtering for trans
+      {
+        source: '/trans/asian',
+        destination: '/trans?ethnicity=asian',
+        permanent: true,
+      },
+      {
+        source: '/trans/ebony',
+        destination: '/trans?ethnicity=ebony',
+        permanent: true,
+      },
+      {
+        source: '/trans/latina',
+        destination: '/trans?ethnicity=latina',
+        permanent: true,
+      },
+      {
+        source: '/trans/blonde',
+        destination: '/trans?hair_color=blonde',
+        permanent: true,
+      },
+      {
+        source: '/trans/brunette',
+        destination: '/trans?hair_color=brunette',
+        permanent: true,
+      },
+      {
+        source: '/trans/teen',
+        destination: '/trans?tags=teen',
+        permanent: true,
+      },
+      {
+        source: '/trans/milf',
+        destination: '/trans?tags=milf',
+        permanent: true,
+      },
+      {
+        source: '/trans/bbw',
+        destination: '/trans?tags=bbw',
+        permanent: true,
+      },
+      {
+        source: '/trans/fetish',
+        destination: '/trans?tags=fetish',
+        permanent: true,
+      },
+      // Only keep basic redirection 
+      {
+        source: '/free',
+        destination: '/free/girls',
+        permanent: false,
       },
     ];
   },
@@ -293,6 +420,26 @@ const nextConfig = {
       //   pathname: '/**',
       // }
     ],
+    domains: [
+      'picsum.photos', // For development placeholders
+      'partner-api.awempire.com', // AWE API
+      'images.livejasmin.com', // LiveJasmin images
+      'static-assets.awempire.com', // Static AWE assets
+      'chaturbate.com', // Chaturbate
+      'www.chaturbate.com', // Chaturbate www subdomain
+      'static-us.xvideoslive.com', // Chaturbate alternative domain
+      'static-eu.xvideoslive.com', // Chaturbate EU domain
+      'static-gals.xilovespass.com', // Another static domain
+      'cdn-image.mistressworld.xxx', // Our CDN (for future use)
+      'mistressworld.xxx', // Our domain
+      'www.mistressworld.xxx', // Our www subdomain
+      'localhost', // Local development
+    ],
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 3600, // 1 hour cache
+    // For performance and to avoid visible resizing/shifting
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840], // Device widths
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384], // Image widths
   },
   eslint: {
     // Warning: This allows production builds to successfully complete even if
@@ -330,6 +477,7 @@ const nextConfig = {
   //     }
   //   ]
   // }
+  trailingSlash: false,
 };
 
 export default nextConfig;

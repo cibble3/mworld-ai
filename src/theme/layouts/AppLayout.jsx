@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { FaInstagram, FaTwitter } from "react-icons/fa6";
 import { IoLogoYoutube } from 'react-icons/io';
 import { popularTags } from '@/components/navigation/DynamicSidebar';
+
 const LegacyLayout = ({
   children,
   meta = {},
@@ -93,7 +94,7 @@ const LegacyLayout = ({
                 <ul className="space-y-2">
                   <li><a href="/girls" className="text-textPrimary">Cam Girls</a></li>
                   <li><a href="/trans" className="text-textPrimary">Trans Cams</a></li>
-                  <li><a href="/free" className="text-textPrimary">Free Cams</a></li>
+                  <li><a href="/fetish" className="text-textPrimary">Fetish Cams</a></li>
                 </ul>
               </div>
               <div>
@@ -130,9 +131,6 @@ const LegacyLayout = ({
                   </li>
                   <li>
                     <Link href="/fetish" className="text-textPrimary">Fetish</Link>
-                  </li>
-                  <li>
-                    <Link href="/free" className="text-textPrimary">Free Cams</Link>
                   </li>
                   <li>
                     <Link href="/videos" className="text-textPrimary">Videos</Link>

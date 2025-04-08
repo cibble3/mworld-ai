@@ -1,44 +1,38 @@
 /**
- * Unified API Service
+ * API Module
  * 
- * This service provides a standardized interface for interacting with
- * all external APIs (AWE, VPAPI, FreeAPI) and internal data.
+ * Central API handling with:
+ * - Provider selection (AWE, VPAPI)
+ * - Caching layer
+ * - Response normalization
  */
 
-import axios from 'axios';
+import { Redis } from '@upstash/redis';
+import aweProvider from './providers/awe';
+import vpapiProvider from './providers/vpapi';
+import cache from './cache';
+// Import utils
+import { ensureAbsoluteUrl, normalizeTag, generateRandomId } from './utils';
 
 /**
  * API Providers 
- * This defines the available data providers for the application
+ * Available data providers for the application
  */
+export const Providers = {
+  AWE: 'awe',       // AWE Network
+  VPAPI: 'vpapi',   // VideoPlayerAPI
+};
+
+// For backward compatibility - maintain the old naming but without FREE
 export const ApiProviders = {
-  AWE: 'awe',      // LiveJasmin Models
-  VPAPI: 'vpapi',  // LiveJasmin Videos
-  FREE: 'free'     // Chaturbate Models
+  AWE: 'awe',
+  VPAPI: 'vpapi'
 };
 
 /**
- * Base URLs for the different API providers
- * These will be used by the orchestrator service
+ * Content Types
+ * Available content types in the application
  */
-export const API_URLS = {
-  [ApiProviders.AWE]: '/api/models',
-  [ApiProviders.FREE]: '/api/free-models',
-  [ApiProviders.VPAPI]: '/api/videos'
-};
-
-/**
- * Helper to ensure URLs are properly formatted
- * This is especially important for VPAPI which returns protocol-relative URLs
- */
-export const ensureAbsoluteUrl = (url) => {
-  if (typeof url === 'string' && url.startsWith('//')) {
-    return `https:${url}`;
-  }
-  return url || '';
-};
-
-// Content type constants
 export const ContentTypes = {
   MODEL: 'model',
   VIDEO: 'video',
@@ -48,231 +42,282 @@ export const ContentTypes = {
 };
 
 /**
- * Fetch models with consistent interface across providers
+ * API endpoint URLs
+ * NextJS API routes for each provider
+ */
+export const API_URLS = {
+  [Providers.AWE]: '/api/models',
+  [Providers.VPAPI]: '/api/videos'
+};
+
+/**
+ * Fetch models from the appropriate provider
  * 
  * @param {Object} params - Query parameters
- * @param {string} params.provider - API provider (awe, vpapi, free)
- * @param {string} params.category - Category (asian, ebony, latina, etc.)
+ * @param {string} params.provider - API provider (awe, vpapi)
+ * @param {string} params.category - Model category (girls, trans, fetish)
+ * @param {number} params.limit - Number of models to return
+ * @param {number} params.offset - Pagination offset
+ * @param {boolean} skipCache - Whether to skip the cache
+ * @returns {Promise<Object>} - Normalized API response
+ */
+export const fetchModels = async (params, skipCache = false) => {
+  const { provider = Providers.AWE, ...otherParams } = params;
+  
+  console.log(`[API] fetchModels with provider: ${provider}`);
+  
+  try {
+    switch (provider) {
+      case Providers.AWE:
+        return aweProvider.fetchModels(otherParams, skipCache);
+      case Providers.VPAPI:
+        return vpapiProvider.fetchModels(otherParams, skipCache);
+      default:
+        throw new Error(`Unknown provider: ${provider}`);
+    }
+  } catch (error) {
+    console.error(`[API] Error fetching models from ${provider}:`, error);
+    throw error;
+  }
+};
+
+/**
+ * Fetch videos with a consistent interface
+ * 
+ * @param {Object} params - Query parameters
+ * @param {string} params.category - Category (popular, new, lesbian, etc.)
  * @param {string} params.subcategory - Subcategory if applicable
  * @param {number} params.limit - Number of results to return
  * @param {number} params.offset - Pagination offset
- * @param {string} params.sort - Sort order
+ * @param {Object} params.filters - Filter options (quality, tags, etc.)
  * @param {boolean} params.skipCache - Whether to skip cache
- * @returns {Promise<Object>} - Normalized response with models and pagination
+ * @returns {Promise<Object>} - Normalized response with videos and pagination
  */
-export async function fetchModels(params = {}) {
-  try {
-    const { 
-      provider = ApiProviders.AWE, 
-      category, 
-      subcategory,
-      limit = 50,
-      offset = 0,
-      sort = 'featured',
-      skipCache = false
-    } = params;
-    
-    console.log(`[API service] fetchModels called with provider: ${provider}`);
-    
-    // Normalize provider to string
-    const providerStr = String(provider).toLowerCase();
-    
-    // Build query parameters differently based on provider
-    let endpoint, queryParams;
-    
-    if (providerStr === ApiProviders.FREE) {
-      // For FREE provider, use the dedicated free-models endpoint
-      queryParams = new URLSearchParams({
-        category: category || '',
-        subcategory: subcategory || '',
-        limit,
-        offset,
-        sort,
-        _timestamp: Date.now() // Cache busting
-      }).toString();
-      
-      endpoint = `/api/free-models?${queryParams}`;
-      console.log(`[API service] Using FREE provider endpoint: ${endpoint}`);
-    } 
-    else if (providerStr === ApiProviders.VPAPI) {
-      // For VPAPI provider, use the videos endpoint
-      queryParams = new URLSearchParams({
-        category: category || '',
-        subcategory: subcategory || '',
-        limit,
-        offset,
-        sort,
-        skipCache: skipCache ? '1' : '0',
-        _timestamp: Date.now()
-      }).toString();
-      
-      endpoint = `/api/videos?${queryParams}`;
-      console.log(`[API service] Using VPAPI provider endpoint: ${endpoint}`);
-    }
-    else {
-      // Default AWE provider
-      queryParams = new URLSearchParams({
-        provider: 'awe', // Ensure provider is explicitly set to AWE
-        category: category || '',
-        subcategory: subcategory || '',
-        limit,
-        offset,
-        sort,
-        skipCache: skipCache ? '1' : '0',
-        _timestamp: Date.now()
-      }).toString();
-      
-      endpoint = `/api/models?${queryParams}`;
-      console.log(`[API service] Using AWE provider endpoint: ${endpoint}`);
-    }
-    
-    // Make the API request
-    console.log(`[API service] Making request to: ${endpoint}`);
-    const response = await axios.get(endpoint);
-    
-    return response.data;
-  } catch (error) {
-    console.error('[API service] Error fetching models:', error);
-    return {
-      success: false,
-      error: error.message,
-      data: {
-        models: [],
-        pagination: {
-          total: 0,
-          offset: parseInt(params.offset || 0),
-          limit: parseInt(params.limit || 50),
-          pages: 0,
-          currentPage: 1
-        }
-      }
-    };
-  }
+export async function fetchVideos(params = {}) {
+  const { skipCache = false, ...otherParams } = params;
+  
+  console.log(`[API] fetchVideos called with category: ${params.category || 'popular'}`);
+  
+  return vpapiProvider.fetchVideos(otherParams, skipCache);
 }
 
 /**
- * Fetch content (blog posts, pages, etc.)
- * 
- * @param {Object} params - Query parameters
- * @param {string} params.type - Content type (blog, page)
- * @param {string} params.slug - Content slug
- * @param {string} params.category - Category if applicable
- * @returns {Promise<Object>} - Normalized response with content data
+ * Clear cache entries
+ * @param {string} prefix - Optional prefix to clear only matching keys
+ * @returns {void}
  */
-export async function fetchContent(params = {}) {
-  try {
-    const { 
-      type = ContentTypes.PAGE, 
-      slug,
-      category
-    } = params;
-    
-    // Build query parameters
-    const queryParams = new URLSearchParams({
-      type,
-      slug: slug || '',
-      category: category || '',
-      _timestamp: Date.now() // Cache busting
-    }).toString();
-    
-    const response = await axios.get(`/api/content?${queryParams}`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching content:', error);
-    return {
-      success: false,
-      error: error.message,
-      data: null
-    };
-  }
+export function clearCache(prefix = '') {
+  return cache.clear(prefix);
 }
 
 /**
- * Fetch categories with consistent interface
- * 
- * @param {Object} params - Query parameters
- * @param {string} params.category - Main category
- * @param {string} params.subcategory - Subcategory
- * @returns {Promise<Object>} - Normalized response with category data
+ * Get cache statistics for monitoring
+ * @returns {Object} Cache statistics
  */
-export async function fetchCategories(params = {}) {
-  try {
-    const { 
-      category,
-      subcategory
-    } = params;
-    
-    // Build query parameters
-    const queryParams = new URLSearchParams({
-      category: category || '',
-      subcategory: subcategory || '',
-      _timestamp: Date.now() // Cache busting
-    }).toString();
-    
-    const response = await axios.get(`/api/categories?${queryParams}`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-    return {
-      success: false,
-      error: error.message,
-      data: {
-        categories: [],
-        subcategories: []
-      }
-    };
-  }
+export function getCacheStats() {
+  return cache.stats();
 }
+
+/**
+ * Ensure URLs are properly formatted
+ * This is especially important for VPAPI which returns protocol-relative URLs
+ * @param {string} url - URL to format
+ * @returns {string} Properly formatted URL
+ */
+export { ensureAbsoluteUrl };
 
 /**
  * Standardize model data across different providers
- * 
- * @param {Object} model - Raw model data from API
+ * @param {Object} model - Raw model data
  * @param {string} provider - API provider
  * @returns {Object} - Standardized model object
  */
 export function standardizeModelData(model, provider) {
   // Create a standard model object regardless of source
   return {
-    id: model.id || model.uid || model.model_id,
-    slug: model.slug || createSlug(model.name || model.displayName),
-    name: model.name || model.displayName || model.model_name,
-    preview: model.preview || model.thumbnail || model.image,
+    id: model.id || model.uid || model.model_id || generateRandomId('model'),
+    slug: model.slug || model.username || model.id || generateRandomId('slug'),
+    name: model.name || model.displayName || model.model_name || 'Unknown Model',
+    preview: model.preview || model.thumbnail || model.image || '',
     category: model.category, 
     subcategory: model.subcategory,
-    isLive: Boolean(model.isLive || model.is_online || model.live),
+    isLive: Boolean(model.isLive || model.is_online || model.isOnline),
     tags: model.tags || [],
-    provider, // Track the source
+    provider: provider || model._provider,
     // We'll merge with AI-generated content later
     bioTop: model.bioTop || null,
     bioBottom: model.bioBottom || null,
     // Original data preserved for access if needed
-    _original: model
+    _original: model._original || model
   };
 }
 
 /**
- * Create a URL-friendly slug from a string
+ * Calculate tag statistics and popularity scores across all providers
+ * This helps prioritize which tags should be displayed based on active model count
  * 
- * @param {string} text - Input text
- * @returns {string} - URL-friendly slug
+ * @param {Object} options - Options for calculation
+ * @param {boolean} options.skipCache - Whether to skip cache
+ * @param {string[]} options.tags - List of tags to check
+ * @param {string[]} options.providers - List of providers to check
+ * @returns {Promise<Object>} Tag statistics
  */
-function createSlug(text) {
-  if (!text) return '';
-  return text
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/[\s_-]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+export async function calculateTagStats(options = {}) {
+  const { 
+    skipCache = false,
+    tags = [], 
+    providers = [Providers.AWE] 
+  } = options;
+  
+  const cacheKey = 'tag_stats';
+  
+  // Check cache first if not skipping
+  if (!skipCache) {
+    const cachedStats = cache.get(cacheKey);
+    if (cachedStats) {
+      console.log(`[API] Using cached tag statistics`);
+      return cachedStats;
+    }
+  }
+  
+  console.log(`[API] Calculating tag statistics for ${tags.length} tags across ${providers.length} providers`);
+  
+  // Object to store tag statistics
+  const tagStats = {
+    totalActiveByTag: {},
+    totalActiveByProvider: {},
+    updatedAt: new Date().toISOString()
+  };
+  
+  try {
+    // Get model counts for each tag from each provider
+    const tagPromises = tags.map(async (tag) => {
+      const providerPromises = providers.map(async (provider) => {
+        const result = await fetchModels({
+          provider,
+          limit: 1,
+          skipCache,
+          tags: tag,
+          count_only: true // Just get counts, not actual models
+        });
+        
+        const count = result.success ? (result.data?.pagination?.total || 0) : 0;
+        return { provider, count };
+      });
+      
+      const providerCounts = await Promise.all(providerPromises);
+      
+      // Calculate total for this tag across all providers
+      const totalForTag = providerCounts.reduce((sum, { count }) => sum + count, 0);
+      
+      // Store count by provider
+      providerCounts.forEach(({ provider, count }) => {
+        if (!tagStats.totalActiveByProvider[provider]) {
+          tagStats.totalActiveByProvider[provider] = {};
+        }
+        tagStats.totalActiveByProvider[provider][tag] = count;
+      });
+      
+      return { tag, count: totalForTag };
+    });
+    
+    const tagCounts = await Promise.all(tagPromises);
+    
+    // Store total counts and sort by popularity
+    tagCounts.forEach(({ tag, count }) => {
+      tagStats.totalActiveByTag[tag] = count;
+    });
+    
+    // Sort tags by count (descending)
+    tagStats.sortedTags = Object.entries(tagStats.totalActiveByTag)
+      .sort(([, countA], [, countB]) => countB - countA)
+      .map(([tag]) => tag);
+    
+    // Cache the results
+    const tagStatsCacheTTL = 15 * 60 * 1000; // 15 minutes
+    cache.set(cacheKey, tagStats, tagStatsCacheTTL);
+    
+    return tagStats;
+  } catch (error) {
+    console.error(`[API] Error calculating tag statistics:`, error);
+    return {
+      totalActiveByTag: {},
+      totalActiveByProvider: {},
+      error: error.message,
+      updatedAt: new Date().toISOString()
+    };
+  }
 }
+
+// Export the Redis client for other modules to use
+export const redisClient = process.env.UPSTASH_REDIS_URL ? new Redis({
+  url: process.env.UPSTASH_REDIS_URL,
+  token: process.env.UPSTASH_REDIS_TOKEN
+}) : null;
+
+/**
+ * Get average viewer count across all platforms
+ * @returns {Promise<number>} - Average viewer count
+ */
+export const getAverageViewerCount = async () => {
+  return 127; // Default viewer count
+};
+
+/**
+ * Get popular models across providers
+ * 
+ * @param {Object} options - Query options
+ * @param {number} options.limit - Number of models to return
+ * @param {string} options.category - Optional category filter
+ * @returns {Promise<Array>} - Array of popular models
+ */
+export const getPopularModels = async (options = {}) => {
+  const { limit = 8, category } = options;
+  
+  console.log(`[API] Getting ${limit} popular models${category ? ` in category ${category}` : ''}`);
+  
+  // Default to AWE only for now
+  const providers = [Providers.AWE];
+  
+  try {
+    // Get models from primary provider first
+    const params = {
+      provider: providers[0],
+      limit: limit * 2, // Get more models than needed to allow for filtering
+      ...(category && { category }),
+      sortBy: 'popular'
+    };
+    
+    const result = await fetchModels(params);
+    if (!result.success) {
+      throw new Error(result.error || 'Failed to fetch models');
+    }
+    
+    return result.data.models.slice(0, limit);
+  } catch (error) {
+    console.error('[API] Error getting popular models:', error);
+    return [];
+  }
+};
+
+// Export other utilities from utils.js and tag-analyzer.js
+export { normalizeTag } from './utils';
+export * from './tag-analyzer';
 
 export default {
   fetchModels,
-  fetchContent,
-  fetchCategories,
+  fetchVideos,
+  clearCache,
+  getCacheStats,
+  calculateTagStats,
   standardizeModelData,
+  ensureAbsoluteUrl,
+  normalizeTag,
+  Providers,
   ApiProviders,
   ContentTypes,
   API_URLS,
-  ensureAbsoluteUrl
+  redisClient,
+  getAverageViewerCount,
+  getPopularModels
 }; 

@@ -1,158 +1,56 @@
-import React, { useState, useEffect } from 'react';
-import HeadMeta from '@/components/HeadMeta';
-import CookiesModal from '@/components/CookiesModal/CookiesModal';
-import ModelGrid from '@/theme/components/grid/ModelGrid';
-import ModelCard from '@/theme/components/common/ModelCard';
-import DynamicSidebar from '@/components/navigation/DynamicSidebar';
-import axios from 'axios';
-import { useSearchParams } from 'next/navigation'
-
+import React from 'react';
+import ThemeLayout from '@/theme/layouts/ThemeLayout';
+import ModelPage from '@/components/pages/ModelPage';
+import { text as girlsTransContent } from '@/theme/content/girlsTransContent';
+import { capitalizeString } from '@/utils/string-helpers';
 
 const TransPage = () => {
-  const searchParams = useSearchParams();
-  const [models, setModels] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchModels = async () => {
-      try {
-        console.log('[TransPage] Fetching models...');
-        setLoading(true);
-        // Read query params
-        const hairColor = searchParams.get('hair_color');
-        const tags = searchParams.get('tags');
-        const willingness = searchParams.get('willingness');
-
-        const response = await axios.get('/api/models', {
-          params: {
-            provider: 'awe',
-            category: 'trans',
-            limit: 24,
-            debug: true,
-            ...(hairColor && { hair_color: hairColor }),
-            ...(tags && { tags }),
-            ...(willingness && { willingness }),
-          }
-        });
-
-        console.log(`[TransPage] API response:`,
-          response.data?.success ?
-            `Success - ${response.data.data?.models?.length || 0} models` :
-            `Failed - ${response.data.error || 'Unknown error'}`
-        );
-
-        // Handle different possible API response structures
-        let models = [];
-        if (response.data?.success) {
-          if (response.data.data?.models && Array.isArray(response.data.data.models)) {
-            models = response.data.data.models;
-          } else if (response.data.data?.items && Array.isArray(response.data.data.items)) {
-            models = response.data.data.items;
-          } else if (Array.isArray(response.data.data)) {
-            models = response.data.data;
-          } else {
-            console.warn(`[TransPage] Unexpected API response structure`);
-            models = [];
-          }
-
-          if (models.length > 0) {
-            console.log('[TransPage] First model:', JSON.stringify(models[0]).substring(0, 100));
-          } else {
-            console.warn('[TransPage] No models found in API response');
-          }
-
-          setModels(models);
-        } else {
-          // Handle error from API
-          console.error('[TransPage] API error:', response.data?.error);
-          setError(response.data?.error || 'Failed to fetch models');
-
-          // In development, use fallback models 
-          if (process.env.NODE_ENV === 'development') {
-            const fallbackModels = Array.from({ length: 8 }, (_, i) => ({
-              id: `fallback-${i}`,
-              performerId: `fallback-${i}`,
-              name: `Trans Model ${i + 1}`,
-              age: 25 + (i % 10),
-              ethnicity: ['asian', 'latin', 'ebony', 'white'][i % 4],
-              tags: ['trans', 'beautiful'],
-              thumbnail: `https://picsum.photos/id/${200 + i}/300/400`,
-              isOnline: true,
-              viewerCount: Math.floor(Math.random() * 100)
-            }));
-            setModels(fallbackModels);
-            console.log('[TransPage] Using fallback models for development');
-          }
-        }
-      } catch (err) {
-        console.error('[TransPage] Error:', err);
-        setError(err.message || 'Failed to fetch models');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchModels();
-  }, [searchParams]);
-
-  // Prepare page metadata
-  const pageContent = {
+  // Default content when no filters are applied
+  const defaultContent = {
+    title: "Live Trans Cams",
+    desc: "Explore the hottest live trans cam models online. Watch transgender webcam models perform live just for you.",
     meta_title: "Live Trans Cams | MistressWorld",
     meta_desc: "Explore the hottest live trans cam models online. Watch transgender webcam models perform live just for you.",
-    top_text: ""
+    meta_keywords: "trans models, transgender webcams, trans cams, transgender models",
+    about: []
   };
 
+  // Get content map from the content file
+  const contentMap = girlsTransContent?.trans || {};
+
+  // Helper function to generate dynamic content based on ethnicity
+  const generateDynamicContent = (ethnicity) => ({
+    title: `${capitalizeString(ethnicity)} Trans Models`,
+    desc: `Experience the hottest ${ethnicity} trans models online at MistressWorld.xxx. Connect with stunning ${ethnicity} trans performers for a private chat experience you'll never forget.`,
+    meta_title: `${capitalizeString(ethnicity)} Trans Models - Live ${capitalizeString(ethnicity)} Trans Cams - MistressWorld`,
+    meta_desc: `Chat live with sexy ${ethnicity} trans models online now. MistressWorld features the hottest transgender webcam performers for private shows.`,
+    meta_keywords: `${ethnicity} trans models, ${ethnicity} trans cams, ${ethnicity} transgender webcams`
+  });
+
+  // Ensure contentMap has entries for common ethnicities
+  const ensuredContentMap = {
+    ...contentMap,
+    // Add default ethnicity entries if they don't exist
+    asian: contentMap.asian || generateDynamicContent('asian'),
+    ebony: contentMap.ebony || generateDynamicContent('ebony'),
+    latina: contentMap.latina || generateDynamicContent('latina'),
+    white: contentMap.white || generateDynamicContent('white')
+  };
+
+  const transPageContent = (
+    <ModelPage
+      category="trans"
+      defaultContent={defaultContent}
+      contentMap={ensuredContentMap}
+      additionalParams={['gender_identity', 'body_type']} // Trans page has these additional params
+      pageRoute="/trans"
+    />
+  );
+
   return (
-    <div className="bg-[#16181c] text-textlight min-h-screen">
-      <HeadMeta pageContent={pageContent} />
-      <CookiesModal />
-
-      {/* Sidebar as an overlay that doesn't affect main content flow */}
-      <div className="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] bg-[#1a1a1a] overflow-y-auto z-10 pointer-events-auto lg:block hidden">
-        <DynamicSidebar />
-      </div>
-
-      <div className="py-4 px-3">
-        <h1 className="text-2xl md:text-3xl font-bold mb-6">Live Trans Cams</h1>
-
-        {loading ? (
-          <div className="flex justify-center py-10">
-            <div className="animate-pulse text-xl">Loading models...</div>
-          </div>
-        ) : error ? (
-          <div className="text-center text-red-500 py-10">
-            Error loading models: {error}
-          </div>
-        ) : models.length === 0 ? (
-          <div className="text-center text-gray-500 py-10">
-            No models found.
-          </div>
-        ) : (
-          <>
-            <p className="text-gray-400 mb-5">
-              Showing {models.length} trans models on Mistress World. Explore our selection of beautiful trans cam models ready to engage in private chat sessions.
-            </p>
-
-            <ModelGrid models={models} isLoading={false}>
-              {(model) => (
-                <ModelCard
-                  key={model.id || model.slug}
-                  performerId={model.id || model.slug}
-                  name={model.name}
-                  age={model.age}
-                  ethnicity={model.ethnicity}
-                  tags={model.tags || []}
-                  image={model.thumbnail}
-                  isOnline={model.isOnline !== false}
-                  viewerCount={model.viewerCount || 0}
-                />
-              )}
-            </ModelGrid>
-          </>
-        )}
-      </div>
-    </div>
+    <ThemeLayout>
+      {transPageContent}
+    </ThemeLayout>
   );
 };
 

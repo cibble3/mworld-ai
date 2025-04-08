@@ -17,14 +17,35 @@ const ModelCard = ({
   performerId,
   isOnline = true,
   viewerCount = 0,
-  preload = false
+  preload = false,
+  highlightTag = null,
+  providerLabel = null
 }) => {
   const { theme } = useTheme();
   const currentTheme = themes[theme];
   const isLegacy = theme === THEMES.LEGACY_DARK;
 
   // Limit tags to display
-  const displayTags = tags?.slice(0, 3) || [];
+  const displayTags = useMemo(() => {
+    // If we have a highlight tag, make sure it's first
+    if (highlightTag && tags) {
+      const tagsArray = [...tags];
+      const tagIndex = tagsArray.findIndex(tag => 
+        tag.toLowerCase() === highlightTag.toLowerCase()
+      );
+      
+      if (tagIndex !== -1) {
+        // Move highlight tag to the front
+        const highlightTagValue = tagsArray[tagIndex];
+        tagsArray.splice(tagIndex, 1);
+        tagsArray.unshift(highlightTagValue);
+      }
+      
+      return tagsArray.slice(0, 3);
+    }
+    
+    return tags?.slice(0, 3) || [];
+  }, [tags, highlightTag]);
 
   // Determine model category based on tags
   const isTrans = tags?.some(tag => tag.toLowerCase() === 'trans' || tag.toLowerCase() === 'transgender');
@@ -43,11 +64,31 @@ const ModelCard = ({
   // Process the image URL to ensure it's safe - using new helper
   const processedImageUrl = useMemo(() => {
     if (!image) return fallbackImageUrl;
-    if (typeof image === 'string' && image.startsWith('//')) {
-      return `https:${image}`;
-    }
-    return image;
+    return getSafeImageUrl(image, fallbackImageUrl);
   }, [image, fallbackImageUrl]);
+  
+  // Check if we should optimize the image or not
+  // Some external domains might not be on our allowlist
+  const shouldOptimizeImage = useMemo(() => {
+    // Check if URL is from a domain we control or have added to Next.js config
+    const optimizableDomains = [
+      'mistressworld.xxx',
+      'cdn-image.mistressworld.xxx',
+      'picsum.photos',
+      'partner-api.awempire.com',
+      'static-assets.awempire.com'
+    ];
+    
+    try {
+      if (!processedImageUrl) return false;
+      
+      // Parse the URL to get the hostname
+      const url = new URL(processedImageUrl);
+      return optimizableDomains.some(domain => url.hostname.includes(domain));
+    } catch (e) {
+      return false;
+    }
+  }, [processedImageUrl]);
 
   // Style objects for themeable components
   const cardStyle = {
@@ -81,7 +122,10 @@ const ModelCard = ({
             className="object-cover transition-transform duration-500 group-hover:scale-110"
             loading={preload ? "eager" : "lazy"}
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            unoptimized={true}
+            unoptimized={!shouldOptimizeImage}
+            quality={80}
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+/HgAEtAJJZ5+cPAAAAABJRU5ErkJggg=="
             onError={(e) => {
               console.log(`Image failed to load: ${processedImageUrl}`);
               e.currentTarget.src = fallbackImageUrl;
@@ -98,6 +142,13 @@ const ModelCard = ({
           className="absolute top-2 right-2 w-3 h-3 rounded-full z-10 ring-2 ring-gray-900/50"
           style={statusStyle}
         />
+
+        {/* Provider label if available */}
+        {providerLabel && (
+          <div className="absolute top-2 left-2 bg-black/70 text-primary text-xs px-2 py-0.5 rounded-sm z-10 font-medium">
+            {providerLabel}
+          </div>
+        )}
 
         {/* Viewer count for online models */}
         {isOnline && viewerCount > 0 && (
@@ -134,14 +185,21 @@ const ModelCard = ({
         {/* Tags */}
         {displayTags.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mt-2">
-            {displayTags.map((tag, index) => (
-              <span
-                key={index}
-                className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium transition-all duration-200 bg-gray-800/50 text-gray-300 hover:bg-gray-700/50 hover:text-white ring-1 ring-gray-700/50"
-              >
-                {tag}
-              </span>
-            ))}
+            {displayTags.map((tag, index) => {
+              const isHighlighted = highlightTag && tag.toLowerCase() === highlightTag.toLowerCase();
+              return (
+                <span
+                  key={index}
+                  className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium transition-all duration-200 
+                    ${isHighlighted 
+                      ? 'bg-primary/20 text-primary' 
+                      : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50 hover:text-white'} 
+                    ring-1 ${isHighlighted ? 'ring-primary/30' : 'ring-gray-700/50'}`}
+                >
+                  {tag}
+                </span>
+              );
+            })}
           </div>
         )}
       </div>

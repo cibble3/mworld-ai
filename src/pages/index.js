@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import ThemeLayout from '@/theme/layouts/ThemeLayout';
 import HeadMeta from '@/components/HeadMeta';
-import CookiesModal from '@/components/CookiesModal/CookiesModal';
 import ModelGrid from '@/theme/components/grid/ModelGrid';
 import ModelCard from '@/theme/components/common/ModelCard';
-import DynamicSidebar from '@/components/navigation/DynamicSidebar';
 import Link from 'next/link';
 import axios from 'axios';
 import { useSearchParams } from 'next/navigation';
@@ -15,6 +14,7 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const searchParams = useSearchParams();
+  
   useEffect(() => {
     const fetchModels = async () => {
       try {
@@ -187,136 +187,134 @@ const HomePage = () => {
     top_text: ""
   };
 
-  return (
-    <div className="bg-background text-textblack min-h-screen">
+  const homePageContent = (
+    <>
       <HeadMeta pageContent={pageContent} />
-      <CookiesModal />
+      
+      <div className="mb-10">
+        <h1 className="text-3xl md:text-4xl font-bold mb-4">Welcomes to MistressWorld</h1>
+        <p className="text-xl text-gray-300 mb-8">
+          Explore our collection of beautiful cam models ready for private chat experiences.
+        </p>
 
-      {/* Sidebar as an overlay that doesn't affect main content flow */}
-      <div className="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] bg-sidebar overflow-y-auto z-10 pointer-events-auto lg:block hidden">
-        <DynamicSidebar />
-      </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Link href="/girls" className="bg-pink-600 hover:bg-pink-700 text-white p-6 rounded-lg transition-colors">
+            <h2 className="text-2xl font-bold mb-2">Cam Girls</h2>
+            <p>Explore our collection of stunning cam girls ready for private chat.</p>
+          </Link>
 
-      <div className="py-4 px-3">
-        <div className="mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4  ">Welcomes to MistressWorld</h1>
-          <p className="text-xl text-gray-300 mb-8">
-            Explore our collection of beautiful cam models ready for private chat experiences.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Link href="/girls" className="bg-pink-600 hover:bg-pink-700 text-white p-6 rounded-lg transition-colors">
-              <h2 className="text-2xl font-bold mb-2">Cam Girls</h2>
-              <p>Explore our collection of stunning cam girls ready for private chat.</p>
-            </Link>
-
-            <Link href="/trans" className="bg-purple-600 hover:bg-purple-700 text-white p-6 rounded-lg transition-colors">
-              <h2 className="text-2xl font-bold mb-2">Trans Models</h2>
-              <p>Discover our beautiful trans models available for private sessions.</p>
-            </Link>
-          </div>
+          <Link href="/trans" className="bg-purple-600 hover:bg-purple-700 text-white p-6 rounded-lg transition-colors">
+            <h2 className="text-2xl font-bold mb-2">Trans Models</h2>
+            <p>Discover our beautiful trans models available for private sessions.</p>
+          </Link>
         </div>
-
-        {/* Girls Section */}
-        {girlModels.length > 0 && (
-          <section className="mb-12">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold">Featured Girls</h2>
-              <Link href="/girls" className="text-primary ">
-                View All Girls
-              </Link>
-            </div>
-
-            <ModelGrid models={girlModels} isLoading={false}>
-              {(model) => (
-                <ModelCard
-                  key={model.id || model.slug}
-                  performerId={model.id || model.slug}
-                  name={model.name}
-                  age={model.age}
-                  ethnicity={model.ethnicity}
-                  tags={model.tags || []}
-                  image={model.thumbnail}
-                  isOnline={model.isOnline !== false}
-                  viewerCount={model.viewerCount || 0}
-                />
-              )}
-            </ModelGrid>
-          </section>
-        )}
-
-        {/* Trans Section */}
-        {transModels.length > 0 && (
-          <section className="mb-12">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold">Featured Trans Models</h2>
-              <Link href="/trans" className="text-purple-500 ">
-                View All Trans
-              </Link>
-            </div>
-
-            <ModelGrid models={transModels} isLoading={false}>
-              {(model) => (
-                <ModelCard
-                  key={model.id || model.slug}
-                  performerId={model.id || model.slug}
-                  name={model.name}
-                  age={model.age}
-                  ethnicity={model.ethnicity}
-                  tags={model.tags || []}
-                  image={model.thumbnail}
-                  isOnline={model.isOnline !== false}
-                  viewerCount={model.viewerCount || 0}
-                />
-              )}
-            </ModelGrid>
-          </section>
-        )}
-
-        {/* Fetish Section */}
-        {fetishModels.length > 0 && (
-          <section>
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold">Featured Fetish Models</h2>
-              <Link href="/fetish" className="text-primary ">
-                View All Fetish
-              </Link>
-            </div>
-
-            <ModelGrid models={fetishModels} isLoading={false}>
-              {(model) => (
-                <ModelCard
-                  key={model.id || model.slug}
-                  performerId={model.id || model.slug}
-                  name={model.name}
-                  age={model.age}
-                  ethnicity={model.ethnicity}
-                  tags={model.tags || []}
-                  image={model.thumbnail}
-                  isOnline={model.isOnline !== false}
-                  viewerCount={model.viewerCount || 0}
-                />
-              )}
-            </ModelGrid>
-          </section>
-        )}
-
-        {/* Loading/Error States */}
-        {loading ? (
-          <div className="flex justify-center py-10">
-            <div className="animate-pulse text-xl">Loading models...</div>
-          </div>
-        ) : error && !hasModels ? (
-          <div className="text-center text-red-500 py-10">
-            Error loading models: {error}
-          </div>
-        ) : !hasModels ? (
-          <div className="text-center text-gray-500 py-10">
-            No models found. Please try again later.
-          </div>
-        ) : null}
       </div>
-    </div>
+
+      {/* Girls Section */}
+      {girlModels.length > 0 && (
+        <section className="mb-12">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold">Featured Girls</h2>
+            <Link href="/girls" className="text-primary">
+              View All Girls
+            </Link>
+          </div>
+
+          <ModelGrid models={girlModels} isLoading={false}>
+            {(model) => (
+              <ModelCard
+                key={model.id || model.slug}
+                performerId={model.id || model.slug}
+                name={model.name}
+                age={model.age}
+                ethnicity={model.ethnicity}
+                tags={model.tags || []}
+                image={model.thumbnail}
+                isOnline={model.isOnline !== false}
+                viewerCount={model.viewerCount || 0}
+              />
+            )}
+          </ModelGrid>
+        </section>
+      )}
+
+      {/* Trans Section */}
+      {transModels.length > 0 && (
+        <section className="mb-12">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold">Featured Trans Models</h2>
+            <Link href="/trans" className="text-purple-500">
+              View All Trans
+            </Link>
+          </div>
+
+          <ModelGrid models={transModels} isLoading={false}>
+            {(model) => (
+              <ModelCard
+                key={model.id || model.slug}
+                performerId={model.id || model.slug}
+                name={model.name}
+                age={model.age}
+                ethnicity={model.ethnicity}
+                tags={model.tags || []}
+                image={model.thumbnail}
+                isOnline={model.isOnline !== false}
+                viewerCount={model.viewerCount || 0}
+              />
+            )}
+          </ModelGrid>
+        </section>
+      )}
+
+      {/* Fetish Section */}
+      {fetishModels.length > 0 && (
+        <section>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold">Featured Fetish Models</h2>
+            <Link href="/fetish" className="text-primary">
+              View All Fetish
+            </Link>
+          </div>
+
+          <ModelGrid models={fetishModels} isLoading={false}>
+            {(model) => (
+              <ModelCard
+                key={model.id || model.slug}
+                performerId={model.id || model.slug}
+                name={model.name}
+                age={model.age}
+                ethnicity={model.ethnicity}
+                tags={model.tags || []}
+                image={model.thumbnail}
+                isOnline={model.isOnline !== false}
+                viewerCount={model.viewerCount || 0}
+              />
+            )}
+          </ModelGrid>
+        </section>
+      )}
+
+      {/* Loading/Error States */}
+      {loading ? (
+        <div className="flex justify-center py-10">
+          <div className="animate-pulse text-xl">Loading models...</div>
+        </div>
+      ) : error && !hasModels ? (
+        <div className="text-center text-red-500 py-10">
+          Error loading models: {error}
+        </div>
+      ) : !hasModels ? (
+        <div className="text-center text-gray-500 py-10">
+          No models found. Please try again later.
+        </div>
+      ) : null}
+    </>
+  );
+
+  return (
+    <ThemeLayout>
+      {homePageContent}
+    </ThemeLayout>
   );
 };
 

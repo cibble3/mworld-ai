@@ -1249,3 +1249,32 @@ li.categories_items a:hover {
   background-color: var(--color-secondary) !important;
   color: var(--color-text-light) !important;
 }
+
+/* Fix for header text contrast */
+.bg-background {
+  background-color: var(--color-background, #16181c);
+}
+
+.text-textlight {
+  color: var(--color-text-light, #ffffff) !important;
+}
+
+.text-textblack {
+  color: var(--color-text-light, #ffffff) !important;
+}
+
+/* Fix for dropdown text contrast */
+.bg-gray-900\/95 {
+  background-color: rgba(17, 24, 39, 0.95);
+}
+
+/* Make dropdowns visible */
+nav .group:hover .invisible {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Primary color fix */
+.text-primary {
+  color: var(--color-primary, #e41b64) !important;
+}

@@ -6,8 +6,7 @@ import { ensureAbsoluteUrl } from '@/utils/image-helpers';
 const DEFAULT_LIMIT = 24;
 export const ApiProviders = {
   AWE: 'awe',      // LiveJasmin Models
-  VPAPI: 'vpapi',  // LiveJasmin Videos
-  FREE: 'free'     // Chaturbate Models
+  VPAPI: 'vpapi'   // LiveJasmin Videos
 };
 
 // --- API Configurations (Load from environment variables) ---
@@ -19,12 +18,6 @@ const AWE_CONFIG = {
   PS_PROGRAM: process.env.AWE_PS_PROGRAM || 'cbrnd',
   CAMPAIGN_ID: process.env.AWE_CAMPAIGN_ID || '117404',
   API_KEY: process.env.AWE_API_KEY || '8d3f909766a7009186058874fb8fe2b4',
-};
-
-const FREE_CONFIG = {
-  BASE_URL: process.env.FREE_API_ENDPOINT || 'https://chaturbate.com/api/public/affiliates/onlinerooms/',
-  LIMIT: 100, // Default limit for their API?
-  WM: process.env.FREE_WM, // Load campaign slug from env
 };
 
 /**
@@ -943,10 +936,8 @@ export const fetchModels = async (params = {}) => {
 
     // --- Use Mock Data if requested or API keys missing ---
     const aweConfigured = AWE_CONFIG.BASE_URL && AWE_CONFIG.API_KEY;
-    const freeConfigured = FREE_CONFIG.BASE_URL && FREE_CONFIG.WM;
     const shouldMock = useMock || 
-                       (provider === ApiProviders.AWE && !aweConfigured) || 
-                       (provider === ApiProviders.FREE && !freeConfigured);
+                       (provider === ApiProviders.AWE && !aweConfigured);
 
     if (shouldMock) {
         if (!useMock) {

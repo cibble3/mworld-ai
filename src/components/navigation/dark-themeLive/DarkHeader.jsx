@@ -159,61 +159,61 @@ const DarkHeader = () => {
 
                     <div className={styles.listDropdownSubnav}>
                       <Link
-                        href="/girls/asian"
+                        href="/girls?ethnicity=asian"
                         className={`${styles.listDropdownSubnavItem}`}
                       >
                         <Translatable>Asian</Translatable>
                       </Link>
                       <Link
-                        href="/girls/ebony"
+                        href="/girls?ethnicity=ebony"
                         className={`${styles.listDropdownSubnavItem}`}
                       >
                         <Translatable>Ebony</Translatable>
                       </Link>
                       <Link
-                        href="/girls/latina"
+                        href="/girls?ethnicity=latina"
                         className={`${styles.listDropdownSubnavItem}`}
                       >
                         <Translatable>Latina</Translatable>
                       </Link>
                       <Link
-                        href="/girls/blonde"
+                        href="/girls?hair_color=blonde"
                         className={`${styles.listDropdownSubnavItem}`}
                       >
                         <Translatable>Blonde</Translatable>
                       </Link>
                       <Link
-                        href="/girls/brunette"
+                        href="/girls?hair_color=brunette"
                         className={`${styles.listDropdownSubnavItem}`}
                       >
                         <Translatable>Brunette</Translatable>
                       </Link>
                       <Link
-                        href="/girls/bbw"
+                        href="/girls?tags=bbw"
                         className={`${styles.listDropdownSubnavItem}`}
                       >
                         <Translatable>BBW</Translatable>
                       </Link>
                       <Link
-                        href="/girls/milf"
+                        href="/girls?tags=milf"
                         className={`${styles.listDropdownSubnavItem}`}
                       >
                         <Translatable>MILF</Translatable>
                       </Link>
                       <Link
-                        href="/girls/teen"
+                        href="/girls?tags=teen"
                         className={`${styles.listDropdownSubnavItem}`}
                       >
                         <Translatable>18+ Teen</Translatable>
                       </Link>
                       <Link
-                        href="/girls/mature"
+                        href="/girls?tags=mature"
                         className={`${styles.listDropdownSubnavItem}`}
                       >
                         <Translatable>Mature</Translatable>
                       </Link>
                       <Link
-                        href="/girls/fetish"
+                        href="/girls?tags=fetish"
                         className={`${styles.listDropdownSubnavItem}`}
                       >
                         <Translatable>Fetish</Translatable>
@@ -235,68 +235,52 @@ const DarkHeader = () => {
 
                     <div className={styles.listDropdownSubnav}>
                       <Link
-                        href="/trans/asian"
+                        href="/trans?ethnicity=asian"
                         className={`${styles.listDropdownSubnavItem}`}
                       >
                         <Translatable>Asian</Translatable>
                       </Link>
                       <Link
-                        href="/trans/ebony"
+                        href="/trans?ethnicity=ebony"
                         className={`${styles.listDropdownSubnavItem}`}
                       >
                         <Translatable>Ebony</Translatable>
                       </Link>
                       <Link
-                        href="/trans/latina"
+                        href="/trans?ethnicity=latina"
                         className={`${styles.listDropdownSubnavItem}`}
                       >
                         <Translatable>Latina</Translatable>
                       </Link>
                       <Link
-                        href="/trans/blonde"
+                        href="/trans?tags=teen"
                         className={`${styles.listDropdownSubnavItem}`}
                       >
-                        <Translatable>Blonde</Translatable>
+                        <Translatable>18+ Teen</Translatable>
                       </Link>
                       <Link
-                        href="/trans/brunette"
+                        href="/trans?tags=milf"
                         className={`${styles.listDropdownSubnavItem}`}
                       >
-                        <Translatable>Brunette</Translatable>
+                        <Translatable>MILF</Translatable>
                       </Link>
                       <Link
-                        href="/trans/fetish"
+                        href="/trans?gender_identity=trans_woman"
+                        className={`${styles.listDropdownSubnavItem}`}
+                      >
+                        <Translatable>Trans Women</Translatable>
+                      </Link>
+                      <Link
+                        href="/trans?gender_identity=non_binary"
+                        className={`${styles.listDropdownSubnavItem}`}
+                      >
+                        <Translatable>Non Binary</Translatable>
+                      </Link>
+                      <Link
+                        href="/trans?tags=fetish"
                         className={`${styles.listDropdownSubnavItem}`}
                       >
                         <Translatable>Fetish</Translatable>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-
-                <div className={styles.listItemdropdownContainer}>
-                  <div className={styles.listItemdropdownDiv}>
-                    <Link
-                      href="/free/girls"
-                      className={`${styles.listItem} ${
-                        router.pathname === "/free/girls" ? styles.isActive : ""
-                      }`}
-                    >
-                      <Translatable>Free Cams</Translatable> <IoMdArrowDropdown />
-                    </Link>
-
-                    <div className={styles.listDropdownSubnav}>
-                      <Link
-                        href="/free/girls"
-                        className={`${styles.listDropdownSubnavItem}`}
-                      >
-                        <Translatable>Girls</Translatable>
-                      </Link>
-                      <Link
-                        href="/free/trans"
-                        className={`${styles.listDropdownSubnavItem}`}
-                      >
-                        <Translatable>Trans</Translatable>
                       </Link>
                     </div>
                   </div>

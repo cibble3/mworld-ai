@@ -26,7 +26,7 @@ const formatFilterName = (name) => {
 };
 
 const LegacyTopbar = () => {
-  const { theme, setTheme, availableThemes } = useTheme();
+  const { theme } = useTheme();
   console.log('theme :>> ', theme);
   const router = useRouter();
   const { categories, isLoading, isError } = useCategories();
@@ -35,7 +35,7 @@ const LegacyTopbar = () => {
   const currentMainCategorySlug = currentPathSegments[0];
 
   const defaultThemeKey = Object.keys(themes)[0];
-  const currentThemeKey = availableThemes.includes(theme) ? theme : defaultThemeKey;
+  const currentThemeKey = theme || defaultThemeKey;
   const currentTheme = themes[currentThemeKey];
 
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
@@ -133,7 +133,7 @@ const LegacyTopbar = () => {
               <span className="text-sm text-red-500">Error</span>
             ) : (
               categories
-                .filter(cat => ['girls', 'trans', 'fetish', 'free', 'videos'].includes(cat.slug))
+                .filter(cat => ['girls', 'trans', 'fetish', 'videos'].includes(cat.slug))
                 .map((cat) => {
                   const isActive = currentMainCategorySlug === cat.slug;
                   const hasFilters = cat.filters && cat.filters.length > 0;
@@ -260,7 +260,7 @@ const LegacyTopbar = () => {
                       <span className="text-sm text-red-500">Error</span>
                     ) : (
                       categories
-                        .filter((cat) => ["girls", "trans", "fetish", "free", "videos"].includes(cat.slug))
+                        .filter((cat) => ["girls", "trans", "fetish", "videos"].includes(cat.slug))
                         .map((cat) => {
                           const isActive = currentMainCategorySlug === cat.slug;
                           const hasFilters = cat.filters && cat.filters.length > 0;

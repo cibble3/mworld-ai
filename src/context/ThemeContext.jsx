@@ -6,7 +6,7 @@ const ThemeContext = createContext();
 export const THEMES = {
   DARK: 'dark',
   LIGHT: 'light',
-  LEGACY_DARK: 'legacyDark',
+  LEGACY_DARK: 'legacy_dark',
 };
 
 // CSS variables for each theme
@@ -105,6 +105,7 @@ export const ThemeProvider = ({ children, initialTheme = THEMES.LEGACY_DARK }) =
       changeTheme, 
       toggleTheme, 
       THEMES,
+      availableThemes: Object.values(THEMES),
       themeVariables: THEME_VARIABLES[theme] || THEME_VARIABLES[THEMES.LEGACY_DARK]
     }}>
       {children}

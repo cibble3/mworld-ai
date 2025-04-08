@@ -14,18 +14,18 @@ const ThemeLayout = (props) => {
   const { theme } = useTheme();
   
   // For debugging:
-  console.log(`Current theme: ${theme}`);
+  console.log(`Current ThemeLayout theme: ${theme}`);
   
-  // IMPORTANT: Only use one theme layout to prevent duplicate headers/footers
-  // This ensures consistent layout across all categories and subcategories
-  const useLegacyLayout = true; // Hard-coded to legacy for consistent layout
+  // TEMPORARILY: Always use ModernLayout to fix styling issues
+  return <ModernLayout {...props} />;
   
-  // Only render one layout component based on setting
-  if (useLegacyLayout) {
-    return <LegacyLayout {...props} />;
-  } else {
-    return <ModernLayout {...props} />;
-  }
+  // Original code (commented out):
+  // const useLegacyLayout = theme !== THEMES.DEFAULT;
+  // if (useLegacyLayout) {
+  //   return <LegacyLayout {...props} />;
+  // } else {
+  //   return <ModernLayout {...props} />;
+  // }
 };
 
 export default ThemeLayout; 

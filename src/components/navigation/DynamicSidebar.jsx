@@ -12,21 +12,37 @@ export const popularTags = [
   'bbw', 'mature', 'lesbian', 'squirt', 'anal', 'fetish'
 ];
 
-const filterData = [{
-  "category": ["girls", "trans",
-    "free"], "ethnicity": ["asian", "latina", "white"],
-  "hair_color": ["blonde", "black", "red"], "tags": ["milf",
-    "petite", "bdsm"], "willingness": ["group", "anal"],
+// Girls-specific filters
+const girlsFilterData = {
+  "ethnicity": ["asian", "ebony", "latina", "white", "indian", "arab", "japanese"],
+  "hair_color": ["blonde", "black", "red", "brunette", "pink", "blue"],
+  "tags": ["milf", "teen", "bbw", "petite", "bdsm", "fetish", "mature"],
+  "willingness": ["group", "anal", "oral", "roleplay", "domination", "submission"],
   "source": ["aweapi", "freeapi", "vpapi"]
-}
-]
+};
+
+// Trans-specific filters
+const transFilterData = {
+  "ethnicity": ["asian", "ebony", "latina", "white", "indian", "arab"],
+  "gender_identity": ["trans_woman", "trans_man", "non_binary", "genderfluid"],
+  "body_type": ["slim", "athletic", "curvy", "muscular"],
+  "tags": ["top", "bottom", "switch", "dom", "sub", "fetish"],
+  "willingness": ["group", "anal", "oral", "roleplay"],
+  "source": ["aweapi", "freeapi", "vpapi"]
+};
+
 const DynamicSidebar = () => {
   const [trendingModels, setTrendingModels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const route = useRouter()
+  const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
+  
+  // Determine which category we're in to show relevant filters
+  const isTrans = pathname?.includes('/trans');
+  const filterData = isTrans ? transFilterData : girlsFilterData;
+
   useEffect(() => {
     const fetchTrendingModels = async () => {
       try {
@@ -98,29 +114,43 @@ const DynamicSidebar = () => {
     fetchTrendingModels();
   }, []);
 
-  // const toggleQueryParam = (key, value) => {
-  //   const params = new URLSearchParams(searchParams.toString())
-  //   const current = params.getAll(key)
-
-  //   if (current.includes(value)) {
-  //     const filtered = current.filter((item) => item !== value)
-  //     params.delete(key)
-  //     filtered.forEach(v => params.append(key, v))
-  //   } else {
-  //     params.append(key, value)
-  //   }
-
-  //   return params.toString()
-  // }
   const toggleQueryParam = (key, value) => {
     const params = new URLSearchParams(searchParams.toString())
     const current = params.get(key)
 
-    if (current === value) {
-      // If clicked again, remove the param
-      params.delete(key)
+    // Handle multi-select filters
+    if (current) {
+      // Current value exists
+      if (current.includes(',')) {
+        // Already have multiple values
+        const values = current.split(',').map(v => v.trim())
+        
+        // Check if this value is already selected
+        const valueIndex = values.indexOf(value)
+        if (valueIndex !== -1) {
+          // Remove this value
+          values.splice(valueIndex, 1)
+          if (values.length === 0) {
+            // If no values left, remove the parameter
+            params.delete(key)
+          } else {
+            // Set remaining values
+            params.set(key, values.join(','))
+          }
+        } else {
+          // Add this value to existing values
+          values.push(value)
+          params.set(key, values.join(','))
+        }
+      } else if (current === value) {
+        // Current value is exactly this value, remove it
+        params.delete(key)
+      } else {
+        // Current value is different, add both values
+        params.set(key, `${current},${value}`)
+      }
     } else {
-      // Otherwise, set it (replace existing)
+      // No current value, set this value
       params.set(key, value)
     }
 
@@ -128,7 +158,16 @@ const DynamicSidebar = () => {
   }
 
   const isActive = (key, value) => {
-    return searchParams.getAll(key).includes(value)
+    const current = searchParams.get(key);
+    if (!current) return false;
+    
+    // Check if value is in comma-separated list
+    if (current.includes(',')) {
+      return current.split(',').map(v => v.trim()).includes(value);
+    }
+    
+    // Direct match
+    return searchParams.get(key) === value;
   }
   // Popular tags that could be fetched from API in the future
   console.log('filterData :>> ', filterData);
@@ -144,16 +183,16 @@ const DynamicSidebar = () => {
             <div>
               <h4 className='text-xs font-medium text-gray-500 mb-3 tracking-wider uppercase'>Ethnicity</h4>
               <div className='flex flex-wrap gap-2'>
-                {filterData[0]?.category?.map((item) => (
+                {filterData?.ethnicity?.map((item) => (
                   <Link
                     key={item}
-                    href={`/${item}?${searchParams.toString()}`}
-                    className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full ${pathname.includes(item)
+                    href={`${pathname}?${toggleQueryParam('ethnicity', item)}`}
+                    className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full ${isActive('ethnicity', item)
                       ? 'bg-primary text-white shadow-lg shadow-primary/25'
                       : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700 hover:text-white'
                       }`}
                   >
-                    {pathname.includes(item) && (
+                    {isActive('ethnicity', item) && (
                       <svg className="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
@@ -164,10 +203,87 @@ const DynamicSidebar = () => {
               </div>
             </div>
 
+            {/* Trans-specific filters - only show when in trans section */}
+            {isTrans && (
+              <>
+                <div>
+                  <h4 className='text-xs font-medium text-gray-500 mb-3 tracking-wider uppercase'>Gender Identity</h4>
+                  <div className='flex flex-wrap gap-2'>
+                    {filterData?.gender_identity?.map((item) => (
+                      <Link
+                        key={item}
+                        href={`${pathname}?${toggleQueryParam('gender_identity', item)}`}
+                        className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full ${isActive('gender_identity', item)
+                          ? 'bg-primary text-white shadow-lg shadow-primary/25'
+                          : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700 hover:text-white'
+                          }`}
+                      >
+                        {isActive('gender_identity', item) && (
+                          <svg className="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        )}
+                        {item.replace('_', ' ')}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className='text-xs font-medium text-gray-500 mb-3 tracking-wider uppercase'>Body Type</h4>
+                  <div className='flex flex-wrap gap-2'>
+                    {filterData?.body_type?.map((item) => (
+                      <Link
+                        key={item}
+                        href={`${pathname}?${toggleQueryParam('body_type', item)}`}
+                        className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full ${isActive('body_type', item)
+                          ? 'bg-primary text-white shadow-lg shadow-primary/25'
+                          : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700 hover:text-white'
+                          }`}
+                      >
+                        {isActive('body_type', item) && (
+                          <svg className="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        )}
+                        {item}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Girls-specific filters - only show when in girls section */}
+            {!isTrans && (
+              <div>
+                <h4 className='text-xs font-medium text-gray-500 mb-3 tracking-wider uppercase'>Hair Color</h4>
+                <div className='flex flex-wrap gap-2'>
+                  {filterData?.hair_color?.map((item) => (
+                    <Link
+                      key={item}
+                      href={`${pathname}?${toggleQueryParam('hair_color', item)}`}
+                      className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full ${isActive('hair_color', item)
+                        ? 'bg-primary text-white shadow-lg shadow-primary/25'
+                        : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700 hover:text-white'
+                        }`}
+                    >
+                      {isActive('hair_color', item) && (
+                        <svg className="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                      {item}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div>
               <h4 className='text-xs font-medium text-gray-500 mb-3 tracking-wider uppercase'>Tags</h4>
               <div className='flex flex-wrap gap-2'>
-                {filterData[0]?.tags?.map((item) => (
+                {filterData?.tags?.map((item) => (
                   <Link
                     key={item}
                     href={`${pathname}?${toggleQueryParam('tags', item)}`}
@@ -188,32 +304,9 @@ const DynamicSidebar = () => {
             </div>
 
             <div>
-              <h4 className='text-xs font-medium text-gray-500 mb-3 tracking-wider uppercase'>Hair Color</h4>
-              <div className='flex flex-wrap gap-2'>
-                {filterData[0]?.hair_color?.map((item) => (
-                  <Link
-                    key={item}
-                    href={`${pathname}?${toggleQueryParam('hair_color', item)}`}
-                    className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full ${isActive('hair_color', item)
-                      ? 'bg-primary text-white shadow-lg shadow-primary/25'
-                      : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700 hover:text-white'
-                      }`}
-                  >
-                    {isActive('hair_color', item) && (
-                      <svg className="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    )}
-                    {item}
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            <div>
               <h4 className='text-xs font-medium text-gray-500 mb-3 tracking-wider uppercase'>Willingness</h4>
               <div className='flex flex-wrap gap-2'>
-                {filterData[0]?.willingness?.map((item) => (
+                {filterData?.willingness?.map((item) => (
                   <Link
                     key={item}
                     href={`${pathname}?${toggleQueryParam('willingness', item)}`}
@@ -233,8 +326,30 @@ const DynamicSidebar = () => {
               </div>
             </div>
 
+            {/* Fetish Categories - shown on all pages for better promotion */}
+            <div>
+              <h4 className='text-xs font-medium text-gray-500 mb-3 tracking-wider uppercase'>Fetish Categories</h4>
+              <div className='flex flex-wrap gap-2'>
+                {['bdsm', 'leather', 'latex', 'feet', 'femdom', 'spanking'].map((item) => (
+                  <Link
+                    key={item}
+                    href={`/fetish/${item}`}
+                    className="inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full bg-gray-800/50 text-gray-400 hover:bg-pink-900/30 hover:text-pink-400"
+                  >
+                    {item}
+                  </Link>
+                ))}
+                <Link
+                  href="/fetish"
+                  className="inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full bg-pink-900/30 text-pink-400 hover:bg-pink-900/50"
+                >
+                  View All
+                </Link>
+              </div>
+            </div>
+
             <button
-              onClick={() => route.push(pathname)}
+              onClick={() => router.push(pathname)}
               className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-800/30 hover:bg-gray-800/50 text-gray-400 hover:text-white rounded-lg text-xs font-medium tracking-wide transition-all duration-200 group"
             >
               <svg
@@ -325,7 +440,6 @@ const DynamicSidebar = () => {
               { href: '/girls', label: 'Girls' },
               { href: '/trans', label: 'Trans' },
               { href: '/fetish', label: 'Fetish' },
-              { href: '/free', label: 'Free Cams' },
               { href: '/videos', label: 'Videos' }
             ].map((link) => (
               <li key={link.href}>

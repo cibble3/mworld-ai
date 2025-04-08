@@ -26,7 +26,7 @@ const VideoEmbed = ({ embedUrl, embedScript }) => {
     containerRef.current.innerHTML = '';
 
     // SIMPLEST APPROACH: For our mock data, we know it's a Vimeo video, so directly create an iframe
-    if (embedUrl && embedUrl.includes('vimeo.com')) {
+    if (embedUrl && typeof embedUrl === 'string' && embedUrl.includes('vimeo.com')) {
       const iframe = document.createElement('iframe');
       iframe.src = embedUrl;
       iframe.width = '100%';
@@ -40,7 +40,7 @@ const VideoEmbed = ({ embedUrl, embedScript }) => {
     }
 
     // For production VPAPI data with {CONTAINER} placeholder
-    if (embedScript && embedScript.includes('{CONTAINER}')) {
+    if (embedScript && typeof embedScript === 'string' && embedScript.includes('{CONTAINER}')) {
       try {
         // Replace placeholder with actual container ID
         const containerId = containerRef.current.id;
@@ -63,11 +63,11 @@ const VideoEmbed = ({ embedUrl, embedScript }) => {
       } catch (error) {
         console.error("Error handling video embed:", error);
         // Fallback to direct URL if available
-        if (embedUrl) {
+        if (embedUrl && typeof embedUrl === 'string') {
           containerRef.current.innerHTML = `<iframe src="${embedUrl}" width="100%" height="100%" frameborder="0" allowfullscreen allow="autoplay; fullscreen; picture-in-picture"></iframe>`;
         }
       }
-    } else if (embedUrl) {
+    } else if (embedUrl && typeof embedUrl === 'string') {
       // Direct fallback to embedUrl
       containerRef.current.innerHTML = `<iframe src="${embedUrl}" width="100%" height="100%" frameborder="0" allowfullscreen allow="autoplay; fullscreen; picture-in-picture"></iframe>`;
     }
@@ -86,9 +86,10 @@ const VideoPlayer = ({ video }) => {
 
     // Clear previous content
     container.innerHTML = '';
-    console.log('video.playerEmbedUrl :>> ', video.playerEmbedUrl);
+    console.log('video.playerEmbedUrl :>> ', video?.playerEmbedUrl);
+    
     // If we have playerEmbedUrl from VPAPI
-    if (video.playerEmbedUrl) {
+    if (video?.playerEmbedUrl && typeof video.playerEmbedUrl === 'string') {
       if (video.playerEmbedUrl.includes('{CONTAINER}')) {
         // Replace {CONTAINER} placeholder with our container ID
         const embedUrl = video.playerEmbedUrl.replace('{CONTAINER}', container.id);
@@ -103,7 +104,7 @@ const VideoPlayer = ({ video }) => {
       }
     }
     // If we have playerEmbedScript from VPAPI
-    else if (video.playerEmbedScript) {
+    else if (video?.playerEmbedScript && typeof video.playerEmbedScript === 'string') {
       if (video.playerEmbedScript.includes('{CONTAINER}')) {
         // Replace {CONTAINER} placeholder with our container ID
         const scriptContent = video.playerEmbedScript.replace(/{CONTAINER}/g, container.id);
@@ -538,5 +539,11 @@ const VideoDetailPage = () => {
     </div>
   );
 };
+
+export async function getServerSideProps(context) {
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+}
 
 export default VideoDetailPage; 

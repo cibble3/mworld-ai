@@ -57,6 +57,39 @@ if (config.jobSchedule?.categoryFlatten) {
   console.warn('⚠️ Category flatten schedule not found in config.');
 }
 
+// Schedule Tag Analysis Job
+if (config.jobSchedule?.tagAnalysis) {
+  cron.schedule(config.jobSchedule.tagAnalysis, () => {
+    console.log(`[${new Date().toISOString()}] Starting tag analysis job...`);
+    const scriptPath = path.resolve(process.cwd(), 'src/cli/analyze-tags.js');
+    
+    if (require('fs').existsSync(scriptPath)) {
+      const childProcess = spawn('node', [
+        scriptPath,
+        '--min-models=20',
+        '--visualize'
+      ]);
+      
+      childProcess.stdout.on('data', (data) => console.log(`Tag Analysis: ${data}`));
+      childProcess.stderr.on('data', (data) => console.error(`Tag Analysis Error: ${data}`));
+      
+      childProcess.on('close', (code) => {
+        if (code === 0) {
+          console.log(`[${new Date().toISOString()}] Tag analysis completed successfully.`);
+        } else {
+          console.error(`[${new Date().toISOString()}] Tag analysis failed with code ${code}.`);
+        }
+      });
+    } else {
+      console.error(`[${new Date().toISOString()}] Error: Tag analysis script not found at ${scriptPath}`);
+    }
+  });
+  
+  console.log(`🏷️ Scheduled Tag Analysis: ${config.jobSchedule.tagAnalysis}`);
+} else {
+  console.warn('⚠️ Tag analysis schedule not found in config. Tag data may become stale.');
+}
+
 // --- Add more schedules here as needed (reading from config) ---
 
 console.log('✅ Scheduler running. Waiting for scheduled tasks...');

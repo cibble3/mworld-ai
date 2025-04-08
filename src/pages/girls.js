@@ -1,124 +1,56 @@
-import React, { useState, useEffect } from 'react';
-import HeadMeta from '@/components/HeadMeta';
-import CookiesModal from '@/components/CookiesModal/CookiesModal';
-import ModelGrid from '@/theme/components/grid/ModelGrid';
-import ModelCard from '@/theme/components/common/ModelCard';
-import DynamicSidebar from '@/components/navigation/DynamicSidebar';
-import axios from 'axios';
-import { useSearchParams } from 'next/navigation'
+import React from 'react';
+import ThemeLayout from '@/theme/layouts/ThemeLayout';
+import ModelPage from '@/components/pages/ModelPage';
+import { text as girlsTransContent } from '@/theme/content/girlsTransContent';
+import { capitalizeString } from '@/utils/string-helpers';
 
 const GirlsPage = () => {
-  const searchParams = useSearchParams();
-  const [models, setModels] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  console.log('models :>> ', models);
-  useEffect(() => {
-    const fetchModels = async () => {
-      try {
-        setLoading(true);
-
-        // Read query params
-        const hairColor = searchParams.get('hair_color');
-        const tags = searchParams.get('tags');
-        const willingness = searchParams.get('willingness');
-
-        const response = await axios.get('/api/models', {
-          params: {
-            provider: 'awe',
-            category: 'girls',
-            limit: 24,
-            debug: true,
-            ...(hairColor && { hair_color: hairColor }),
-            ...(tags && { tags }),
-            ...(willingness && { willingness }),
-          }
-        });
-
-        if (response.data?.success) {
-          const data = response.data.data;
-          let items = [];
-
-          if (Array.isArray(data?.models)) {
-            items = data.models;
-          } else if (Array.isArray(data?.items)) {
-            items = data.items;
-          } else if (Array.isArray(data)) {
-            items = data;
-          }
-
-          setModels(items);
-        } else {
-          setError(response.data?.error || 'Failed to fetch models');
-        }
-      } catch (err) {
-        console.error('Fetch error:', err);
-        setError(err.message || 'Failed to fetch models');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchModels();
-  }, [searchParams]);
-
-  // Prepare page metadata
-  const pageContent = {
+  // Default content when no filters are applied
+  const defaultContent = {
+    title: "Live Cam Girls",
+    desc: "Find the hottest live cam girls online. Watch sexy webcam girls perform live shows just for you.",
     meta_title: "Live Cam Girls | MistressWorld",
     meta_desc: "Find the hottest live cam girls online. Watch sexy webcam girls perform live shows just for you.",
-    top_text: ""
+    meta_keywords: "cam girls, webcam models, live cams, sex chat",
+    about: []
   };
 
+  // Get content map from the content file
+  const contentMap = girlsTransContent?.girls || {};
+
+  // Helper function to generate dynamic content based on ethnicity
+  const generateDynamicContent = (ethnicity) => ({
+    title: `${capitalizeString(ethnicity)} Cam Girls`,
+    desc: `Experience the hottest ${ethnicity} cam girls online at MistressWorld.xxx. Connect with stunning ${ethnicity} models for a private chat experience you'll never forget.`,
+    meta_title: `${capitalizeString(ethnicity)} Cam Girls - Live ${capitalizeString(ethnicity)} Sex Chat - MistressWorld`,
+    meta_desc: `Chat live with sexy ${ethnicity} cam girls online now. MistressWorld features the hottest adult chat models for private shows.`,
+    meta_keywords: `${ethnicity} cam girls, ${ethnicity} cams, ${ethnicity} sex chat`
+  });
+
+  // Ensure contentMap has entries for common ethnicities
+  const ensuredContentMap = {
+    ...contentMap,
+    // Add default ethnicity entries if they don't exist
+    asian: contentMap.asian || generateDynamicContent('asian'),
+    ebony: contentMap.ebony || generateDynamicContent('ebony'),
+    latina: contentMap.latina || generateDynamicContent('latina'),
+    white: contentMap.white || generateDynamicContent('white')
+  };
+
+  const girlsPageContent = (
+    <ModelPage
+      category="girls"
+      defaultContent={defaultContent}
+      contentMap={ensuredContentMap}
+      additionalParams={[]} // Girls page doesn't have additional parameters beyond the common ones
+      pageRoute="/girls"
+    />
+  );
+
   return (
-    <div className="bg-[#16181c] text-textlight min-h-screen">
-      <HeadMeta pageContent={pageContent} />
-      <CookiesModal />
-
-      {/* Sidebar as an overlay that doesn't affect main content flow */}
-      <div className="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] bg-[#1a1a1a] overflow-y-auto z-10 pointer-events-auto lg:block hidden">
-        <DynamicSidebar />
-      </div>
-
-      <div className="py-4 px-3">
-        <h1 className="text-2xl md:text-3xl font-bold mb-6">Live Cam Girls</h1>
-
-        {loading ? (
-          <div className="flex justify-center py-10">
-            <div className="animate-pulse text-xl">Loading models...</div>
-          </div>
-        ) : error ? (
-          <div className="text-center text-red-500 py-10">
-            Error loading models: {error}
-          </div>
-        ) : models.length === 0 ? (
-          <div className="text-center text-gray-500 py-10">
-            No models found.
-          </div>
-        ) : (
-          <>
-            <p className="text-gray-400 mb-5">
-              Showing {models.length} models on Mistress World. Explore our collection of beautiful cam models ready to engage in private chat sessions.
-            </p>
-
-            <ModelGrid models={models} isLoading={false}>
-              {(model) => (
-                <ModelCard
-                  key={model.id || model.slug}
-                  performerId={model.id || model.slug}
-                  name={model.name}
-                  age={model.age}
-                  ethnicity={model.ethnicity}
-                  tags={model.tags || []}
-                  image={model.thumbnail}
-                  isOnline={model.isOnline !== false}
-                  viewerCount={model.viewerCount || 0}
-                />
-              )}
-            </ModelGrid>
-          </>
-        )}
-      </div>
-    </div>
+    <ThemeLayout>
+      {girlsPageContent}
+    </ThemeLayout>
   );
 };
 

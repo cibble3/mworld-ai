@@ -19,19 +19,19 @@ export default function Notfound() {
         <p className="text-xl text-white my-4">Explore our top categories!</p>
         <div className="flex justify-center items-center gap-4 flex-wrap">
           <a
-            href="/girls/asian"
+            href="/girls?ethnicity=asian"
             className="inline-block bg-[#e0006c] text-white  py-2 px-3 rounded-[10px]"
           >
             Asian
           </a>
           <a
-            href="/girls/ebony"
+            href="/girls?ethnicity=ebony"
             className="inline-block bg-[#e0006c] text-white  py-2 px-3 rounded-[10px]"
           >
             Ebony
           </a>
           <a
-            href="/girls/latina"
+            href="/girls?ethnicity=latina"
             className="inline-block bg-[#e0006c] text-white  py-2 px-3 rounded-[10px]"
           >
             Latina

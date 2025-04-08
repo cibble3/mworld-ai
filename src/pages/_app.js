@@ -24,8 +24,9 @@ export default function App({ Component, pageProps }) {
   // const getLayout = (page) => page;
   // --- END TEMPORARY ---
 
-  // Get initial theme from query param or cookies (SSR-friendly way)
-  const initialTheme = pageProps.initialTheme || THEMES.RETRO;
+  // Force the DEFAULT theme
+  const initialTheme = THEMES.DEFAULT;
+  
   console.log('initialTheme :>> ', initialTheme);
   return (
     <>

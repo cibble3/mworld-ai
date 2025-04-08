@@ -6,17 +6,21 @@ import { themes } from '../../config';
 
 const ModernTopbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { theme, toggleTheme, changeTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const currentTheme = themes[theme] || themes[THEMES.DARK];
 
   if (!currentTheme) {
     console.error(`Theme not found for key: ${theme} in ModernTopbar. Falling back to dark theme.`);
-    return <nav className="h-16 bg-[#16181c] border-b border-gray-800"></nav>;
+    return <nav className="h-16 bg-[#16181c] border-b border-gray-800 w-full"></nav>;
   }
 
+  // Ensure visibility with explicit styling
   const navStyles = {
-    backgroundColor: currentTheme.secondary,
-    borderColor: currentTheme.border,
+    backgroundColor: currentTheme.secondary || '#1a1c21',
+    borderColor: currentTheme.border || '#2d3748',
+    width: '100%',
+    height: '4rem',
+    zIndex: 50
   };
 
   const linkStyles = {
@@ -29,7 +33,7 @@ const ModernTopbar = () => {
   };
 
   return (
-    <nav className="border-b" style={navStyles}>
+    <nav className="border-b shadow-md w-full" style={navStyles}>
       <Container>
         <div className="h-16 flex items-center justify-between">
           {/* Logo */}
@@ -53,49 +57,6 @@ const ModernTopbar = () => {
             >
               Trans
             </Link>
-            
-            {/* Free Cams Dropdown */}
-            <div className="relative group">
-              <button 
-                className="flex items-center hover:text-pink-500 transition-colors"
-                style={linkStyles}
-              >
-                Free Cams
-                <svg 
-                  className="w-4 h-4 ml-1" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M19 9l-7 7-7-7" 
-                  />
-                </svg>
-              </button>
-              
-              <div 
-                className="absolute left-0 mt-2 w-48 bg-gray-900 rounded-md shadow-lg overflow-hidden z-20 transform scale-0 group-hover:scale-100 origin-top transition-transform"
-                style={menuStyle}
-              >
-                <Link 
-                  href="/free/girls"
-                  className="block py-2 px-4 hover:bg-gray-800 transition-colors"
-                  style={linkStyles}
-                >
-                  Free Girls
-                </Link>
-                <Link 
-                  href="/free/trans"
-                  className="block py-2 px-4 hover:bg-gray-800 transition-colors"
-                  style={linkStyles}
-                >
-                  Free Trans
-                </Link>
-              </div>
-            </div>
             
             <Link 
               href="/videos" 
@@ -210,8 +171,8 @@ const ModernTopbar = () => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden py-4">
-            <div className="flex flex-col space-y-4">
+          <div className="md:hidden py-4 absolute left-0 right-0 bg-[#1a1c21] z-50 border-b border-gray-800">
+            <div className="flex flex-col space-y-4 px-4">
               <Link 
                 href="/girls" 
                 className="hover:text-pink-500 px-4 py-2"
@@ -227,22 +188,6 @@ const ModernTopbar = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Trans
-              </Link>
-              <Link 
-                href="/free/girls" 
-                className="hover:text-pink-500 px-4 py-2"
-                style={linkStyles}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Free Girls
-              </Link>
-              <Link 
-                href="/free/trans" 
-                className="hover:text-pink-500 px-4 py-2"
-                style={linkStyles}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Free Trans
               </Link>
               <Link 
                 href="/videos" 

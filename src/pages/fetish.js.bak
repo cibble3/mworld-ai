@@ -1,0 +1,26 @@
+import React from 'react';
+import ModelPage from '@/components/pages/ModelPage';
+
+const FetishPage = () => {
+  // Default content when no filters are applied
+  const defaultContent = {
+    title: "Live Fetish Cams",
+    desc: "Explore our fetish cam models. Experience BDSM, domination, and other fetish content with our beautiful models.",
+    meta_title: "Live Fetish Cams | MistressWorld",
+    meta_desc: "Explore our fetish cam models. Experience BDSM, domination, and other fetish content with our beautiful models.",
+    meta_keywords: "fetish cams, BDSM models, dominatrix, mistress, fetish webcams",
+    about: []
+  };
+
+  return (
+    <ModelPage
+      category="fetish"
+      defaultContent={defaultContent}
+      contentMap={{}}  // No specific ethnicity content for fetish at this time
+      additionalParams={['willingness', 'fetish_type']}  // Add fetish-specific params
+      pageRoute="/fetish"
+    />
+  );
+};
+
+export default FetishPage; 

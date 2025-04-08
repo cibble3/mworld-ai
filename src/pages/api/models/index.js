@@ -1,5 +1,5 @@
 import { Redis } from '@upstash/redis';
-import * as orchestrator from '@/services/orchestrator'; // Import the orchestrator
+import api from '@/services/api'; // Import our new centralized API service
 
 // Initialize Redis client if UPSTASH_REDIS_URL is available
 let redis = null;
@@ -19,7 +19,7 @@ try {
 
 // Cache configuration
 const CACHE_CONFIG = {
-  TTL: process.env.MODEL_CACHE_TTL ? parseInt(process.env.MODEL_CACHE_TTL) : 60, // Cache TTL in seconds (configurable)
+  TTL: process.env.MODEL_CACHE_TTL ? parseInt(process.env.MODEL_CACHE_TTL) : 180, // Cache TTL in seconds (3 minutes max for live content)
   ENABLED: redis !== null,
 };
 
@@ -35,12 +35,14 @@ export default async function handler(req, res) {
   }
 
   const { 
-      provider = orchestrator.ApiProviders.AWE, // Default to AWE via orchestrator constant
+      provider = api.Providers.AWE, // Default to AWE using our new provider constant
       category,
       subcategory,
       limit = 32,
       offset = 0,
       debug = false,
+      skipCache = false,
+      prioritizeOnline = true, // Always prioritize online models in results
       // Pass any other potential filter parameters directly
       ...otherFilters 
   } = req.query;
@@ -48,18 +50,32 @@ export default async function handler(req, res) {
   // Ensure provider is treated consistently
   const providerKey = String(provider).toLowerCase();
   
+  // For free provider, always use a shorter cache TTL
+  const cacheTime = providerKey === api.Providers.FREE 
+    ? Math.min(CACHE_CONFIG.TTL, 120) // 2 minutes max for free
+    : CACHE_CONFIG.TTL;
+  
   const parsedLimit = parseInt(limit);
   const parsedOffset = parseInt(offset);
+  const parsedSkipCache = skipCache === 'true' || skipCache === '1';
+  const parsedPrioritizeOnline = prioritizeOnline === 'true' || prioritizeOnline === '1' || prioritizeOnline === true;
 
-  // Generate cache key (Keep this part, ensure it includes all relevant query params)
-  // Use a stable serialization method for the key
-  const queryKey = JSON.stringify({ provider: providerKey, category, subcategory, limit: parsedLimit, offset: parsedOffset, ...otherFilters });
+  // Generate cache key
+  const queryKey = JSON.stringify({ 
+    provider: providerKey, 
+    category, 
+    subcategory, 
+    limit: parsedLimit, 
+    offset: parsedOffset,
+    prioritizeOnline: parsedPrioritizeOnline,
+    ...otherFilters 
+  });
   const cacheKey = `models:${queryKey}`;
 
   console.log(`[API /models] Request received with provider: ${providerKey}, params: ${queryKey}`);
 
-  // Try to get from cache first (Keep this part)
-  if (CACHE_CONFIG.ENABLED) {
+  // Try to get from cache first if not explicitly skipped
+  if (CACHE_CONFIG.ENABLED && !parsedSkipCache) {
     try {
       console.log(`[API /models] Attempting cache fetch for key: ${cacheKey}`);
       const cached = await redis.get(cacheKey);
@@ -76,34 +92,57 @@ export default async function handler(req, res) {
       console.warn('[API /models] Redis cache get failed:', error.message);
       // Continue without using cache
     }
+  } else if (parsedSkipCache) {
+    console.log('[API /models] Skipping cache as requested.');
   }
 
   try {
-      // Call the orchestrator to fetch models
-      console.log('[API /models] Calling orchestrator.fetchModels with params:', {
+      // Use our new centralized API service to fetch models
+      console.log('[API /models] Calling api.fetchModels with params:', {
         provider: providerKey,
         category,
         subcategory,
         limit: parsedLimit,
         offset: parsedOffset,
-        filters: otherFilters
+        prioritizeOnline: parsedPrioritizeOnline,
+        filters: otherFilters,
+        skipCache: parsedSkipCache
       });
       
-      const result = await orchestrator.fetchModels({
-          provider: providerKey, // Ensure provider is properly passed
+      const result = await api.fetchModels({
+          provider: providerKey,
           category,
           subcategory,
           limit: parsedLimit,
           offset: parsedOffset,
-          filters: otherFilters // Pass remaining query params as filters
+          prioritizeOnline: parsedPrioritizeOnline,
+          filters: otherFilters,
+          skipCache: parsedSkipCache
       });
 
+      // If we got results, sort them to always show online models first
+      if (result.success && parsedPrioritizeOnline && result.data && Array.isArray(result.data.items)) {
+        result.data.items.sort((a, b) => {
+          // Sort by online status first
+          if (a.isOnline && !b.isOnline) return -1;
+          if (!a.isOnline && b.isOnline) return 1;
+          
+          // Then by viewer count
+          if (a.isOnline && b.isOnline) {
+            return (b.viewerCount || 0) - (a.viewerCount || 0);
+          }
+          
+          // Keep original order for offline models
+          return 0;
+        });
+      }
+
       // Set cache if successful and caching enabled
-      if (result.success && CACHE_CONFIG.ENABLED) {
+      if (result.success && CACHE_CONFIG.ENABLED && !parsedSkipCache) {
           try {
-              console.log(`[API /models] Setting cache for key: ${cacheKey} with TTL: ${CACHE_CONFIG.TTL}s`);
-              await redis.set(cacheKey, JSON.stringify(result), { // Cache the whole result object
-                  ex: CACHE_CONFIG.TTL,
+              console.log(`[API /models] Setting cache for key: ${cacheKey} with TTL: ${cacheTime}s`);
+              await redis.set(cacheKey, JSON.stringify(result), {
+                  ex: cacheTime,
               });
           } catch (error) {
               console.warn('[API /models] Redis cache set failed:', error.message);
@@ -112,9 +151,9 @@ export default async function handler(req, res) {
       }
       
       // Determine status code based on success
-      const statusCode = result.success ? 200 : 500; // Use 500 for internal errors from orchestrator
+      const statusCode = result.success ? 200 : 500; // Use 500 for internal errors
       
-      // Return the result from the orchestrator
+      // Return the result
       console.log(`[API /models] Returning result (Success: ${result.success}, Status: ${statusCode})`);
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('X-Cache', 'MISS');
@@ -147,13 +186,13 @@ export default async function handler(req, res) {
       return res.status(statusCode).json(result);
 
   } catch (error) {
-      // Catch unexpected errors during orchestrator call or response handling
+      // Catch unexpected errors
       console.error('[API /models] Unhandled error in handler:', error);
       return res.status(500).json({ 
           success: false,
           error: 'Internal Server Error in API handler',
           data: {
-              models: [], // Keep the expected structure even on error
+              items: [], // Use consistent naming (items not models)
               pagination: {
                   total: 0,
                   limit: parsedLimit,

@@ -6,7 +6,8 @@ export const THEMES = {
   DARK: 'dark',
   LUXURY: 'luxury',
   RETRO: 'retro',
-  MINIMAL: 'minimal'
+  MINIMAL: 'minimal',
+  LEGACY_DARK: 'legacy_dark'
 };
 
 // Default theme configuration
@@ -306,7 +307,31 @@ const THEME_MAP = {
   [THEMES.DARK]: darkThemeConfig,
   [THEMES.LUXURY]: luxuryThemeConfig,
   [THEMES.RETRO]: retroThemeConfig,
-  [THEMES.MINIMAL]: minimalThemeConfig
+  [THEMES.MINIMAL]: minimalThemeConfig,
+  [THEMES.LEGACY_DARK]: {
+    name: THEMES.LEGACY_DARK,
+    palette: {
+      primary: '#1a1a1a',
+      secondary: '#2a2a2a',
+      text: {
+        primary: '#f5f5f5',
+        secondary: '#b0b0b0',
+        accent: '#FF007A'
+      },
+      background: {
+        main: '#121212',
+        dark: '#0a0a0a',
+        card: '#1e1e1e',
+        footer: '#0a0a0a'
+      },
+      divider: '#333333',
+      error: '#cf6679',
+      success: '#4caf50',
+      warning: '#ff9800'
+    },
+    // Inherit typography, spacing, etc. from default theme
+    ...defaultThemeConfig
+  }
 };
 
 // Create the context
@@ -323,8 +348,17 @@ export const ThemeProvider = ({ children, initialTheme = THEMES.DEFAULT }) => {
   const [theme, setThemeState] = useState(THEMES.DEFAULT);
   const [themeConfig, setThemeConfig] = useState(THEME_MAP[initialTheme] || defaultThemeConfig);
   console.log('thememain :>> ', theme);
+  
   // Effect to load theme from localStorage on initial render
   useEffect(() => {
+    // TEMPORARILY FORCE DEFAULT THEME
+    setThemeState(THEMES.DEFAULT);
+    setThemeConfig(THEME_MAP[THEMES.DEFAULT]);
+    localStorage.setItem('theme', THEMES.DEFAULT);
+    document.documentElement.setAttribute('data-theme', THEMES.DEFAULT);
+    
+    // Original code (commented out):
+    /*
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme && THEME_MAP[savedTheme]) {
       setThemeState(savedTheme);
@@ -334,6 +368,7 @@ export const ThemeProvider = ({ children, initialTheme = THEMES.DEFAULT }) => {
       // localStorage.setItem('theme', THEMES.DEFAULT)
       document.documentElement.setAttribute('data-theme', THEMES.DEFAULT);
     }
+    */
   }, [initialTheme]);
 
   // Handle theme change

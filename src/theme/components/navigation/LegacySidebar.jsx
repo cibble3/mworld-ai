@@ -134,8 +134,8 @@ const LegacySidebar = () => {
       {/* Main Category Links */}
       <div className="flex flex-col mb-4">
         {categories.map((cat) => {
-          // Only render categories that should appear as main links (e.g., not blog if handled differently)
-          if (['girls', 'trans', 'fetish', 'free', 'videos'].includes(cat.slug)) { // Adjust as needed
+          // Skip categories we don't want to show in sidebar
+          if (['girls', 'trans', 'fetish', 'videos'].includes(cat.slug)) { // Adjust as needed
             const href = `/${cat.slug}`;
             const isActive = currentMainCategorySlug === cat.slug;
             return (

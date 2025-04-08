@@ -7,13 +7,15 @@
 
 // AWE API Configuration
 export const AWE_CONFIG = {
-  BASE_URL: process.env.AWE_API_ENDPOINT || 'https://wptcd.com/api/model/feed',
-  SITE_ID: process.env.AWE_SITE_ID || '201300',
+  BASE_URL: process.env.AWE_API_ENDPOINT || 'https://partner-api.awempire.com',
+  SITE_ID: process.env.AWE_SITE_ID || 4512,
   PS_ID: process.env.AWE_PS_ID || 'mikeeyy3',
   PS_TOOL: process.env.AWE_PS_TOOL || '213_1',
   PS_PROGRAM: process.env.AWE_PS_PROGRAM || 'cbrnd',
   CAMPAIGN_ID: process.env.AWE_CAMPAIGN_ID || '117404',
   API_KEY: process.env.AWE_API_KEY || '8d3f909766a7009186058874fb8fe2b4',
+  NATS_ID: process.env.AWE_NATS_ID || 'mistress',
+  NATS_TOUR: process.env.AWE_NATS_TOUR || ''
 };
 
 // VPAPI (Video Promotion API) Configuration
@@ -34,18 +36,10 @@ export const VPAPI_CONFIG = {
   CLIENT_RELATED_ENDPOINT: '/api/video-promotion/v1/client/related'
 };
 
-// Free API (Chaturbate) Configuration
-export const FREE_CONFIG = {
-  BASE_URL: process.env.FREE_API_ENDPOINT || 'https://chaturbate.com/api/public/affiliates/onlinerooms/',
-  LIMIT: 100, // Default limit for their API
-  WM: process.env.FREE_WM || 'mistress', // Campaign slug
-};
-
 // API Provider Constants
 export const ApiProviders = {
   AWE: 'awe',      // LiveJasmin Models
   VPAPI: 'vpapi',  // LiveJasmin Videos
-  FREE: 'free'     // Chaturbate Models
 };
 
 // Default API Request Parameters
@@ -57,7 +51,6 @@ export const DEFAULT_PARAMS = {
 export default {
   AWE_CONFIG,
   VPAPI_CONFIG,
-  FREE_CONFIG,
   ApiProviders,
   DEFAULT_PARAMS
 }; 
