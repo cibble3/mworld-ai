@@ -177,7 +177,7 @@ const DynamicSidebar = () => {
       <div className="space-y-10">
         {/* Filter Section */}
         <div className="space-y-8">
-          <h3 className="text-primary font-semibold text-base tracking-wide uppercase">Filter Models</h3>
+          <h3 className="text-pink-500 font-semibold text-base tracking-wide uppercase">Filter Models</h3>
 
           <div className="space-y-8">
             <div>
@@ -188,7 +188,7 @@ const DynamicSidebar = () => {
                     key={item}
                     href={`${pathname}?${toggleQueryParam('ethnicity', item)}`}
                     className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full ${isActive('ethnicity', item)
-                      ? 'bg-primary text-white shadow-lg shadow-primary/25'
+                      ? 'bg-pink-600 text-white shadow-lg shadow-pink-600/25'
                       : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700 hover:text-white'
                       }`}
                   >
@@ -214,7 +214,7 @@ const DynamicSidebar = () => {
                         key={item}
                         href={`${pathname}?${toggleQueryParam('gender_identity', item)}`}
                         className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full ${isActive('gender_identity', item)
-                          ? 'bg-primary text-white shadow-lg shadow-primary/25'
+                          ? 'bg-pink-600 text-white shadow-lg shadow-pink-600/25'
                           : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700 hover:text-white'
                           }`}
                       >
@@ -237,7 +237,7 @@ const DynamicSidebar = () => {
                         key={item}
                         href={`${pathname}?${toggleQueryParam('body_type', item)}`}
                         className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full ${isActive('body_type', item)
-                          ? 'bg-primary text-white shadow-lg shadow-primary/25'
+                          ? 'bg-pink-600 text-white shadow-lg shadow-pink-600/25'
                           : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700 hover:text-white'
                           }`}
                       >
@@ -264,7 +264,7 @@ const DynamicSidebar = () => {
                       key={item}
                       href={`${pathname}?${toggleQueryParam('hair_color', item)}`}
                       className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full ${isActive('hair_color', item)
-                        ? 'bg-primary text-white shadow-lg shadow-primary/25'
+                        ? 'bg-pink-600 text-white shadow-lg shadow-pink-600/25'
                         : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700 hover:text-white'
                         }`}
                     >
@@ -288,7 +288,7 @@ const DynamicSidebar = () => {
                     key={item}
                     href={`${pathname}?${toggleQueryParam('tags', item)}`}
                     className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full ${isActive('tags', item)
-                      ? 'bg-primary text-white shadow-lg shadow-primary/25'
+                      ? 'bg-pink-600 text-white shadow-lg shadow-pink-600/25'
                       : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700 hover:text-white'
                       }`}
                   >
@@ -311,7 +311,7 @@ const DynamicSidebar = () => {
                     key={item}
                     href={`${pathname}?${toggleQueryParam('willingness', item)}`}
                     className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full ${isActive('willingness', item)
-                      ? 'bg-primary text-black shadow-lg shadow-primary/25'
+                      ? 'bg-pink-600 text-white shadow-lg shadow-pink-600/25'
                       : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700 hover:text-white'
                       }`}
                   >
