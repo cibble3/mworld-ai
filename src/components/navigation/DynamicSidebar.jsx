@@ -13,52 +13,241 @@ export const popularTags = [
 ];
 
 const filterData = [{
-  "category": ["girls", "trans",
-    "free"], "ethnicity": ["asian", "latina", "white"],
-  "hair_color": ["blonde", "black", "red"], "tags": ["milf",
-    "petite", "bdsm"], "willingness": ["group", "anal"],
+  "category": ["girls", "trans", "free", "fetish"],
+  "ethnicity": ["asian", "latina", "white", "ebony", "middle_eastern", "indian"],
+  "hair_color": ["blonde", "black", "red", "brunette", "blue", "pink", "other"],
+  "tags": ["milf", "petite", "bdsm", "lingerie", "tattoos", "piercing", "squirt", "smoking", "toys", "roleplay"],
+  "willingness": ["group", "anal", "fetish", "couple", "dildo", "roleplay", "cumshow"],
+  "height": ["short", "average", "tall", "very_tall"],
+  "body_type": ["slim", "athletic", "curvy", "bbw", "muscular", "petite", "average"],
+  "age_group": ["18-22", "23-29", "30-39", "40+"],
+  "breast_size": ["small", "medium", "large", "very_large"],
+  "language": ["english", "spanish", "french", "german", "russian", "italian"],
+  "experience": ["beginner", "intermediate", "professional"],
   "source": ["aweapi", "freeapi", "vpapi"]
-}
-]
+}]
+
+// FilterTag component for rendering individual filter options
+const FilterTag = ({ item, isActive, onClick, checkIsActive }) => {
+  return (
+    <Link
+      href="#"
+      onClick={(e) => {
+        e.preventDefault();
+        onClick && onClick(item);
+      }}
+      className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full ${
+        checkIsActive ? checkIsActive(item) : isActive
+          ? 'bg-primary text-white shadow-lg shadow-primary/25'
+          : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700 hover:text-white'
+      }`}
+    >
+      {(checkIsActive ? checkIsActive(item) : isActive) && (
+        <svg className="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+          <path 
+            fillRule="evenodd" 
+            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" 
+            clipRule="evenodd" 
+          />
+        </svg>
+      )}
+      {item}
+    </Link>
+  );
+};
+
+// FilterSection component for a group of filter options
+const FilterSection = ({ title, items, filterKey, handleFilterClick, isActive }) => {
+  if (!items || items.length === 0) return null;
+  
+  return (
+    <div>
+      <h4 className='text-xs font-medium text-gray-500 mb-3 tracking-wider uppercase'>{title}</h4>
+      <div className='flex flex-wrap gap-2'>
+        {items.map((item) => (
+          <FilterTag
+            key={item}
+            item={item}
+            isActive={isActive(filterKey, item)}
+            onClick={() => handleFilterClick(filterKey, item)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// CategorySection component for category selection
+const CategorySection = ({ items, pathname }) => {
+  if (!items || items.length === 0) return null;
+  
+  const isActiveCategory = (item) => {
+    if (!pathname) return false;
+    return pathname.startsWith(`/${item}`);
+  };
+  
+  return (
+    <div>
+      <h4 className='text-xs font-medium text-gray-500 mb-3 tracking-wider uppercase'>Category</h4>
+      <div className='flex flex-wrap gap-2'>
+        {items.map((item) => (
+          <Link
+            key={item}
+            href={`/${item}`}
+            className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full ${
+              isActiveCategory(item)
+                ? 'bg-primary text-white shadow-lg shadow-primary/25'
+                : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700 hover:text-white'
+            }`}
+          >
+            {isActiveCategory(item) && (
+              <svg className="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                <path 
+                  fillRule="evenodd" 
+                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" 
+                  clipRule="evenodd" 
+                />
+              </svg>
+            )}
+            {item}
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// TrendingModels component
+const TrendingModelsSection = ({ models, loading, error }) => {
+  return (
+    <div className="space-y-8">
+      <h3 className="text-primary font-semibold text-base tracking-wide uppercase">Trending Models</h3>
+
+      {loading ? (
+        <div className="space-y-4">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="animate-pulse flex items-center">
+              <div className="w-10 h-10 bg-gray-800/30 rounded-full mr-3"></div>
+              <div className="flex-1">
+                <div className="h-3 bg-gray-800/30 rounded w-3/4 mb-2"></div>
+                <div className="h-2 bg-gray-800/30 rounded w-1/2"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : error ? (
+        <p className="text-red-500 text-xs">{error}</p>
+      ) : (
+        <div className="space-y-4">
+          {models.map((model) => (
+            <Link
+              href={`/chat/${model.id}`}
+              key={model.id}
+              className="flex items-center hover:bg-gray-800/30 p-2 rounded-md transition-all duration-200 group"
+            >
+              <div className="relative w-10 h-10 rounded-full overflow-hidden mr-3">
+                <Image
+                  src={model?.thumbnail || '/images/placeholder.jpg'}
+                  alt={model?.name}
+                  width={40}
+                  height={40}
+                  className="object-cover size-10"
+                  unoptimized
+                />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-300 group-hover:text-primary transition-colors">{model.name}</p>
+                <p className="text-xs text-gray-500">{model?.category || 'Model'}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// PopularTags component
+const PopularTagsSection = ({ tags, handleTagClick }) => {
+  return (
+    <div className="space-y-8">
+      <h3 className="text-primary font-semibold text-base tracking-wide uppercase">Popular Tags</h3>
+      <div className="flex flex-wrap gap-2">
+        {tags.map((tag) => (
+          <Link
+            href="#"
+            key={tag}
+            onClick={(e) => {
+              e.preventDefault();
+              handleTagClick('tags', tag);
+            }}
+            className="px-3 py-1.5 bg-gray-800/30 hover:bg-primary/10 text-gray-400 hover:text-primary text-xs font-medium rounded-md transition-all duration-200"
+          >
+            {tag}
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// QuickLinks component
+const QuickLinksSection = () => {
+  const links = [
+    { href: '/girls', label: 'Girls' },
+    { href: '/trans', label: 'Trans' },
+    { href: '/fetish', label: 'Fetish' },
+    { href: '/free', label: 'Free Cams' },
+    { href: '/videos', label: 'Videos' }
+  ];
+
+  return (
+    <div className="space-y-8">
+      <h3 className="text-primary font-semibold text-base tracking-wide uppercase">Quick Links</h3>
+      <ul className="space-y-3">
+        {links.map((link) => (
+          <li key={link.href}>
+            <Link
+              href={link.href}
+              className="text-gray-400 hover:text-primary text-sm font-medium flex items-center transition-colors duration-200"
+            >
+              <span className="w-1 h-1 bg-primary rounded-full mr-2 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+              {link.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
 const DynamicSidebar = () => {
   const [trendingModels, setTrendingModels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const route = useRouter()
+  const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
+
   useEffect(() => {
     const fetchTrendingModels = async () => {
       try {
         setLoading(true);
-        // Fetch trending models from various categories
-        const response = await axios.get('/api/models', {
+        // Use the real-models-test endpoint for better filtering
+        const response = await axios.get('/api/real-models-test', {
           params: {
-            provider: 'awe',
             limit: 5,
-            sort: 'trending',
-            debug: true
+            category: getCurrentCategory()
           }
         });
 
-        if (response.data?.success) {
-          let models = [];
-
-          if (response.data.data?.models && Array.isArray(response.data.data.models)) {
-            models = response.data.data.models;
-          } else if (response.data.data?.items && Array.isArray(response.data.data.items)) {
-            models = response.data.data.items;
-          } else if (Array.isArray(response.data.data)) {
-            models = response.data.data;
-          }
-
-          setTrendingModels(models);
+        if (response.data?.success && response.data.normalizedModels?.length > 0) {
+          setTrendingModels(response.data.normalizedModels);
         } else {
-          // In development, use fallback data
+          // Fallback for development
           if (process.env.NODE_ENV === 'development') {
             const fallbackModels = Array.from({ length: 5 }, (_, i) => ({
               id: `trending-${i}`,
-              performerId: `trending-${i}`,
               name: `Trending Model ${i + 1}`,
               age: 20 + (i * 2),
               ethnicity: ['asian', 'latin', 'ebony', 'white'][i % 4],
@@ -80,7 +269,6 @@ const DynamicSidebar = () => {
         if (process.env.NODE_ENV === 'development') {
           const fallbackModels = Array.from({ length: 5 }, (_, i) => ({
             id: `trending-${i}`,
-            performerId: `trending-${i}`,
             name: `Trending Model ${i + 1}`,
             age: 20 + (i * 2),
             ethnicity: ['asian', 'latin', 'ebony', 'white'][i % 4],
@@ -95,43 +283,76 @@ const DynamicSidebar = () => {
         setLoading(false);
       }
     };
+    
     fetchTrendingModels();
-  }, []);
+  }, [pathname]); // Re-fetch when the pathname changes to get category-specific trending models
 
-  // const toggleQueryParam = (key, value) => {
-  //   const params = new URLSearchParams(searchParams.toString())
-  //   const current = params.getAll(key)
+  // Helper function to get the current category from the pathname
+  const getCurrentCategory = () => {
+    if (!pathname) return 'fetish'; // Default if pathname is null
+    if (pathname.startsWith('/girls')) return 'girls';
+    if (pathname.startsWith('/trans')) return 'trans';
+    if (pathname.startsWith('/fetish')) return 'fetish';
+    return 'fetish'; // Default to fetish for homepage
+  };
 
-  //   if (current.includes(value)) {
-  //     const filtered = current.filter((item) => item !== value)
-  //     params.delete(key)
-  //     filtered.forEach(v => params.append(key, v))
-  //   } else {
-  //     params.append(key, value)
-  //   }
-
-  //   return params.toString()
-  // }
+  // Improved query parameter toggling function that works with next/navigation
   const toggleQueryParam = (key, value) => {
-    const params = new URLSearchParams(searchParams.toString())
-    const current = params.get(key)
+    if (!searchParams) return '';
+    
+    const params = new URLSearchParams(searchParams.toString());
+    const current = params.get(key);
 
     if (current === value) {
       // If clicked again, remove the param
-      params.delete(key)
+      params.delete(key);
     } else {
       // Otherwise, set it (replace existing)
-      params.set(key, value)
+      params.set(key, value);
     }
 
-    return params.toString()
-  }
+    return params.toString();
+  };
 
+  // Check if a filter is active
   const isActive = (key, value) => {
-    return searchParams.getAll(key).includes(value)
-  }
-  // Popular tags that could be fetched from API in the future
-  console.log('filterData :>> ', filterData);
+    if (!searchParams) return false;
+    return searchParams.get(key) === value;
+  };
+
+  // Handle filter click with proper analytics tracking
+  const handleFilterClick = (key, value) => {
+    if (!pathname || !router) return;
+    
+    // Build the new URL
+    const params = new URLSearchParams(searchParams?.toString() || '');
+    const current = params.get(key);
+
+    if (current === value) {
+      params.delete(key);
+    } else {
+      params.set(key, value);
+    }
+
+    // Analytics tracking
+    try {
+      if (window.gtag) {
+        window.gtag('event', 'filter_selection', {
+          filter_type: key,
+          filter_value: value,
+          page: pathname
+        });
+      }
+    } catch (e) {
+      console.error('Analytics error:', e);
+    }
+
+    // Navigate with the updated params
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  // Get filter data with safeguards
+  const filters = filterData && filterData.length > 0 ? filterData[0] : {};
 
   return (
     <div className="p-6 border-r border-gray-800/30 bg-background lg:block hidden min-h-screen">
@@ -141,100 +362,48 @@ const DynamicSidebar = () => {
           <h3 className="text-primary font-semibold text-base tracking-wide uppercase">Filter Models</h3>
 
           <div className="space-y-8">
-            <div>
-              <h4 className='text-xs font-medium text-gray-500 mb-3 tracking-wider uppercase'>Ethnicity</h4>
-              <div className='flex flex-wrap gap-2'>
-                {filterData[0]?.category?.map((item) => (
-                  <Link
-                    key={item}
-                    href={`/${item}?${searchParams.toString()}`}
-                    className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full ${pathname.includes(item)
-                      ? 'bg-primary text-white shadow-lg shadow-primary/25'
-                      : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700 hover:text-white'
-                      }`}
-                  >
-                    {pathname.includes(item) && (
-                      <svg className="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    )}
-                    {item}
-                  </Link>
-                ))}
-              </div>
-            </div>
+            {/* Category Section */}
+            <CategorySection 
+              items={filters.category} 
+              pathname={pathname} 
+            />
 
-            <div>
-              <h4 className='text-xs font-medium text-gray-500 mb-3 tracking-wider uppercase'>Tags</h4>
-              <div className='flex flex-wrap gap-2'>
-                {filterData[0]?.tags?.map((item) => (
-                  <Link
-                    key={item}
-                    href={`${pathname}?${toggleQueryParam('tags', item)}`}
-                    className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full ${isActive('tags', item)
-                      ? 'bg-primary text-white shadow-lg shadow-primary/25'
-                      : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700 hover:text-white'
-                      }`}
-                  >
-                    {isActive('tags', item) && (
-                      <svg className="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    )}
-                    {item}
-                  </Link>
-                ))}
-              </div>
-            </div>
+            {/* Filter Sections for different attributes */}
+            <FilterSection 
+              title="Ethnicity" 
+              items={filters.ethnicity} 
+              filterKey="ethnicity"
+              handleFilterClick={handleFilterClick}
+              isActive={isActive}
+            />
+            
+            <FilterSection 
+              title="Hair Color" 
+              items={filters.hair_color} 
+              filterKey="hair_color"
+              handleFilterClick={handleFilterClick}
+              isActive={isActive}
+            />
+            
+            <FilterSection 
+              title="Body Type" 
+              items={filters.body_type} 
+              filterKey="body_type"
+              handleFilterClick={handleFilterClick}
+              isActive={isActive}
+            />
+            
+            <FilterSection 
+              title="Height" 
+              items={filters.height} 
+              filterKey="height"
+              handleFilterClick={handleFilterClick}
+              isActive={isActive}
+            />
 
-            <div>
-              <h4 className='text-xs font-medium text-gray-500 mb-3 tracking-wider uppercase'>Hair Color</h4>
-              <div className='flex flex-wrap gap-2'>
-                {filterData[0]?.hair_color?.map((item) => (
-                  <Link
-                    key={item}
-                    href={`${pathname}?${toggleQueryParam('hair_color', item)}`}
-                    className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full ${isActive('hair_color', item)
-                      ? 'bg-primary text-white shadow-lg shadow-primary/25'
-                      : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700 hover:text-white'
-                      }`}
-                  >
-                    {isActive('hair_color', item) && (
-                      <svg className="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    )}
-                    {item}
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h4 className='text-xs font-medium text-gray-500 mb-3 tracking-wider uppercase'>Willingness</h4>
-              <div className='flex flex-wrap gap-2'>
-                {filterData[0]?.willingness?.map((item) => (
-                  <Link
-                    key={item}
-                    href={`${pathname}?${toggleQueryParam('willingness', item)}`}
-                    className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-all duration-200 rounded-full ${isActive('willingness', item)
-                      ? 'bg-primary text-black shadow-lg shadow-primary/25'
-                      : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700 hover:text-white'
-                      }`}
-                  >
-                    {isActive('willingness', item) && (
-                      <svg className="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    )}
-                    {item}
-                  </Link>
-                ))}
-              </div>
-            </div>
-
+            {/* Reset Filters button */}
             <button
-              onClick={() => route.push(pathname)}
+              onClick={() => router?.push(pathname || '/')}
               className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-800/30 hover:bg-gray-800/50 text-gray-400 hover:text-white rounded-lg text-xs font-medium tracking-wide transition-all duration-200 group"
             >
               <svg
@@ -256,90 +425,20 @@ const DynamicSidebar = () => {
         </div>
 
         {/* Trending Models Section */}
-        <div className="space-y-8">
-          <h3 className="text-primary font-semibold text-base tracking-wide uppercase">Trending Models</h3>
-
-          {loading ? (
-            <div className="space-y-4">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="animate-pulse flex items-center">
-                  <div className="w-10 h-10 bg-gray-800/30 rounded-full mr-3"></div>
-                  <div className="flex-1">
-                    <div className="h-3 bg-gray-800/30 rounded w-3/4 mb-2"></div>
-                    <div className="h-2 bg-gray-800/30 rounded w-1/2"></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : error ? (
-            <p className="text-red-500 text-xs">{error}</p>
-          ) : (
-            <div className="space-y-4">
-              {trendingModels.map((model) => (
-                <Link
-                  href={`/chat/${model.performerId}`}
-                  key={model.id}
-                  className="flex items-center hover:bg-gray-800/30 p-2 rounded-md transition-all duration-200 group"
-                >
-                  <div className="relative w-10 h-10 rounded-full overflow-hidden  mr-3">
-                    <Image
-                      src={model?.thumbnail || '/images/placeholder.jpg'}
-                      alt={model?.name}
-                      width={40}
-                      height={40}
-                      className="object-cover size-10"
-                      unoptimized
-                    />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-300 group-hover:text-primary transition-colors">{model.name}</p>
-                    <p className="text-xs text-gray-500">{model?.viewerCount} viewers</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
-        </div>
+        <TrendingModelsSection 
+          models={trendingModels} 
+          loading={loading} 
+          error={error} 
+        />
 
         {/* Popular Tags Section */}
-        <div className="space-y-8">
-          <h3 className="text-primary font-semibold text-base tracking-wide uppercase">Popular Tags</h3>
-          <div className="flex flex-wrap gap-2">
-            {popularTags.map((tag) => (
-              <Link
-                href={`/tag/${tag}`}
-                key={tag}
-                className="px-3 py-1.5 bg-gray-800/30 hover:bg-primary/10 text-gray-400 hover:text-primary text-xs font-medium rounded-md transition-all duration-200"
-              >
-                {tag}
-              </Link>
-            ))}
-          </div>
-        </div>
+        <PopularTagsSection 
+          tags={popularTags} 
+          handleTagClick={handleFilterClick} 
+        />
 
         {/* Quick Links Section */}
-        <div className="space-y-8">
-          <h3 className="text-primary font-semibold text-base tracking-wide uppercase">Quick Links</h3>
-          <ul className="space-y-3">
-            {[
-              { href: '/girls', label: 'Girls' },
-              { href: '/trans', label: 'Trans' },
-              { href: '/fetish', label: 'Fetish' },
-              { href: '/free', label: 'Free Cams' },
-              { href: '/videos', label: 'Videos' }
-            ].map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className="text-gray-400 hover:text-primary text-sm font-medium flex items-center transition-colors duration-200"
-                >
-                  <span className="w-1 h-1 bg-primary rounded-full mr-2 opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <QuickLinksSection />
       </div>
     </div>
   );

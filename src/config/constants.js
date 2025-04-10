@@ -1,3 +1,7 @@
+/**
+ * Global application constants
+ */
+
 // Cache Configuration
 const CACHE_CONFIG = {
   TTL: 3600, // 1 hour in seconds
@@ -70,12 +74,33 @@ const CDN_CONFIG = {
   INVALIDATION_PATHS: ['/api/*', '/data/*']
 };
 
-module.exports = {
-  CACHE_CONFIG,
-  JOB_CONFIG,
-  CONTENT_CONFIG,
-  API_LIMITS,
-  VALIDATION_SCHEMAS,
-  BACKUP_CONFIG,
-  CDN_CONFIG
+// API providers
+export const ApiProviders = {
+    AWE: 'awe',
+    FREE: 'free',
+    VPAPI: 'vpapi',
+};
+
+// Mock data configuration
+export const MOCK_DATA = {
+    ENABLED: false, // Force disable mock data
+};
+
+// Default pagination values
+export const PAGINATION = {
+    DEFAULT_LIMIT: 24,
+    DEFAULT_OFFSET: 0,
+};
+
+export default {
+    CACHE_CONFIG,
+    JOB_CONFIG,
+    CONTENT_CONFIG,
+    API_LIMITS,
+    VALIDATION_SCHEMAS,
+    BACKUP_CONFIG,
+    CDN_CONFIG,
+    ApiProviders,
+    MOCK_DATA,
+    PAGINATION,
 }; 

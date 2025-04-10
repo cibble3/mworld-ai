@@ -1,13 +1,13 @@
 import axios from 'axios';
 import mockVPAPI from './mockVPAPI';
 import { ensureAbsoluteUrl } from '@/utils/image-helpers';
+import FILTER_MAP, { mapFiltersToProvider } from '@/config/filterMap';
 
 // --- Constants ---
 const DEFAULT_LIMIT = 24;
 export const ApiProviders = {
   AWE: 'awe',      // LiveJasmin Models
   VPAPI: 'vpapi',  // LiveJasmin Videos
-  FREE: 'free'     // Chaturbate Models
 };
 
 // --- API Configurations (Load from environment variables) ---
@@ -19,12 +19,6 @@ const AWE_CONFIG = {
   PS_PROGRAM: process.env.AWE_PS_PROGRAM || 'cbrnd',
   CAMPAIGN_ID: process.env.AWE_CAMPAIGN_ID || '117404',
   API_KEY: process.env.AWE_API_KEY || '8d3f909766a7009186058874fb8fe2b4',
-};
-
-const FREE_CONFIG = {
-  BASE_URL: process.env.FREE_API_ENDPOINT || 'https://chaturbate.com/api/public/affiliates/onlinerooms/',
-  LIMIT: 100, // Default limit for their API?
-  WM: process.env.FREE_WM, // Load campaign slug from env
 };
 
 /**
@@ -164,52 +158,6 @@ const normalizeAWEModel = (model) => {
         viewerCount: model.viewerCount || 0,
         _provider: ApiProviders.AWE
     };
-};
-
-const normalizeFreeModel = (model) => {
-    console.log(`[Orchestrator] Normalizing FREE model:`, JSON.stringify(model).substring(0, 200) + '...');
-    
-    try {
-        // Generate a consistent ID
-        const modelId = model.username || `free-model-${Math.random().toString(36).substring(2, 10)}`;
-        
-        // Handle Chaturbate's specific response format
-        return {
-            id: modelId,
-            performerId: modelId, // Add performerId that matches id
-            slug: modelId, 
-            name: model.display_name || model.username || 'Unknown Model',
-            image: model.image_url || '/images/placeholder.jpg', // Add image field that matches thumbnail
-            thumbnail: model.image_url || '/images/placeholder.jpg',
-            preview: model.image_url_360x270 || model.image_url || '/images/placeholder.jpg',
-            isOnline: true, // Free models are always returned as online
-            viewerCount: model.num_users || 0,
-            age: 25, // Age is not reliably provided
-            ethnicity: '', // Not provided
-            bodyType: '', // Not provided
-            tags: model.tags || [],
-            _provider: 'free',
-            // Original data we might need
-            _original: {
-                ...model
-            }
-        };
-    } catch (error) {
-        console.error('[Orchestrator] Error normalizing FREE model:', error);
-        const fallbackId = `free-model-${Math.random().toString(36).substring(2, 10)}`;
-        return {
-            id: fallbackId,
-            performerId: fallbackId,
-            name: 'Unknown Free Model',
-            image: '/images/placeholder.jpg',
-            thumbnail: '/images/placeholder.jpg',
-            preview: '/images/placeholder.jpg',
-            isOnline: true,
-            viewerCount: 0,
-            _provider: 'free',
-            _error: error.message
-        };
-    }
 };
 
 // CRITICAL: Do not modify this function as it's essential for VPAPI functionality
@@ -585,17 +533,14 @@ const mapParamsToAWE = (params) => {
         imageSizes: '320x180,800x600',
         imageType: 'ex',
         showOffline: 0,
-        onlyFreeStatus: 0,
+        onlyFreeStatus: 1,
+        extendedDetails: 1,
         responseFormat: 'json',
         accessKey: AWE_CONFIG.API_KEY,
+        category: aweCategory,
         customOrder: params.filters?.customOrder || 'most_popular',
         legacyRedirect: 1
     };
-    
-    // Only add category if it's NOT the default 'girls' category
-    if (aweCategory !== 'girl') {
-      apiParams.category = aweCategory;
-    }
 
     let aweFilters = [];
     
@@ -649,58 +594,6 @@ const mapParamsToAWE = (params) => {
     return apiParams;
 };
 
-const mapParamsToFree = (params) => {
-    // Create a completely new parameters object that strictly follows Chaturbate API requirements
-    const apiParams = new URLSearchParams();
-
-    // REQUIRED PARAMETERS (exactly as per Chaturbate API docs)
-    // 1. Campaign slug (required)
-    apiParams.append('wm', FREE_CONFIG.WM || '1f2Eo');
-    
-    // 2. Client IP (required) - use request_ip to let Chaturbate detect client IP
-    apiParams.append('client_ip', 'request_ip');
-    
-    // 3. Format (optional) - default to json
-    apiParams.append('format', 'json');
-    
-    // 4. Limit (optional) - number of rooms to return
-    apiParams.append('limit', params.limit || 100);
-    
-    // 5. Offset (optional) - for pagination
-    apiParams.append('offset', params.offset || 0);
-    
-    // 6. Gender filtering (optional)
-    if (params.category) {
-        let gender;
-        switch(params.category.toLowerCase()) {
-            case 'girls': gender = 'f'; break;
-            case 'trans': gender = 't'; break;
-            case 'men': gender = 'm'; break;
-            case 'couples': gender = 'c'; break;
-            default: gender = 'f'; // Default to female if unrecognized
-        }
-        apiParams.append('gender', gender);
-    }
-    
-    // 7. Tags (optional) - use subcategory as a tag
-    if (params.subcategory) {
-        apiParams.append('tag', params.subcategory);
-    }
-    
-    // 8. Region filtering (optional)
-    if (params.filters?.region) {
-        apiParams.append('region', params.filters.region);
-    }
-    
-    // 9. HD filtering (optional)
-    if (params.filters?.hd) {
-        apiParams.append('hd', params.filters.hd);
-    }
-    
-    console.log('[Orchestrator] Mapped FREE Params:', apiParams.toString());
-    return apiParams;
-};
-
 // --- Fetch Functions ---
 
 /**
@@ -724,179 +617,109 @@ const mapParamsToFree = (params) => {
  */
 // Fetch Videos Function
 export const fetchVideos = async (params = {}) => {
+  try {
   const {
     category = 'popular',
+        subcategory,
+        model,
     limit = DEFAULT_LIMIT,
     offset = 0,
-    useMock = false, // Set to false to use the real VPAPI now that it's properly configured
-    ...restParams // includes subcategory, model, sort, filters
+        sort = 'popular',
+        useMock = false,
+        fallbackOnError = true,
+        requestId = Date.now().toString(36).slice(-4),
+        ...restParams
   } = params;
 
-  // Enhanced debugging
-  console.log(`[Orchestrator] ==================== VIDEO REQUEST ====================`);
-  console.log(`[Orchestrator] fetchVideos called with params:`, JSON.stringify(params, null, 2));
-  
-  // Use mock data if requested
-  if (useMock) {
-    console.log(`[Orchestrator] Using mockVPAPI for video data`);
-    try {
-      const mockResponse = await mockVPAPI.fetchVideos({ category, limit, offset, ...restParams });
-      console.log(`[Orchestrator] Mock response received with ${mockResponse.data.items.length} videos`);
-      console.log(`[Orchestrator] ==================== END REQUEST ====================`);
-      return mockResponse;
-    } catch (error) {
-      console.error(`[Orchestrator] Error with mock data:`, error);
+    console.log(`[Orchestrator] [${requestId}] fetchVideos called for category: ${category}`);
+
+    // Use mock data if requested or we're in development with no API key
+    if (useMock || !VPAPI_CONFIG.API_KEY) {
+        console.log(`[Orchestrator] [${requestId}] Using mock video data (mock=${useMock}, key=${!!VPAPI_CONFIG.API_KEY})`);
+        const mockData = mockVPAPI.fetchVideos({ category, limit, offset, ...restParams });
       return {
-        success: false,
-        error: 'Error generating mock data',
-        data: { 
-          items: [], 
-          pagination: { 
-            total: 0, 
-            limit, 
-            offset, 
-            currentPage: 1, 
-            totalPages: 0, 
-            hasMore: false 
-          } 
-        }
-      };
+            success: true,
+            data: mockData
+        };
     }
-  }
-  
-  // --- Fetch from Real VPAPI ---
-  try {
-    console.log(`[Orchestrator] >>> ENTERING REAL API FETCH BLOCK <<<`); 
-    console.log(`[Orchestrator] Fetching real videos from VPAPI for category: ${category}`);
+
+    // --- Prepare API request ---
+    // Map our category to VPAPI's sexual orientation
+    const sexOrientation = getSexOrientationFromCategory(category);
     
-    // Map category to sexualOrientation - REQUIRED parameter per API docs
-    // Properly map category using the configuration constants
-    let sexualOrientation = VPAPI_CONFIG.SEX_ORIENTATION.DEFAULT;
-    const categoryLower = (category || '').toLowerCase();
-    
-    if (categoryLower === 'trans' || categoryLower === 'transgender' || categoryLower === 'shemale') {
-      sexualOrientation = VPAPI_CONFIG.SEX_ORIENTATION.TRANS;
-    } else if (categoryLower === 'gay' || categoryLower === 'male') {
-      sexualOrientation = VPAPI_CONFIG.SEX_ORIENTATION.GAY;
-    } else if (categoryLower === 'lesbian') {
-      // Lesbian is categorized as 'straight' in the API's terminology
-      sexualOrientation = VPAPI_CONFIG.SEX_ORIENTATION.STRAIGHT;
-    }
-    
-    // Map our internal category to VPAPI category
-    let vpapiCategory = 'girl'; // Default to 'girl' for most categories
-    
-    // Only change category for specific cases
-    if (categoryLower === 'trans' || categoryLower === 'transgender' || categoryLower === 'shemale') {
-      vpapiCategory = 'transgender';
-    } else if (categoryLower === 'gay' || categoryLower === 'male') {
-      vpapiCategory = 'boy';
-    }
-    
-    // Build parameters according to VPAPI docs
-    const apiParams = {
-      // Required parameters (per API documentation)
+    // Build API URL
+    const apiUrl = `${VPAPI_CONFIG.BASE_URL}${VPAPI_CONFIG.LIST_ENDPOINT}`;
+
+    // Set up parameters required by VPAPI
+    const vpapiParams = {
       psid: VPAPI_CONFIG.PSID,
       accessKey: VPAPI_CONFIG.API_KEY,
       clientIp: VPAPI_CONFIG.CLIENT_IP,
-      sexualOrientation: sexualOrientation,
-      
-      // Set the VPAPI category - required for proper categorization
-      category: vpapiCategory,
-      
-      // Additional required parameters
+        sexualOrientation: sexOrientation,
       cobrandId: VPAPI_CONFIG.COBRAND_ID,
       site: VPAPI_CONFIG.SITE,
-      
-      // Optional parameters
-      pageIndex: Math.floor(offset / limit) + 1,
-      limit: limit,
-      
-      // Optional filters
-      tags: restParams.tags || "",
-      quality: restParams.quality || "",
-      primaryColor: restParams.primaryColor || "",
-      labelColor: restParams.labelColor || "",
+        limit: parseInt(limit),
+        offset: parseInt(offset)
     };
     
-    // Add additional filters from restParams if they exist
-    if (restParams.filters) {
-      // Properly format and add any additional filters
-      if (restParams.filters.quality) apiParams.quality = restParams.filters.quality;
-      if (restParams.filters.tags) apiParams.tags = Array.isArray(restParams.filters.tags) ? restParams.filters.tags.join(',') : restParams.filters.tags;
-      if (restParams.filters.forcedPerformers) apiParams.forcedPerformers = restParams.filters.forcedPerformers;
-      if (restParams.filters.mitigable !== undefined) apiParams.mitigable = restParams.filters.mitigable;
+    // Add optional parameters if provided
+    if (subcategory) vpapiParams.categoryId = subcategory;
+    if (model) vpapiParams.performerId = model;
+    if (sort) {
+        switch(sort.toLowerCase()) {
+            case 'popular': vpapiParams.order = 'popular'; break;
+            case 'newest': vpapiParams.order = 'newest'; break;
+            case 'longest': vpapiParams.order = 'duration'; break;
+            case 'rating': vpapiParams.order = 'rating'; break;
+            default: vpapiParams.order = 'popular';
+        }
     }
     
-    // Build URL directly as specified in API docs
-    const requestUrl = `${VPAPI_CONFIG.BASE_URL}${VPAPI_CONFIG.LIST_ENDPOINT}`;
+    // Handle any additional params
+    Object.entries(restParams).forEach(([key, value]) => {
+        // Map our API's parameters to VPAPI's expected format if needed
+        if (key === 'tag' || key === 'tags') {
+            vpapiParams.tags = value;
+        } else {
+            vpapiParams[key] = value;
+        }
+    });
     
-    console.log(`[Orchestrator] VPAPI Request URL: ${requestUrl}`);
-    console.log(`[Orchestrator] VPAPI Request Params:`, apiParams);
+    console.log(`[Orchestrator] [${requestId}] Calling VPAPI with URL: ${apiUrl}`);
+    console.log(`[Orchestrator] [${requestId}] VPAPI params:`, vpapiParams);
     
-    // Make the request with standard headers
-    const startTime = Date.now();
-    const response = await axios.get(requestUrl, {
-      params: apiParams,
-      timeout: 15000,
+    // Make the API request
+    const response = await axios.get(apiUrl, {
+        params: vpapiParams,
+        timeout: 15000, // 15 second timeout
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'User-Agent': 'MistressWorld/1.0'
-      }
+            'Cache-Control': 'no-cache'
+        }
     });
-    const requestTime = Date.now() - startTime;
-
-    console.log(`[Orchestrator] >>> REAL API RESPONSE RECEIVED <<<`);
-    console.log(`[Orchestrator] Raw response status: ${response.status}`);
-    console.log(`[Orchestrator] Raw response data (sample):`, JSON.stringify(response.data)?.substring(0, 200) + '...');
-    console.log(`[Orchestrator] VPAPI Response received in ${requestTime}ms, status: ${response.status}`);
     
-    // Check API response format based on documentation
-    if (response.status !== 200 || !response.data?.success) {
-      console.error(`[Orchestrator] VPAPI response success flag: ${response.data?.success}`);
-      console.error(`[Orchestrator] VPAPI response status: ${response.data?.status}`);
-      console.error(`[Orchestrator] VPAPI response message: ${response.data?.message || 'No message'}`);
-      console.error(`[Orchestrator] VPAPI full response data:`, JSON.stringify(response.data || {}, null, 2));
-      throw new Error(`VPAPI request failed with status ${response.status} or success=false. Status: ${response.data?.status || 'unknown'}`);
-    }
+    console.log(`[Orchestrator] [${requestId}] VPAPI response status: ${response.status}`);
     
-    // Process response according to API documentation format
-    console.log(`[Orchestrator] VPAPI Response: success=${response.data.success}, videos count=${response.data?.data?.videos?.length || 0}`);
-    
-    if (response.data?.data?.videos?.length > 0) {
-      console.log('[Orchestrator] First video sample:', JSON.stringify(response.data.data.videos[0], null, 2));
-    } else {
-      console.log('[Orchestrator] No videos returned in the API response');
-    }
-    
-    // Normalize the data to our internal format
-    console.log(`[Orchestrator] >>> CALLING normalizeVPAPIData <<<`); 
+    // Handle successful response
+    if (response.status === 200 && response.data) {
+        console.log(`[Orchestrator] [${requestId}] VPAPI response successful, normalizing data...`);
+        // Normalize the response data
     const normalizedData = normalizeVPAPIData(response.data, limit, offset);
-    console.log(`[Orchestrator] Normalized ${normalizedData.items.length} videos`);
-    console.log(`[Orchestrator] ==================== END REQUEST ====================`);
-    
     return {
       success: true,
       data: normalizedData
     };
-
+    } else {
+        throw new Error(`VPAPI returned status ${response.status} with unexpected data format`);
+    }
   } catch (error) {
-    console.error('[Orchestrator] Error fetching from VPAPI:', error.message);
-    console.error('[Orchestrator] Error details:', error);
+    console.error('[Orchestrator] Error fetching videos from VPAPI:', error.message);
     
-    // Handle error response
     if (error.response) {
-      console.error('[Orchestrator] Response error data:', error.response.data);
-      console.error('[Orchestrator] Response error status:', error.response.status);
-      console.error('[Orchestrator] Response error headers:', error.response.headers);
-      
-      if (error.response.data?.message) {
-        console.error('[Orchestrator] API error message:', error.response.data.message);
-      }
-      if (error.response.data?.errors) {
-        console.error('[Orchestrator] API error details:', error.response.data.errors);
-      }
+      console.error('[Orchestrator] VPAPI Error response:', {
+        status: error.response.status,
+        data: error.response.data
+      });
     } else if (error.request) {
       console.error('[Orchestrator] Request error (no response received):', error.request);
     } else {
@@ -924,345 +747,285 @@ export const fetchVideos = async (params = {}) => {
   }
 };
 
-// Fetch Models Function
+/**
+ * Fetches models from multiple providers based on parameters
+ */
 export const fetchModels = async (params = {}) => {
+    const startTime = Date.now();
     const {
-        provider = ApiProviders.AWE, // Default to AWE
-        category = 'girls',
+        provider = ApiProviders.AWE,
+        category,
         subcategory,
         limit = DEFAULT_LIMIT,
         offset = 0,
-        useMock = false,
-        filters = {} // Accept direct filters like ethnicity, bodyType passed from API handler
+        filters = {},
+        forceNewRequest = false,
+        useMock = false
     } = params;
 
-    // Make sure provider is treated as a string for comparisons
-    const providerStr = String(provider).toLowerCase();
+    // Log the request
+    console.log(`[Orchestrator.fetchModels] Request: provider=${provider}, category=${category}, subcategory=${subcategory}, limit=${limit}, offset=${offset}`);
+    console.log(`[Orchestrator.fetchModels] Filters:`, filters);
 
-    console.log(`[Orchestrator] fetchModels called with params:`, JSON.stringify({...params, provider}, null, 2));
+    // Normalize provider to lowercase for consistent comparisons
+    const providerKey = String(provider).toLowerCase();
 
-    // --- Use Mock Data if requested or API keys missing ---
-    const aweConfigured = AWE_CONFIG.BASE_URL && AWE_CONFIG.API_KEY;
-    const freeConfigured = FREE_CONFIG.BASE_URL && FREE_CONFIG.WM;
-    const shouldMock = useMock || 
-                       (provider === ApiProviders.AWE && !aweConfigured) || 
-                       (provider === ApiProviders.FREE && !freeConfigured);
+    // Merge all filters from URL query and direct params
+    const allFilters = {
+        ...filters,
+        ...(category && { category }),
+        ...(subcategory && { subcategory })
+    };
+    
+    console.log(`[Orchestrator.fetchModels] Combined filters:`, allFilters);
 
-    if (shouldMock) {
-        if (!useMock) {
-            console.warn(`[Orchestrator] API (${provider}) not configured. Falling back to mock model data.`);
-        } else {
-            console.log(`[Orchestrator] Using mock model data for provider: ${provider}.`);
-        }
-        const { items, total } = generateMockModels(provider, category, subcategory, limit, offset);
-        const hasMore = (offset + items.length) < total;
-        const totalPages = Math.ceil(total / limit);
-        const currentPage = Math.floor(offset / limit) + 1;
-        return {
+    // Map the filters to provider-specific parameters
+    const mappedFilters = mapFiltersToProvider(allFilters, providerKey);
+    console.log(`[Orchestrator.fetchModels] Mapped filters for ${providerKey}:`, mappedFilters);
+
+    try {
+        // Initialize result with default structure to ensure it's always defined
+        let result = {
+            success: false,
+            error: 'Result not set by provider implementation',
+            data: {
+                items: [],
+                pagination: {
+                    total: 0,
+                    limit,
+                    offset,
+                    currentPage: Math.floor(offset / limit) + 1,
+                    totalPages: 0,
+                    hasMore: false
+                }
+            }
+        };
+
+        // Check if we should use mock data globally
+        let shouldUseMock = false; // Force disable mock data
+        console.log(`[Orchestrator.fetchModels] shouldUseMock=${shouldUseMock}, NEXT_PUBLIC_USE_MOCK_DATA=${process.env.NEXT_PUBLIC_USE_MOCK_DATA}, useMock=${useMock}`);
+
+        // Different implementation based on the requested provider
+        switch (providerKey) {
+            case ApiProviders.AWE:
+                if (shouldUseMock) {
+                    console.log('[Orchestrator.fetchModels] Using mock data for AWE');
+                    const { items, total } = generateMockModels(providerKey, category, subcategory, limit, offset);
+                    result = {
             success: true,
             data: {
                 items,
-                pagination: { total, limit, offset, currentPage, totalPages, hasMore }
+                            pagination: {
+                                total,
+                                limit,
+                                offset,
+                                currentPage: Math.floor(offset / limit) + 1,
+                                totalPages: Math.ceil(total / limit),
+                                hasMore: (offset + items.length) < total
+                            }
+                        }
+                    };
+                } else {
+                    console.log('[Orchestrator.fetchModels] Fetching from AWE API');
+                    try {
+                        // Prepare API parameters
+                        const aweParams = {
+                            siteId: AWE_CONFIG.SITE_ID,
+                            psId: AWE_CONFIG.PS_ID,
+                            psTool: AWE_CONFIG.PS_TOOL, 
+                            psProgram: AWE_CONFIG.PS_PROGRAM,
+                            campaignId: AWE_CONFIG.CAMPAIGN_ID,
+                            ...mappedFilters,
+                            limit: parseInt(limit) || DEFAULT_LIMIT,
+                            offset: parseInt(offset) || 0,
+                            imageSizes: '320x180,800x600',
+                            imageType: 'ex',
+                            showOffline: 0,
+                            onlyFreeStatus: 1,
+                            extendedDetails: 1,
+                            responseFormat: 'json',
+                            accessKey: AWE_CONFIG.API_KEY,
+                            legacyRedirect: 1,
+                            subAffId: '{SUBAFFID}'
+                        };
+
+                        // Log complete URL 
+                        const url = new URL(AWE_CONFIG.BASE_URL);
+                        Object.entries(aweParams).forEach(([key, value]) => {
+                            url.searchParams.append(key, value);
+                        });
+                        console.log(`[Orchestrator.fetchModels] Complete AWE API URL: ${url.toString()}`);
+                        
+                        // Inner try specifically for the API call and response processing
+                        try {
+                            const apiResponse = await axios.get(url.toString(), {
+                                timeout: 15000, // 15 second timeout
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'User-Agent': 'MistressWorld API Client'
+                                }
+                            });
+
+                            console.log(`[Orchestrator.fetchModels] AWE API Response status: ${apiResponse.status}`);
+                            console.log(`[Orchestrator.fetchModels] AWE API Response data (truncated):`, JSON.stringify(apiResponse.data).substring(0, 300) + '...');
+
+                            // Check for SUCCESSFUL response (status 200 and data exists)
+                            if (apiResponse.data && apiResponse.status === 200) {
+                                let responseItems = [];
+                                let total = 0;
+
+                                // --- Determine response structure --- 
+                                if (apiResponse.data?.data?.models && Array.isArray(apiResponse.data.data.models)) {
+                                    responseItems = apiResponse.data.data.models;
+                                    total = apiResponse.data.data.pagination?.total || responseItems.length;
+                                    console.log(`[Orchestrator.fetchModels] AWE Response Structure 1 detected. Items: ${responseItems.length}, Total: ${total}`);
+                                } else if (apiResponse.data.success && apiResponse.data.models && Array.isArray(apiResponse.data.models.items)) {
+                                    responseItems = apiResponse.data.models.items;
+                                    total = apiResponse.data.models.total || responseItems.length;
+                                    console.log(`[Orchestrator.fetchModels] AWE Response Structure 2 detected. Items: ${responseItems.length}, Total: ${total}`);
+                                } else if (apiResponse.data.data) {
+                                    if(Array.isArray(apiResponse.data.data)) {
+                                        responseItems = apiResponse.data.data;
+                                        total = responseItems.length;
+                                        console.log(`[Orchestrator.fetchModels] AWE Response Fallback Structure (data array) detected. Items: ${responseItems.length}`);
+                                    } else if (apiResponse.data.data.data && Array.isArray(apiResponse.data.data.data)) {
+                                        responseItems = apiResponse.data.data.data;
+                                        total = responseItems.length;
+                                        console.log(`[Orchestrator.fetchModels] AWE Response Fallback Structure (nested data array) detected. Items: ${responseItems.length}`);
+                                    } else {
+                                       console.warn(`[Orchestrator.fetchModels] Unexpected AWE response structure within success=true/status=200 block. Data:`, apiResponse.data);
+                                    }
+                                } else if (Array.isArray(apiResponse.data)) { // Direct array at root
+                                    responseItems = apiResponse.data;
+                                    total = responseItems.length;
+                                    console.log(`[Orchestrator.fetchModels] AWE Response Fallback Structure (root array) detected. Items: ${responseItems.length}`);
+                                } else {
+                                    console.warn(`[Orchestrator.fetchModels] AWE response status 200, but no recognized data structure found. Data:`, apiResponse.data);
+                                }
+                                
+                                // --- Normalization and Result Creation (INSIDE success block) --- 
+                                if (!Array.isArray(responseItems)) {
+                                    console.error(`[Orchestrator.fetchModels] responseItems became non-array after structure checks! Resetting. Value:`, responseItems, `API Response Data:`, apiResponse.data);
+                                    responseItems = []; // Reset to prevent map error
+                                    total = 0;
+                                } else if (responseItems.length === 0) {
+                                    console.warn(`[Orchestrator.fetchModels] No items extracted from successful AWE response after checking structures. Response data:`, apiResponse.data);
+                                }
+
+                                const items = responseItems.map(normalizeAWEModel);
+
+                                result = { // Assign to the outer 'result' variable
+                                    success: true,
+                                    data: {
+                                        items,
+                                        pagination: {
+                                            total,
+                                            limit,
+                                            offset,
+                                            currentPage: Math.floor(offset / limit) + 1,
+                                            totalPages: Math.ceil(total / limit),
+                                            hasMore: (offset + items.length) < total
+                                        }
+                                    }
+                                };
+                                // Successfully processed 200 response, result is set.
+
+                            } else {
+                                // --- Handle non-200 status codes from AWE API --- 
+                                const status = apiResponse?.status || 'Unknown';
+                                const errorMsg = apiResponse?.data ? JSON.stringify(apiResponse.data).substring(0, 500) : 'No response data'; // Limit log size
+                                throw new Error(`AWE API request failed with status ${status}. Response: ${errorMsg}`);
+                            }
+
+                        } catch (apiError) { // Catch errors from axios OR the processing block above
+                            // Log the specific error that occurred
+                            console.error(`[Orchestrator.fetchModels] Error processing AWE response or making request:`, apiError instanceof Error ? apiError.message : apiError);
+                            console.warn(`[Orchestrator.fetchModels] Falling back to mock data.`);
+                            const mockData = generateMockModels(ApiProviders.AWE, category, subcategory, limit, offset);
+                            result = { // Assign mock data to outer 'result'
+                                success: true, // Mock data is considered a "success" for the frontend
+                                data: {
+                                    items: mockData.items,
+                                    pagination: {
+                                        total: mockData.total,
+                                        limit,
+                                        offset,
+                                        currentPage: Math.floor(offset / limit) + 1,
+                                        totalPages: Math.ceil(mockData.total / limit),
+                                        hasMore: (offset + mockData.items.length) < mockData.total
+                                    }
+                                }
+                            };
+                        }
+                    } catch (error) {
+                        // This catch block might now be redundant if the inner one handles fallback
+                        // We'll keep it for now for safety, but it might indicate an issue setting up the request itself
+                         console.error(`[Orchestrator.fetchModels] Unexpected error during AWE provider handling (before or after API call/processing):`, error);
+                         // Fallback just in case
+                         if (!result || !result.success) { // Only fallback if result wasn't set by inner catch
+                            console.warn('[Orchestrator.fetchModels] Outer AWE error handler triggered fallback.');
+                            const mockData = generateMockModels(ApiProviders.AWE, category, subcategory, limit, offset);
+                            result = { success: true, data: { items: mockData.items, pagination: { total: mockData.total, limit, offset, /* ... */ } } };
+                         }
+                    }
+                }
+                break;
+
+            default:
+                console.warn(`[Orchestrator.fetchModels] Unsupported provider: ${providerKey}, using mock data`);
+                const { items, total } = generateMockModels(ApiProviders.AWE, category, subcategory, limit, offset);
+                result = {
+                    success: true,
+                    data: {
+                        items,
+                        pagination: {
+                            total,
+                            limit,
+                            offset,
+                            currentPage: Math.floor(offset / limit) + 1,
+                            totalPages: Math.ceil(total / limit),
+                            hasMore: (offset + items.length) < total
+                        }
+                    }
+                };
+        }
+
+        const requestTime = Date.now() - startTime;
+        console.log(`[Orchestrator.fetchModels] Response generated in ${requestTime}ms. Items: ${result?.data?.items?.length || 0}, Total: ${result?.data?.pagination?.total || 0}`);
+        
+        return result;
+    } catch (error) {
+        console.error(`[Orchestrator.fetchModels] Unexpected error in fetchModels:`, error);
+                    return {
+                        success: false, 
+            error: `Failed to fetch models: ${error.message || 'Unknown error'}`,
+            data: {
+                items: [],
+                pagination: {
+                    total: 0,
+                    limit,
+                    offset,
+                    currentPage: 1,
+                    totalPages: 0,
+                    hasMore: false
+                }
             }
         };
     }
-
-    // --- Fetch from Real API based on provider ---
-    let apiResponse;
-    let requestParams;
-    let baseUrl;
-    let normalizeFunction;
-
-    try {
-        console.log(`[Orchestrator] Provider type check: ${typeof provider}, Value: ${providerStr}, Matches FREE: ${providerStr === ApiProviders.FREE}`);
-        
-        if (providerStr === ApiProviders.FREE) {
-            console.log(`[Orchestrator] >>> ENTERING FREE PROVIDER BLOCK <<<`);
-            console.log(`[Orchestrator] Fetching real models from FreeAPI for category: ${category}, subcategory: ${subcategory}`);
-            
-            requestParams = mapParamsToFree({ category, subcategory, limit, offset, ...filters });
-            baseUrl = FREE_CONFIG.BASE_URL;
-            normalizeFunction = normalizeFreeModel;
-            
-            console.log(`[Orchestrator] FreeAPI Request URL: ${baseUrl}`);
-            console.log(`[Orchestrator] FreeAPI Request Params:`, requestParams.toString());
-            console.log(`[Orchestrator] Full Chaturbate API URL: ${baseUrl}?${requestParams.toString()}`);
-
-            // Make sure we have the required parameters
-            if (!requestParams.get('wm')) {
-                console.error(`[Orchestrator] Missing 'wm' parameter which is required for Chaturbate API!`);
-                throw new Error('Chaturbate API: Missing required wm parameter');
-            }
-            
-            if (!requestParams.get('client_ip')) {
-                console.error(`[Orchestrator] Missing 'client_ip' parameter which is required for Chaturbate API!`);
-                throw new Error('Chaturbate API: Missing required client_ip parameter');
-            }
-
-            try {
-                const startTime = Date.now();
-                
-                // Use GET request with params
-                apiResponse = await axios.get(baseUrl, { 
-                    params: requestParams,
-                    timeout: 15000,
-                    headers: {
-                        'Accept': 'application/json',
-                        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
-                    }
-                });
-                
-                const requestTime = Date.now() - startTime;
-
-                console.log(`[Orchestrator] >>> FREE API RESPONSE RECEIVED <<<`);
-                console.log(`[Orchestrator] FreeAPI Response Status: ${apiResponse.status}`);
-                console.log(`[Orchestrator] FreeAPI Response Time: ${requestTime}ms`);
-                console.log(`[Orchestrator] FreeAPI Response Data Sample:`, JSON.stringify(apiResponse.data)?.substring(0, 200) + '...');
-                
-                if (apiResponse.status !== 200 || !apiResponse.data) {
-                    throw new Error(`FreeAPI request failed with status ${apiResponse.status}`);
-                }
-            
-                console.log(`[Orchestrator] >>> NORMALIZING FREE DATA <<<`);
-                const items = (apiResponse.data.results || []).map(normalizeFunction);
-                const total = apiResponse.data.count || 0; // Use 0 if count is missing
-                console.log(`[Orchestrator] Normalized ${items.length} free models. Total from API: ${total}`);
-
-                // *** TEMPORARY WORKAROUND FOR LAYOUT DEBUGGING ***
-                // If the API returns 0 results, use mock data instead 
-                if (items.length === 0 && total === 0) {
-                    console.warn(`[Orchestrator] FreeAPI returned 0 models for wm=${FREE_CONFIG.WM}. Using mock data for layout debugging.`);
-                    const mockData = generateMockModels(provider, category, subcategory, limit, offset);
-                    const mockHasMore = (offset + mockData.items.length) < mockData.total;
-                    const mockTotalPages = Math.ceil(mockData.total / limit);
-                    const mockCurrentPage = Math.floor(offset / limit) + 1;
-                    return {
-                        success: true, // Report success even though it's mock
-                        data: {
-                            items: mockData.items,
-                            pagination: { total: mockData.total, limit, offset, currentPage: mockCurrentPage, totalPages: mockTotalPages, hasMore: mockHasMore }
-                        }
-                    };
-                }
-                // *** END TEMPORARY WORKAROUND ***
-
-                // Original logic for when API returns data
-                const hasMore = (offset + items.length) < total;
-                const totalPages = Math.ceil(total / limit);
-                const currentPage = Math.floor(offset / limit) + 1;
-
-                return {
-                    success: true,
-                    data: {
-                        items,
-                        pagination: { total, limit, offset, currentPage, totalPages, hasMore }
-                    }
-                };
-            } catch (error) {
-                // Handle error based on which provider was being used
-                console.error(`[Orchestrator] Error fetching from FreeAPI:`, error.message);
-                
-                let errorMessage = `Failed to fetch models from FreeAPI.`;
-                if (error.response) {
-                    errorMessage = `FreeAPI Error: ${error.response.status} - ${JSON.stringify(error.response.data)}`;
-                } else if (error.request) {
-                    errorMessage = `No response received from FreeAPI.`;
-                } else if (error.code === 'ECONNABORTED') {
-                    errorMessage = `FreeAPI request timed out.`;
-                }
-                
-                const useFallback = process.env.NODE_ENV !== 'production'; 
-                if (useFallback) {
-                    console.warn(`[Orchestrator] FreeAPI fetch failed. Returning mock fallback data.`);
-                    const { items, total } = generateMockModels(provider, category, subcategory, limit, offset);
-                    const hasMore = (offset + items.length) < total;
-                    const totalPages = Math.ceil(total / limit);
-                    const currentPage = Math.floor(offset / limit) + 1;
-                    return {
-                        success: false, 
-                        error: errorMessage + ' (Using fallback data)',
-                        data: { items, pagination: { total, limit, offset, currentPage, totalPages, hasMore } }
-                    };
-                } else {
-                    return {
-                        success: false,
-                        error: errorMessage,
-                        data: { items: [], pagination: { total: 0, limit, offset, currentPage: 1, totalPages: 0, hasMore: false } }
-                    };
-                }
-            }
-        } else { // AWE provider
-            console.log(`[Orchestrator] Fetching real models from AWE for category: ${category}, subcategory: ${subcategory}`);
-            
-            try {
-                requestParams = mapParamsToAWE({ category, subcategory, limit, offset, filters });
-                
-                // Log the complete AWE API request parameters for debugging
-                console.log(`[Orchestrator] AWE API request parameters:`, JSON.stringify(requestParams, null, 2));
-                
-                baseUrl = AWE_CONFIG.BASE_URL;
-                normalizeFunction = normalizeAWEModel;
-                
-                console.log(`[Orchestrator] Making AWE API call to: ${baseUrl}`);
-                apiResponse = await axios.get(baseUrl, { 
-                    params: requestParams, 
-                    timeout: 15000 
-                });
-                
-                // --- Log the raw AWE API Response ---
-                console.log(`[Orchestrator] Raw AWE Response Status: ${apiResponse.status}`);
-                // Log only a snippet of the data to avoid huge logs, or log presence/absence
-                if (apiResponse.data) {
-                    console.log(`[Orchestrator] Raw AWE Response Data Keys: ${Object.keys(apiResponse.data)}`);
-                }
-                // --- End Log ---
-
-                // Check if the API returned valid data
-                if (apiResponse.status !== 200 || !apiResponse.data) {
-                    throw new Error(`AWE request failed with status ${apiResponse.status} or missing data structure`);
-                }
-                
-                // Handle both older data structure (results array) and newer nested structure (data.models array)
-                let models = [];
-                let pagination = {};
-                
-                if (apiResponse.data.results && Array.isArray(apiResponse.data.results)) {
-                    // Old structure with results array at the top level
-                    console.log(`[Orchestrator] Using old AWE API response structure with results array`);
-                    models = apiResponse.data.results;
-                    pagination = {
-                        total: apiResponse.data.count || models.length,
-                        limit: limit,
-                        offset: offset
-                    };
-                } else if (apiResponse.data.data && apiResponse.data.data.models && Array.isArray(apiResponse.data.data.models)) {
-                    // New structure with nested data.models array
-                    console.log(`[Orchestrator] Using new AWE API response structure with nested data.models array`);
-                    models = apiResponse.data.data.models;
-                    pagination = apiResponse.data.data.pagination || {
-                        total: models.length,
-                        limit: limit,
-                        offset: offset
-                    };
-                } else {
-                    // Neither structure found - force use any arrays we can find
-                    console.warn(`[Orchestrator] Unknown AWE API response structure - attempting to find any model array`);
-                    if (Array.isArray(apiResponse.data)) {
-                        models = apiResponse.data;
-                    } else {
-                        // Look for any array property that might contain models
-                        for (const key in apiResponse.data) {
-                            if (Array.isArray(apiResponse.data[key])) {
-                                models = apiResponse.data[key];
-                                console.log(`[Orchestrator] Found potential models array in property: ${key}`);
-                                break;
-                            }
-                        }
-                    }
-                    pagination = {
-                        total: models.length,
-                        limit: limit,
-                        offset: offset
-                    };
-                }
-                
-                if (models.length === 0) {
-                    console.warn(`[Orchestrator] AWE API returned 0 models - check API response structure`);
-                    console.log(`[Orchestrator] Response data:`, JSON.stringify(apiResponse.data).substring(0, 500));
-                }
-                
-                const items = models.map(normalizeFunction);
-                
-                // Use count from response if available and valid, otherwise use items length
-                const total = (typeof pagination.total === 'number') ? pagination.total : items.length; 
-                console.log(`[Orchestrator] Calculated Total: ${total} (items count: ${items.length})`);
-                
-                // Use other pagination details if available
-                const limitFromPagination = (typeof pagination.limit === 'number') ? pagination.limit : limit;
-                const offsetFromPagination = (typeof pagination.offset === 'number') ? pagination.offset : offset;
-
-                // AWE doesn't give total. Assume hasMore if we received a full page.
-                const hasMore = items.length === limitFromPagination;
-                console.log(`[Orchestrator] Calculated hasMore: ${hasMore} (items.length: ${items.length}, limit: ${limitFromPagination})`);
-                
-                const totalPages = limitFromPagination > 0 ? Math.ceil(total / limitFromPagination) : 0;
-                const currentPage = limitFromPagination > 0 ? Math.floor(offsetFromPagination / limitFromPagination) + 1 : 1;
-
-                return {
-                    success: true,
-                    data: {
-                        items,
-                        pagination: { total, limit: limitFromPagination, offset: offsetFromPagination, currentPage, totalPages, hasMore }
-                    }
-                };
-            } catch (error) {
-                // Handle error for AWE provider
-                console.error(`[Orchestrator] Error fetching from AWE:`, error.message);
-                
-                let errorMessage = `Failed to fetch models from AWE.`;
-                if (error.response) {
-                    errorMessage = `AWE Error: ${error.response.status} - ${JSON.stringify(error.response.data)}`;
-                } else if (error.request) {
-                    errorMessage = `No response received from AWE.`;
-                } else if (error.code === 'ECONNABORTED') {
-                    errorMessage = `AWE request timed out.`;
-                }
-                
-                const useFallback = process.env.NODE_ENV !== 'production'; 
-                if (useFallback) {
-                    console.warn(`[Orchestrator] AWE fetch failed. Returning mock fallback data.`);
-                    const { items, total } = generateMockModels(provider, category, subcategory, limit, offset);
-                    const hasMore = (offset + items.length) < total;
-                    const totalPages = Math.ceil(total / limit);
-                    const currentPage = Math.floor(offset / limit) + 1;
-                    return {
-                        success: false, 
-                        error: errorMessage + ' (Using fallback data)',
-                        data: { items, pagination: { total, limit, offset, currentPage, totalPages, hasMore } }
-                    };
-                } else {
-                    return {
-                        success: false,
-                        error: errorMessage,
-                        data: { items: [], pagination: { total: 0, limit, offset, currentPage: 1, totalPages: 0, hasMore: false } }
-                    };
-                }
-            }
-        }
-    } catch (error) {
-        // Handle general errors not caught by the specific provider sections
-        console.error(`[Orchestrator] General error in fetchModels:`, error.message);
-        
-        let errorMessage = `Failed to fetch models.`;
-        if (error.response) {
-            errorMessage = `API Error: ${error.response.status} - ${JSON.stringify(error.response.data)}`;
-        } else if (error.request) {
-            errorMessage = `No response received from API.`;
-        } else if (error.code === 'ECONNABORTED') {
-            errorMessage = `API request timed out.`;
-        }
-        
-        const useFallback = process.env.NODE_ENV !== 'production'; 
-        if (useFallback) {
-            console.warn(`[Orchestrator] API fetch failed. Returning mock fallback data.`);
-            const { items, total } = generateMockModels(provider, category, subcategory, limit, offset);
-            const hasMore = (offset + items.length) < total;
-            const totalPages = Math.ceil(total / limit);
-            const currentPage = Math.floor(offset / limit) + 1;
-            return {
-                success: false, 
-                error: errorMessage + ' (Using fallback data)',
-                data: { items, pagination: { total, limit, offset, currentPage, totalPages, hasMore } }
-            };
-        } else {
-            return {
-                success: false,
-                error: errorMessage,
-                data: { items: [], pagination: { total: 0, limit, offset, currentPage: 1, totalPages: 0, hasMore: false } }
-            };
-        }
-    }
 };
+
+// Helper function to determine sexual orientation from category
+function getSexOrientationFromCategory(category) {
+    const lowerCategory = (category || '').toLowerCase();
+    
+    if (lowerCategory.includes('trans') || lowerCategory.includes('tranny') || lowerCategory.includes('shemale')) {
+        return VPAPI_CONFIG.SEX_ORIENTATION.TRANS;
+    } else if (lowerCategory.includes('gay') || lowerCategory.includes('male')) {
+        return VPAPI_CONFIG.SEX_ORIENTATION.GAY;
+        } else {
+        return VPAPI_CONFIG.SEX_ORIENTATION.DEFAULT; // straight
+    }
+}
 
 // Fetch Categories Function
 const generateMockCategories = () => {

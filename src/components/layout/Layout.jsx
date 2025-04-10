@@ -1,20 +1,20 @@
 import React from 'react';
-// Import the actual existing layout file
-import LegacyLayout from '@/theme/layouts/AppLayout'; 
+// Import the correct layout file
+import ThemeLayout from '@/theme/layouts/ThemeLayout'; 
 
 /**
  * Main Layout Component
  * 
  * Wraps the page content with the standard application layout,
  * which includes header, sidebar, footer, etc.
- * Currently uses LegacyLayout component which contains the main structure.
+ * Uses the ThemeLayout component for the structure.
  */
 const Layout = ({ children, ...props }) => {
-  // Use LegacyLayout for consistent structure
+  // Use ThemeLayout for consistent structure
   return (
-    <LegacyLayout {...props}>
+    <ThemeLayout {...props}>
       {children}
-    </LegacyLayout>
+    </ThemeLayout>
   );
 };
 

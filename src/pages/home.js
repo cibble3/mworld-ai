@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import ThemeLayout from '@/theme/layouts/ThemeLayout';
 import ModelGrid from '@/theme/components/grid/ModelGrid';
 import ModelCard from '@/theme/components/common/ModelCard';
 import Link from 'next/link';
@@ -52,7 +51,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <ThemeLayout title="MistressWorld - Live Webcam Models">
+    <>
       <div className="container mx-auto px-4 py-8">
         <section className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">Welcome to MistressWorld</h1>
@@ -112,7 +111,7 @@ const HomePage = () => {
           )}
         </section>
       </div>
-    </ThemeLayout>
+    </>
   );
 };
 

@@ -6,6 +6,29 @@
  */
 
 import * as orchestrator from '@/services/orchestrator';
+import { Redis } from '@upstash/redis';
+
+// Initialize Redis client if UPSTASH_REDIS_URL is available
+let redis = null;
+try {
+  if (process.env.UPSTASH_REDIS_URL && process.env.UPSTASH_REDIS_TOKEN) {
+    redis = new Redis({
+      url: process.env.UPSTASH_REDIS_URL,
+      token: process.env.UPSTASH_REDIS_TOKEN,
+    });
+    console.log('[API /videos] Redis client initialized.');
+  } else {
+    console.log('[API /videos] Redis not configured. Cache disabled.');
+  }
+} catch (error) {
+  console.warn('[API /videos] Redis initialization failed:', error.message);
+}
+
+// Cache configuration
+const CACHE_CONFIG = {
+  TTL: process.env.VIDEO_CACHE_TTL ? parseInt(process.env.VIDEO_CACHE_TTL) : 300, // 5 minutes cache TTL by default
+  ENABLED: redis !== null,
+};
 
 export default async function handler(req, res) {
   // Only allow GET requests
@@ -22,11 +45,11 @@ export default async function handler(req, res) {
     const {
       category = 'popular', // Default category if none provided
       subcategory,
-      model, // Assuming 'model' might mean performer/creator for videos?
+      model, // Model/performer ID
       limit = 24,
       offset = 0,
       sort = 'popular', // Default sort order
-      useMock: shouldUseMock = false // Allow explicit mock request, default to false
+      ...otherParams // Any other parameters to pass to the orchestrator
     } = req.query;
 
     const parsedLimit = parseInt(limit);
@@ -37,8 +60,38 @@ export default async function handler(req, res) {
     
     console.log(`[API /videos] [${requestId}] Received request: category=${category}, subcategory=${subcategory}, limit=${parsedLimit}, offset=${parsedOffset}, sort=${sort}`);
 
-    // IMPORTANT: Force useMock to false to ensure we always get real data
-    // Call the orchestrator to fetch videos from VPAPI
+    // Generate cache key
+    const queryKey = JSON.stringify({ 
+      category, 
+      subcategory, 
+      model, 
+      limit: parsedLimit, 
+      offset: parsedOffset, 
+      sort,
+      ...otherParams 
+    });
+    const cacheKey = `videos:${queryKey}`;
+
+    // Try to get from cache first
+    if (CACHE_CONFIG.ENABLED) {
+      try {
+        console.log(`[API /videos] [${requestId}] Attempting cache fetch for key: ${cacheKey}`);
+        const cached = await redis.get(cacheKey);
+        if (cached) {
+          console.log(`[API /videos] [${requestId}] Cache hit!`);
+          res.setHeader('Content-Type', 'application/json');
+          res.setHeader('X-Cache', 'HIT');
+          return res.status(200).json(JSON.parse(cached));
+        } else {
+          console.log(`[API /videos] [${requestId}] Cache miss.`);
+        }
+      } catch (error) {
+        console.warn(`[API /videos] [${requestId}] Redis cache get failed:`, error.message);
+        // Continue without using cache
+      }
+    }
+    
+    // Call the orchestrator to fetch videos
     const videoData = await orchestrator.fetchVideos({
       category,
       subcategory,
@@ -46,38 +99,35 @@ export default async function handler(req, res) {
       limit: parsedLimit,
       offset: parsedOffset,
       sort,
-      useMock: false, // Force to false to ensure we get real data
       fallbackOnError: true, // Allow using fallback data on error
-      requestId // Pass the request ID to help with tracing
+      requestId, // Pass the request ID to help with tracing
+      ...otherParams // Pass any additional parameters
     });
-
-    // Return the response from the orchestrator
-    if (videoData.success) {
-      console.log(`[API /videos] [${requestId}] Success: Returning ${videoData.data?.items?.length || 0} videos.`);
       
-      // Ensure the response format matches what useModelFeed expects (videos array)
-      // Create a stable response without unnecessary data that might cause React to re-render
-      const videos = (videoData.data.items || []).map(video => ({
-        ...video,
-        // If we had a timestamp or anything in the video that constantly changes, 
-        // we would make it stable here by removing it
-      }));
-      
-      return res.status(200).json({
-          success: true,
+    // Format the response in a consistent way for the frontend
+    const formattedResponse = {
+      success: videoData.success,
+      error: videoData.error,
           data: {
-              videos,
-              pagination: videoData.data.pagination || {}
-          }
-      });
-    } else {
-      console.error(`[API /videos] [${requestId}] Error from orchestrator: ${videoData.error}`);
-      return res.status(500).json({
-          success: false,
-          error: videoData.error || 'Failed to fetch videos from orchestrator',
-          data: {
-              videos: [],
-              pagination: {
+        videos: (videoData.data?.items || []).map(video => ({
+          id: video.id,
+          title: video.title,
+          description: video.description || '',
+          thumbnail: video.thumbnail,
+          preview: video.preview || video.thumbnail,
+          duration: video.duration || 0,
+          tags: video.tags || [],
+          createdAt: video.createdAt || new Date().toISOString(),
+          url: video.url || '',
+          embeddedUrl: video.embeddedUrl || video.url || '',
+          performerId: video.performerId || video.modelId || '',
+          performerName: video.performerName || video.modelName || 'Unknown',
+          category: category || 'popular',
+          viewCount: video.viewCount || 0,
+          likeCount: video.likeCount || 0,
+          _provider: orchestrator.ApiProviders.VPAPI
+        })),
+        pagination: videoData.data?.pagination || {
                   total: 0,
                   limit: parsedLimit,
                   offset: parsedOffset,
@@ -86,7 +136,31 @@ export default async function handler(req, res) {
                   hasMore: false
               }
           }
-      });
+    };
+
+    // Cache successful responses
+    if (videoData.success && CACHE_CONFIG.ENABLED) {
+      try {
+        console.log(`[API /videos] [${requestId}] Setting cache for key: ${cacheKey} with TTL: ${CACHE_CONFIG.TTL}s`);
+        await redis.set(cacheKey, JSON.stringify(formattedResponse), {
+          ex: CACHE_CONFIG.TTL
+        });
+      } catch (error) {
+        console.warn(`[API /videos] [${requestId}] Redis cache set failed:`, error.message);
+        // Continue without caching
+      }
+    }
+
+    // Return the response
+    if (videoData.success) {
+      console.log(`[API /videos] [${requestId}] Success: Returning ${formattedResponse.data?.videos?.length || 0} videos.`);
+      
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('X-Cache', 'MISS');
+      return res.status(200).json(formattedResponse);
+    } else {
+      console.error(`[API /videos] [${requestId}] Error from orchestrator: ${videoData.error}`);
+      return res.status(500).json(formattedResponse);
     }
 
   } catch (error) {

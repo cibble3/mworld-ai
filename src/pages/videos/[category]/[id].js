@@ -82,14 +82,14 @@ const VideoPlayer = ({ video }) => {
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    if (!container || !video) return;
 
     // Clear previous content
     container.innerHTML = '';
-    console.log('video.playerEmbedUrl :>> ', video.playerEmbedUrl);
+    
     // If we have playerEmbedUrl from VPAPI
     if (video.playerEmbedUrl) {
-      if (video.playerEmbedUrl.includes('{CONTAINER}')) {
+      if (typeof video.playerEmbedUrl === 'string' && video.playerEmbedUrl.includes('{CONTAINER}')) {
         // Replace {CONTAINER} placeholder with our container ID
         const embedUrl = video.playerEmbedUrl.replace('{CONTAINER}', container.id);
 
@@ -104,7 +104,7 @@ const VideoPlayer = ({ video }) => {
     }
     // If we have playerEmbedScript from VPAPI
     else if (video.playerEmbedScript) {
-      if (video.playerEmbedScript.includes('{CONTAINER}')) {
+      if (typeof video.playerEmbedScript === 'string' && video.playerEmbedScript.includes('{CONTAINER}')) {
         // Replace {CONTAINER} placeholder with our container ID
         const scriptContent = video.playerEmbedScript.replace(/{CONTAINER}/g, container.id);
 
@@ -117,7 +117,9 @@ const VideoPlayer = ({ video }) => {
         }
       } else {
         // For regular iframe HTML
-        container.innerHTML = video.playerEmbedScript;
+        container.innerHTML = typeof video.playerEmbedScript === 'string' ? 
+          video.playerEmbedScript : 
+          '<div class="bg-black w-full h-full flex items-center justify-center text-white">Video unavailable</div>';
       }
     }
   }, [video]);
@@ -540,3 +542,27 @@ const VideoDetailPage = () => {
 };
 
 export default VideoDetailPage; 
+
+// Add getStaticPaths to control which pages will be pre-rendered at build time
+export async function getStaticPaths() {
+  // Instead of trying to pre-render all possible video pages, 
+  // we'll defer this to runtime with fallback: blocking
+  return {
+    paths: [], // No pre-rendered paths
+    fallback: 'blocking' // Generate pages on-demand
+  };
+}
+
+// Add getStaticProps to fetch data at build time or on-demand
+export async function getStaticProps({ params }) {
+  // We can't actually pre-render this content since it depends on dynamic API calls
+  // Returning props with null data, which will be fetched client-side
+  return {
+    props: { 
+      video: null,
+      relatedVideos: []
+    },
+    // Revalidate every hour
+    revalidate: 3600
+  };
+} 

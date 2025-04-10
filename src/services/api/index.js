@@ -48,107 +48,99 @@ export const ContentTypes = {
 };
 
 /**
- * Fetch models with consistent interface across providers
- * 
- * @param {Object} params - Query parameters
- * @param {string} params.provider - API provider (awe, vpapi, free)
- * @param {string} params.category - Category (asian, ebony, latina, etc.)
- * @param {string} params.subcategory - Subcategory if applicable
- * @param {number} params.limit - Number of results to return
- * @param {number} params.offset - Pagination offset
- * @param {string} params.sort - Sort order
- * @param {boolean} params.skipCache - Whether to skip cache
- * @returns {Promise<Object>} - Normalized response with models and pagination
+ * Unified API client for all endpoints
+ * This centralizes all API calls and provides a consistent interface
  */
-export async function fetchModels(params = {}) {
-  try {
-    const { 
-      provider = ApiProviders.AWE, 
-      category, 
-      subcategory,
-      limit = 50,
-      offset = 0,
-      sort = 'featured',
-      skipCache = false
-    } = params;
+export const api = {
+  /**
+   * Fetch models from any provider
+   * @param {Object} params - Query parameters
+   * @param {string} params.provider - Provider type (awe, free)
+   * @param {string} params.category - Model category
+   * @param {string} params.subcategory - Model subcategory
+   * @param {number} params.limit - Number of models to return
+   * @param {number} params.offset - Pagination offset
+   * @param {Object} params.filters - Additional filters
+   * @returns {Promise<Object>} - API response
+   */
+  models: async (params = {}) => {
+    const { provider = ApiProviders.AWE, ...otherParams } = params;
     
-    console.log(`[API service] fetchModels called with provider: ${provider}`);
+    // Determine the correct endpoint based on provider
+    const endpoint = provider.toLowerCase() === ApiProviders.FREE 
+      ? API_URLS[ApiProviders.FREE]
+      : API_URLS[ApiProviders.AWE];
     
-    // Normalize provider to string
-    const providerStr = String(provider).toLowerCase();
+    console.log(`[API Client] Fetching models from ${endpoint} with provider=${provider}`);
     
-    // Build query parameters differently based on provider
-    let endpoint, queryParams;
-    
-    if (providerStr === ApiProviders.FREE) {
-      // For FREE provider, use the dedicated free-models endpoint
-      queryParams = new URLSearchParams({
-        category: category || '',
-        subcategory: subcategory || '',
-        limit,
-        offset,
-        sort,
-        _timestamp: Date.now() // Cache busting
-      }).toString();
-      
-      endpoint = `/api/free-models?${queryParams}`;
-      console.log(`[API service] Using FREE provider endpoint: ${endpoint}`);
-    } 
-    else if (providerStr === ApiProviders.VPAPI) {
-      // For VPAPI provider, use the videos endpoint
-      queryParams = new URLSearchParams({
-        category: category || '',
-        subcategory: subcategory || '',
-        limit,
-        offset,
-        sort,
-        skipCache: skipCache ? '1' : '0',
-        _timestamp: Date.now()
-      }).toString();
-      
-      endpoint = `/api/videos?${queryParams}`;
-      console.log(`[API service] Using VPAPI provider endpoint: ${endpoint}`);
-    }
-    else {
-      // Default AWE provider
-      queryParams = new URLSearchParams({
-        provider: 'awe', // Ensure provider is explicitly set to AWE
-        category: category || '',
-        subcategory: subcategory || '',
-        limit,
-        offset,
-        sort,
-        skipCache: skipCache ? '1' : '0',
-        _timestamp: Date.now()
-      }).toString();
-      
-      endpoint = `/api/models?${queryParams}`;
-      console.log(`[API service] Using AWE provider endpoint: ${endpoint}`);
-    }
-    
-    // Make the API request
-    console.log(`[API service] Making request to: ${endpoint}`);
-    const response = await axios.get(endpoint);
-    
-    return response.data;
-  } catch (error) {
-    console.error('[API service] Error fetching models:', error);
-    return {
-      success: false,
-      error: error.message,
-      data: {
-        models: [],
-        pagination: {
-          total: 0,
-          offset: parseInt(params.offset || 0),
-          limit: parseInt(params.limit || 50),
-          pages: 0,
-          currentPage: 1
+    try {
+      const response = await axios.get(endpoint, {
+        params: {
+          ...otherParams,
+          provider,
+          _timestamp: Date.now() // Cache busting
         }
-      }
-    };
+      });
+      
+      return response.data;
+    } catch (error) {
+      console.error(`[API Client] Error fetching models:`, error.message);
+      throw error;
+    }
+  },
+  
+  /**
+   * Fetch videos from any provider
+   * @param {Object} params - Query parameters
+   * @param {string} params.category - Video category
+   * @param {string} params.subcategory - Video subcategory
+   * @param {string} params.model - Model ID or name
+   * @param {number} params.limit - Number of videos to return
+   * @param {number} params.offset - Pagination offset
+   * @param {Object} params.filters - Additional filters
+   * @returns {Promise<Object>} - API response
+   */
+  videos: async (params = {}) => {
+    console.log(`[API Client] Fetching videos with params:`, params);
+    
+    try {
+      const response = await axios.get(API_URLS[ApiProviders.VPAPI], {
+        params: {
+          ...params,
+          _timestamp: Date.now() // Cache busting
+        }
+      });
+      
+      return response.data;
+    } catch (error) {
+      console.error(`[API Client] Error fetching videos:`, error.message);
+      throw error;
+    }
+  },
+  
+  /**
+   * Fetch categories
+   * @param {Object} params - Query parameters
+   * @returns {Promise<Object>} - API response
+   */
+  categories: async (params = {}) => {
+    console.log(`[API Client] Fetching categories with params:`, params);
+    
+    try {
+      const response = await axios.get('/api/categories', {
+        params: {
+          ...params,
+          _timestamp: Date.now() // Cache busting
+        }
+      });
+      
+      return response.data;
+    } catch (error) {
+      console.error(`[API Client] Error fetching categories:`, error.message);
+      throw error;
+    }
   }
-}
+};
 
 /**
  * Fetch content (blog posts, pages, etc.)
@@ -183,43 +175,6 @@ export async function fetchContent(params = {}) {
       success: false,
       error: error.message,
       data: null
-    };
-  }
-}
-
-/**
- * Fetch categories with consistent interface
- * 
- * @param {Object} params - Query parameters
- * @param {string} params.category - Main category
- * @param {string} params.subcategory - Subcategory
- * @returns {Promise<Object>} - Normalized response with category data
- */
-export async function fetchCategories(params = {}) {
-  try {
-    const { 
-      category,
-      subcategory
-    } = params;
-    
-    // Build query parameters
-    const queryParams = new URLSearchParams({
-      category: category || '',
-      subcategory: subcategory || '',
-      _timestamp: Date.now() // Cache busting
-    }).toString();
-    
-    const response = await axios.get(`/api/categories?${queryParams}`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-    return {
-      success: false,
-      error: error.message,
-      data: {
-        categories: [],
-        subcategories: []
-      }
     };
   }
 }
@@ -266,13 +221,4 @@ function createSlug(text) {
     .replace(/^-+|-+$/g, '');
 }
 
-export default {
-  fetchModels,
-  fetchContent,
-  fetchCategories,
-  standardizeModelData,
-  ApiProviders,
-  ContentTypes,
-  API_URLS,
-  ensureAbsoluteUrl
-}; 
+export default api; 

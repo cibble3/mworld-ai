@@ -1,24 +1,29 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { siteConfig } from '@/theme/theme.config';
 
+/**
+ * Meta - Component for handling SEO metadata and tags
+ * Uses the centralized site configuration from theme.config.js
+ */
 const Meta = ({ 
   title, 
   description, 
   keywords,
-  ogImage = '/images/og-default.jpg',
+  ogImage = siteConfig.defaultImage,
   ogType = 'website',
   canonical,
   noindex = false,
   children 
 }) => {
   const router = useRouter();
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://mistressworld.com';
+  const siteUrl = siteConfig.url;
   const currentUrl = `${siteUrl}${router.asPath}`;
   const canonicalUrl = canonical || currentUrl;
 
   // Default meta values
-  const metaTitle = title ? `${title} | MistressWorld` : 'MistressWorld - Live Cam Models';
-  const metaDesc = description || 'Watch live cam models perform on MistressWorld. Join now for the best live cam experience.';
+  const metaTitle = title ? `${title} | ${siteConfig.name}` : siteConfig.defaultTitle;
+  const metaDesc = description || siteConfig.description;
   const metaKeywords = keywords || 'live cams, cam models, webcam models, live chat';
 
   return (
@@ -35,14 +40,17 @@ const Meta = ({
       <meta property="og:description" content={metaDesc} />
       <meta property="og:type" content={ogType} />
       <meta property="og:url" content={currentUrl} />
-      <meta property="og:image" content={`${siteUrl}${ogImage}`} />
-      <meta property="og:site_name" content="MistressWorld" />
+      <meta property="og:image" content={`${siteUrl}${ogImage.startsWith('/') ? ogImage : `/${ogImage}`}`} />
+      <meta property="og:site_name" content={siteConfig.name} />
       
       {/* Twitter Card */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={metaTitle} />
       <meta name="twitter:description" content={metaDesc} />
-      <meta name="twitter:image" content={`${siteUrl}${ogImage}`} />
+      <meta name="twitter:image" content={`${siteUrl}${ogImage.startsWith('/') ? ogImage : `/${ogImage}`}`} />
+      {siteConfig.socials.twitter && (
+        <meta name="twitter:site" content={siteConfig.socials.twitter} />
+      )}
       
       {/* Mobile Viewport */}
       <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />

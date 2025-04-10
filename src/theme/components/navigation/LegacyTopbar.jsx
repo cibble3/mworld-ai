@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { THEMES, useTheme } from '@/context/ThemeContext';
-import { themes } from '@/theme/config';
 import Container from '../grid/Container';
 import useCategories from '@/hooks/useCategories';
 import { capitalizeString, slugify } from '@/utils/string-helpers';
@@ -25,24 +24,29 @@ const formatFilterName = (name) => {
   return capitalizeString(name.replace(/_/g, ' '));
 };
 
-const LegacyTopbar = () => {
-  const { theme, setTheme, availableThemes } = useTheme();
-  console.log('theme :>> ', theme);
+const LegacyTopbar = ({ 
+  logoOnly = false, 
+  hideSearch = false,
+  isMobileMenuOpen = false,
+  toggleMobileMenu = () => {} 
+}) => {
+  const { theme, themeConfig, setTheme, toggleTheme } = useTheme();
   const router = useRouter();
   const { categories, isLoading, isError } = useCategories();
 
   const currentPathSegments = router.asPath.split('/').filter(Boolean);
   const currentMainCategorySlug = currentPathSegments[0];
 
-  const defaultThemeKey = Object.keys(themes)[0];
-  const currentThemeKey = availableThemes.includes(theme) ? theme : defaultThemeKey;
-  const currentTheme = themes[currentThemeKey];
+  const currentTheme = themeConfig.palette;
+  const currentNavTheme = themeConfig.navigation || {};
 
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
-
-  const [isOpen, setIsOpen] = React.useState(false);
   const [openCategory, setOpenCategory] = useState(null);
+
+  // Use provided mobile menu state and toggle function
+  const isOpen = isMobileMenuOpen;
+  const toggleDrawer = toggleMobileMenu;
 
   const getIcon = (slug) => {
     switch (slug) {
@@ -63,28 +67,31 @@ const LegacyTopbar = () => {
     setOpenCategory(openCategory === slug ? null : slug);
   };
 
-  const toggleDrawer = () => {
-    setIsOpen((prevState) => !prevState);
-  };
+  // Close categories when mobile menu closes
+  useEffect(() => {
+    if (!isOpen) {
+      setOpenCategory(null);
+    }
+  }, [isOpen]);
 
   if (!currentTheme) {
-    console.error(`Theme not found for key: ${currentThemeKey} in LegacyTopbar. No themes available?`);
+    console.error(`Theme config not found in LegacyTopbar.`);
     return <nav className="fixed top-0 left-0 w-full h-16 z-20 shadow-md bg-gray-900 animate-pulse"></nav>;
   }
 
   const navStyle = {
-    backgroundColor: currentTheme.navigation?.topbar || currentTheme.secondary || '#1a1a1a',
+    backgroundColor: currentNavTheme.topbar || currentTheme.background?.dark || currentTheme.secondary || '#1a1a1a',
     borderBottom: `1px solid ${currentTheme.border || '#333'}`,
     color: currentTheme.text?.primary || '#ffffff',
   };
   const buttonStyle = {
-    backgroundColor: currentTheme.button?.secondary || '#333'
+    backgroundColor: currentTheme.button?.secondary || currentTheme.background?.card || '#333'
   };
   const primaryButtonStyle = {
     backgroundColor: currentTheme.button?.primary || '#e0006c'
   };
   const dropdownStyle = {
-    backgroundColor: currentTheme.secondary || '#222',
+    backgroundColor: currentTheme.background?.card || currentTheme.secondary || '#222',
     borderColor: currentTheme.border || '#333',
     color: currentTheme.text?.secondary || '#ccc',
   };
@@ -172,20 +179,20 @@ const LegacyTopbar = () => {
                                   {formatFilterName(filter.name)}
                                 </span>
                                 <div className="grid grid-cols-2 gap-2 px-4 py-2">
-                                  {filter.options.map((option) => {
-                                    const filterSlug = slugify(filter.type);
-                                    const optionSlug = slugify(option);
-                                    const href = `/${cat.slug}/${filterSlug}/${optionSlug}`;
-                                    const isFilterActive = router.asPath.includes(href);
+                                  {filter.optionsWithUrls?.map((option) => {
+                                    const isFilterActive = router.asPath.includes(option.url);
                                     return (
                                       <Link
-                                        key={optionSlug}
-                                        href={href}
+                                        key={option.name}
+                                        href={option.url}
                                         className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${isFilterActive
                                           ? 'bg-primary/20 text-primary ring-1 ring-primary/30 shadow-sm hover:bg-primary/30'
                                           : 'bg-gray-800/30 text-gray-300 hover:bg-gray-700/50 hover:text-white ring-1 ring-gray-700/50'
                                           }`}
-                                        onClick={() => setOpenCategory(null)}
+                                        onClick={() => {
+                                          setOpenCategory(null);
+                                          toggleDrawer();
+                                        }}
                                       >
                                         <span className="flex items-center gap-1.5">
                                           {isFilterActive && (
@@ -193,7 +200,7 @@ const LegacyTopbar = () => {
                                               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                             </svg>
                                           )}
-                                          {capitalizeString(option)}
+                                          {capitalizeString(option.displayName)}
                                         </span>
                                       </Link>
                                     );
@@ -292,21 +299,21 @@ const LegacyTopbar = () => {
                                         {formatFilterName(filter.name)}
                                       </span>
                                       <div className="grid grid-cols-2 gap-2 px-3 py-2">
-                                        {filter.options.map((option) => {
-                                          const filterSlug = slugify(filter.type);
-                                          const optionSlug = slugify(option);
-                                          const href = `/${cat.slug}/${filterSlug}/${optionSlug}`;
-                                          const isFilterActive = router.asPath.includes(href);
+                                        {filter.optionsWithUrls?.map((option) => {
+                                          const isFilterActive = router.asPath.includes(option.url);
 
                                           return (
                                             <Link
-                                              key={optionSlug}
-                                              href={href}
+                                              key={option.name}
+                                              href={option.url}
                                               className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${isFilterActive
                                                 ? 'bg-primary/20 text-primary ring-1 ring-primary/30 shadow-sm hover:bg-primary/30'
                                                 : 'bg-gray-800/30 text-gray-300 hover:bg-gray-700/50 hover:text-white ring-1 ring-gray-700/50'
                                                 }`}
-                                              onClick={() => setOpenCategory(null)}
+                                              onClick={() => {
+                                                setOpenCategory(null);
+                                                toggleDrawer();
+                                              }}
                                             >
                                               <span className="flex items-center gap-1.5">
                                                 {isFilterActive && (
@@ -314,7 +321,7 @@ const LegacyTopbar = () => {
                                                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                   </svg>
                                                 )}
-                                                {capitalizeString(option)}
+                                                {capitalizeString(option.displayName)}
                                               </span>
                                             </Link>
                                           );
@@ -358,21 +365,6 @@ const LegacyTopbar = () => {
                 </div>
               </div>
             </Drawer>
-
-            {/* Theme Dropdown */}
-            {/* <div className="p-3 text-white">
-              <select
-                value={theme}
-                onChange={(e) => setTheme(THEMES[e.target.value.toUpperCase()])}
-                className="text-sm  p-1.5 rounded bg-primary"
-              >
-                {availableThemes.map((t) => (
-                  <option key={t} value={t.toLowerCase()}>
-                    {t}
-                  </option>
-                ))}
-              </select>
-            </div> */}
 
             {/* Language Selector */}
             <div className="relative">

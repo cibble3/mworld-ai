@@ -1,14 +1,9 @@
 import { useRouter } from "next/router";
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import HeadMeta from '@/components/HeadMeta';
-import CookiesModal from '@/components/CookiesModal/CookiesModal';
-import DynamicSidebar from '@/components/navigation/DynamicSidebar';
+import ThemeLayout from '@/theme/layouts/ThemeLayout';
 import VideoGrid from '@/theme/components/grid/VideoGrid';
 import VideoCard from '@/theme/components/common/VideoCard';
-import { getCategoryMeta } from '@/utils/category-helpers';
-import useModelFeed from '@/hooks/useModelFeed';
-import TopText from "@/theme/components/content/TopText";
-import BottomContent from "@/theme/components/content/BottomContent";
 import { ApiProviders } from '@/services/api';
 
 // Sample content for bottom sections (SEO text)
@@ -59,140 +54,118 @@ const videoContent = {
 
 const VideoCategoryPage = () => {
   const router = useRouter();
-  const { category: videoCategory } = router.query;
-
-  if (!videoCategory) {
-    return (
-      <div className="bg-[#16181c] min-h-screen">
-        <div className="flex justify-center items-center h-screen">
-          <div className="animate-pulse text-xl">Loading category...</div>
-        </div>
-      </div>
-    );
-  }
-
-  // Fetch videos using our model feed hook with the VPAPI provider
-  const {
-    models: videos,
-    isLoading,
-    error,
-    hasMore,
-    loadMore
-  } = useModelFeed({
-    provider: ApiProviders.VPAPI,
-    category: videoCategory,
-    limit: 24,
-    filters: {
-      sort: videoCategory === 'new' ? 'newest' : 'popular'
-    }
-  });
-
-  // Ensure we have a valid videos array
-  const safeVideos = Array.isArray(videos) ? videos : [];
-
-  // Derive metadata and page titles/descriptions
-  const { meta, pageTitle, pageDescription, bottomContentJSX } = useMemo(() => {
-    // Get the content for this category, or fallback to generic content
-    const content = videoContent[videoCategory] || {
-      title: `${videoCategory.charAt(0).toUpperCase() + videoCategory.slice(1)} Videos`,
-      description: `Watch the best ${videoCategory} videos. New videos added daily.`
-    };
-
-    const title = content.title;
-    const description = content.description;
-
-    const computedMeta = {
-      title: `${title} - MistressWorld`,
-      description: description,
-      keywords: `${videoCategory} videos, free videos, adult videos, video clips`,
-    };
-
-    // Create the bottom content
-    const bottomContent = content.content ? (
-      <div className="grid md:grid-cols-2 gap-8">
-        {content.content.map((section, index) => (
-          <div key={index} className="bg-[#1a1c21] rounded-lg p-6">
-            <h2 className="text-xl font-semibold mb-4 text-pink-500">
-              {section.heading}
-            </h2>
-            <p className="text-gray-400 mb-3">
-              {section.desc}
-            </p>
-          </div>
-        ))}
-      </div>
-    ) : null;
-
-    return {
-      meta: computedMeta,
-      pageTitle: title,
-      pageDescription: description,
-      bottomContentJSX: bottomContent
-    };
-  }, [videoCategory]);
-
-  // Create page metadata object for HeadMeta component
-  const pageContent = {
-    meta_title: meta.title,
-    meta_desc: meta.description
+  const { category } = router.query;
+  const [loading, setLoading] = useState(true);
+  const [videos, setVideos] = useState([]);
+  
+  // Use effect to simulate video loading and track router state
+  useEffect(() => {
+    if (!router.isReady) return;
+    
+    console.log('[VideoPage] Router ready, category:', category);
+    setLoading(true);
+    
+    // Simulate API call with setTimeout
+    const timer = setTimeout(() => {
+      setVideos(generateDummyVideos(category));
+      setLoading(false);
+    }, 800);
+    
+    return () => clearTimeout(timer);
+  }, [category, router.isReady]);
+  
+  // Generate dummy videos for demo purposes
+  const generateDummyVideos = (categoryParam) => {
+    return Array.from({ length: 20 }, (_, i) => ({
+      id: `video-${categoryParam}-${i}`,
+      title: `${categoryParam ? categoryParam.charAt(0).toUpperCase() + categoryParam.slice(1) : 'Featured'} Video ${i + 1}`,
+      thumbnail: `https://picsum.photos/id/${300 + i}/400/225`,
+      duration: `${Math.floor(Math.random() * 30) + 5}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`,
+      views: Math.floor(Math.random() * 100000),
+      date: new Date(Date.now() - Math.floor(Math.random() * 30) * 24 * 3600 * 1000).toISOString(),
+      premium: Math.random() > 0.7,
+      performer: {
+        id: `performer-${i % 10}`,
+        name: `Performer ${i % 10 + 1}`
+      }
+    }));
   };
-
+  
+  // Use memo to cache our page data
+  const pageData = useMemo(() => {
+    if (!category) return { 
+      title: "Videos", 
+      description: "Browse our video collection" 
+    };
+    
+    // Use predefined content if available, otherwise generate based on category
+    const content = videoContent[category] || {
+      title: `${category.charAt(0).toUpperCase() + category.slice(1)} Videos`,
+      description: `Browse our collection of ${category} videos.`,
+      content: [
+        {
+          heading: `${category.charAt(0).toUpperCase() + category.slice(1)} Videos Collection`,
+          desc: `Explore our handpicked selection of ${category} videos featuring the best content from top performers.`
+        }
+      ]
+    };
+    
+    return content;
+  }, [category]);
+  
+  const bottomContentJSX = pageData.content ? (
+    <div className="grid md:grid-cols-2 gap-8 mt-8">
+      {pageData.content.map((section, i) => (
+        <div key={i} className="bg-gray-800/30 rounded-lg p-6">
+          <h2 className="text-xl font-semibold mb-4 text-primary">
+            {section.heading}
+          </h2>
+          <p className="text-gray-400">
+            {section.desc}
+          </p>
+        </div>
+      ))}
+    </div>
+  ) : null;
+  
+  // Meta data for SEO
+  const meta = {
+    title: `${pageData.title} - MistressWorld`,
+    description: pageData.description,
+    keywords: `${category || ''} videos, adult videos, webcam recordings`
+  };
+  
   return (
-    <div className="bg-[#16181c] min-h-screen">
-      <HeadMeta pageContent={pageContent} />
-      <CookiesModal />
-
-      {/* Sidebar as an overlay that doesn't affect main content flow */}
-      <div className="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] bg-[#1a1a1a] overflow-y-auto z-10 pointer-events-auto lg:block hidden">
-        <DynamicSidebar />
-      </div>
-
-      <div className="py-4 px-3">
-        <h1 className="text-2xl md:text-3xl font-bold mb-6">{pageTitle}</h1>
-        <p className="text-gray-400 mb-6">{pageDescription}</p>
-
-        {/* Videos Grid Section */}
-        <section className="py-4">
-          <VideoGrid
-            videos={safeVideos}
-            isLoading={isLoading}
-            error={error}
-            renderCard={(video, index) => (
+    <ThemeLayout 
+      meta={meta}
+      title={router.isReady ? pageData.title : 'Loading Videos...'}
+      description={pageData.description}
+      bottomContentChildren={router.isReady && bottomContentJSX}
+    >
+      <div className="py-4">
+        {(!router.isReady || loading) ? (
+          <div className="flex justify-center py-10">
+            <div className="animate-pulse text-xl">Loading videos...</div>
+          </div>
+        ) : (
+          <VideoGrid videos={videos} isLoading={false}>
+            {(video) => (
               <VideoCard
-                key={video.id || index}
-                image={video.thumbnail}
+                key={video.id}
+                id={video.id}
                 title={video.title}
+                thumbnail={video.thumbnail}
                 duration={video.duration}
                 views={video.views}
-                category={video.category || videoCategory}
-                videoId={video.id}
-                preload={index < 4}
+                date={video.date}
+                premium={video.premium}
+                performer={video.performer}
               />
             )}
-          />
-
-          {/* Load More Button */}
-          {hasMore && (
-            <div className="text-center mt-8">
-              <button
-                onClick={loadMore}
-                disabled={isLoading}
-                className="bg-pink-600 hover:bg-pink-700 text-white px-8 py-3 rounded-md transition-colors disabled:opacity-50"
-              >
-                {isLoading ? 'Loading...' : 'Load More Videos'}
-              </button>
-            </div>
-          )}
-        </section>
-
-        {/* Bottom Content Section */}
-        {bottomContentJSX && (
-          <div className="mt-12">
-            {bottomContentJSX}
-          </div>
+          </VideoGrid>
         )}
       </div>
-    </div>
+    </ThemeLayout>
   );
 };
 

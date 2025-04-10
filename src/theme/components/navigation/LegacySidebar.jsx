@@ -2,66 +2,84 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTheme } from '@/context/ThemeContext';
-import { themes } from '../../config';
 import Image from 'next/image';
 import { useLanguage } from "@/context/LanguageContext";
 import useCategories from '@/hooks/useCategories';
 import { capitalizeString, slugify } from '@/utils/string-helpers';
-import axios from 'axios';
 
 // Helper function to format filter names (e.g., 'body_size' -> 'Body Size')
-// Consider moving this to string-helpers if used elsewhere
 const formatFilterName = (name) => {
   return capitalizeString(name.replace(/_/g, ' '));
 };
 
-const LegacySidebar = () => {
+const LegacySidebar = ({ onClose }) => {
+  // --- HOOKS MUST BE CALLED AT THE TOP LEVEL --- 
   const router = useRouter();
-  const { theme } = useTheme();
+  const { themeConfig } = useTheme();
   const { translations } = useLanguage();
-
-  // Use the new hook to fetch categories
   const { categories, isLoading, isError, error: categoryError } = useCategories();
-
-  // Determine the current main category based on the route
-  // Example: /girls/asian -> mainCategorySlug = 'girls'
-  // Example: /videos -> mainCategorySlug = 'videos'
-  const currentPathSegments = router.asPath.split('/').filter(Boolean);
-  const currentMainCategorySlug = currentPathSegments[0] || 'girls'; // Default to 'girls' if root path
-
-  const currentTheme = themes[theme] || themes["legacyDark"];
-
-  // State for expanded filter sections (e.g., { girls: { ethnicity: true, age: false }, videos: { category: true } })
   const [expandedFilters, setExpandedFilters] = useState({});
 
-  const fetchData = async () => {
-    try {
-      const res = await axios.get('/api/models?extractAttributes=true')
-      console.log('resdata :>> ', res);
-    } catch (error) {
-      console.log('error :>> ', error);
-    }
-  }
+  // --- EFFECTS --- 
   useEffect(() => {
-    fetchData()
-  }, [])
-  // Initialize expanded state when categories load
-  useEffect(() => {
+    // Initialize expanded filters state once categories are loaded
     if (categories.length > 0) {
       const initialExpansion = {};
       categories.forEach(cat => {
-        initialExpansion[cat.slug] = {}; // Initialize category expansion object
-        // Optionally pre-expand certain filter types
+        initialExpansion[cat.slug] = {};
         cat.filters?.forEach(filter => {
-          // Example: Pre-expand 'ethnicity' and 'category' filters
           initialExpansion[cat.slug][filter.type] = ['ethnicity', 'category'].includes(filter.type);
         });
       });
       setExpandedFilters(initialExpansion);
     }
-  }, [categories]);
+  }, [categories]); // Only re-run if categories change
 
-  // Toggle filter sections within a category
+  // --- EARLY RETURNS for loading/error states --- 
+  if (isLoading || (!categories && !isError)) {
+    // Show loading indicator if loading OR if data isn't available yet and there's no error
+    return (
+      <div 
+        style={{
+          backgroundColor: themeConfig?.palette?.background?.dark || '#1a1a1a',
+          borderRight: `1px solid ${themeConfig?.palette?.border || '#333'}`
+        }}
+        className="fixed top-16 left-0 h-[calc(100vh-4rem)] lg:flex hidden w-64 items-center justify-center animate-pulse"
+      >
+        <p style={{ color: themeConfig?.palette?.text?.primary || '#fff' }}>Loading Nav...</p>
+      </div>
+    );
+  }
+  
+  // --- Early return for error state --- 
+  if (isError) {
+    console.error("Error loading categories:", categoryError);
+    return (
+      <div 
+        style={{
+          backgroundColor: themeConfig?.palette?.background?.dark || '#1a1a1a',
+          borderRight: `1px solid ${themeConfig?.palette?.border || '#333'}`
+        }}
+        className="fixed top-16 left-0 h-[calc(100vh-4rem)] lg:flex hidden w-64 items-center justify-center"
+      >
+        <p className="text-red-500">Error loading navigation.</p>
+      </div>
+    );
+  }
+  
+  // --- If we reach here, data is loaded and there's no error --- 
+
+  // Extract the first path segment for determining the current category
+  const firstPathSegment = router.pathname.split('/')[1] || '';
+  const currentMainCategorySlug = firstPathSegment || 'home'; 
+
+  const currentTheme = themeConfig.palette;
+  const currentNavTheme = themeConfig.navigation || {};
+
+  // Find the current category object
+  const currentCategory = categories.find(cat => cat.slug === currentMainCategorySlug);
+
+  // Function to toggle filter sections
   const toggleFilterSection = (categorySlug, filterType) => {
     setExpandedFilters(prev => ({
       ...prev,
@@ -72,14 +90,19 @@ const LegacySidebar = () => {
     }));
   };
 
-  // Handle loading state or missing config
+  // Function to handle mobile sidebar close
+  const handleClick = () => {
+    if (onClose) {
+      onClose();
+    }
+  };
+
   if (!translations || !currentTheme) {
     return <div className="fixed top-16 left-0 h-[calc(100vh-4rem)] lg:block hidden w-64 bg-gray-800 animate-pulse"></div>;
   }
 
-  // Style variables
   const sidebarStyle = {
-    backgroundColor: currentTheme.navigation?.sidebar || currentTheme.primary || '#1a1a1a',
+    backgroundColor: currentNavTheme.sidebar || currentTheme.background?.dark || currentTheme.primary || '#1a1a1a',
     color: currentTheme.text?.primary || '#ffffff',
     borderRight: `1px solid ${currentTheme.border || '#333'}`,
   };
@@ -90,41 +113,28 @@ const LegacySidebar = () => {
   };
 
   const buttonStyle = {
-    backgroundColor: currentTheme.navigation?.sectionHeader || '#333', // Use a theme color
-    color: currentTheme.text?.primary || '#ffffff', // Ensure text is visible
+    backgroundColor: currentTheme.navigation?.sectionHeader || '#333',
+    color: currentTheme.text?.primary || '#ffffff',
   };
 
   const linkStyle = {
-    color: currentTheme.text?.secondary || '#ccc', // Use a secondary text color for links
+    color: currentTheme.text?.secondary || '#ccc',
   };
 
-  const activeFilterLinkStyle = { // Specific style for active filter options
-    // Example: Add a background or bolder text
-    backgroundColor: currentTheme.navigation?.activeSubtle || 'rgba(224, 0, 108, 0.2)', // Lighter active background
-    color: currentTheme.text?.primary || '#ffffff', // Ensure text remains visible
-    fontWeight: 'bold', // Example: Make active filter bold
+  const activeFilterLinkStyle = {
+    backgroundColor: currentTheme.navigation?.activeSubtle || 'rgba(224, 0, 108, 0.2)',
+    color: currentTheme.text?.primary || '#ffffff',
+    fontWeight: 'bold',
   };
 
-  // --- Render Logic ---
-  if (isLoading) {
-    return <div style={sidebarStyle} className="fixed top-16 left-0 h-[calc(100vh-4rem)] lg:flex hidden w-64  items-center justify-center animate-pulse"><p>Loading Nav...</p></div>;
-  }
-  if (isError) {
-    console.error("Error loading categories:", categoryError);
-    return <div style={sidebarStyle} className="fixed top-16 left-0 h-[calc(100vh-4rem)] lg:flex hidden w-64  items-center justify-center"><p className="text-red-500">Error loading navigation.</p></div>;
-  }
-
-  // Find the current category object based on the slug
-  const currentCategory = categories.find(cat => cat.slug === currentMainCategorySlug);
-  console.log('currentCategory :>> ', currentCategory);
   return (
     <aside
-      className="h-full fixed left-0 top-0 pt-16 w-64 overflow-y-auto z-10"
+      className="h-full fixed left-0 top-0 pt-16 w-64 overflow-y-auto z-50"
       style={sidebarStyle}
     >
       {/* Logo */}
       <div className="flex justify-center py-4">
-        <Link href="/" className="block">
+        <Link href="/" className="block" onClick={handleClick}>
           <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden">
             <span className="text-black font-bold text-xl">MW</span>
           </div>
@@ -133,20 +143,21 @@ const LegacySidebar = () => {
 
       {/* Main Category Links */}
       <div className="flex flex-col mb-4">
-        {categories.map((cat) => {
-          // Only render categories that should appear as main links (e.g., not blog if handled differently)
-          if (['girls', 'trans', 'fetish', 'free', 'videos'].includes(cat.slug)) { // Adjust as needed
+        {categories && Array.isArray(categories) && categories.map((cat) => {
+          // Only render categories that should appear as main links
+          const shouldRenderLink = ['girls', 'trans', 'fetish', 'videos'].includes(cat.slug);
+          if (shouldRenderLink) { 
             const href = `/${cat.slug}`;
             const isActive = currentMainCategorySlug === cat.slug;
             return (
               <Link
-                key={cat.id}
+                key={cat.slug}
                 href={href}
-                className={`py-3 px-4 text-left transition-colors ${isActive ? 'text-white' : 'hover:bg-gray-700'
-                  }`}
+                className={`py-3 px-4 text-left transition-colors ${isActive ? 'text-white' : 'hover:bg-gray-700'}`}
                 style={isActive ? activeLinkStyle : linkStyle}
+                onClick={handleClick}
               >
-                {cat.name}
+                {cat.name || cat.title}
               </Link>
             );
           }
@@ -161,71 +172,71 @@ const LegacySidebar = () => {
             Filters
           </h3>
         )}
-        {currentCategory?.filters?.map((filter) => (
-          <div key={filter.type} className="mb-2">
+        {currentCategory?.filters?.map((filter) => {
+          const isExpanded = expandedFilters[currentCategory.slug]?.[filter.type];
+
+          return (
+          <div key={`${currentCategory.slug}-${filter.type}`} className="mb-2">
             <button
-              className="w-full px-4 py-2 text-left flex justify-between items-center rounded text-sm" // Smaller text for filters
+              className="w-full px-4 py-2 text-left flex justify-between items-center rounded text-sm"
               onClick={() => toggleFilterSection(currentCategory.slug, filter.type)}
               style={buttonStyle}
             >
               <span>{formatFilterName(filter.name)}</span>
-              <span>{expandedFilters[currentCategory.slug]?.[filter.type] ? '▲' : '▼'}</span>
+              <span>{isExpanded ? '▲' : '▼'}</span>
             </button>
-            {expandedFilters[currentCategory.slug]?.[filter.type] && (
-              <div className="mt-1 pl-4"> {/* Indent filter options */}
-                {filter.options.map((option) => {
-                  // Construct href: /girls/ethnicity/asian
-                  const filterSlug = slugify(filter.type); // e.g. ethnicity
-                  const optionSlug = slugify(option); // e.g. asian
-                  const href = `/${currentCategory.slug}/${filterSlug}/${optionSlug}`;
+            {isExpanded && (
+              <div className="mt-1 pl-4">
+                {filter.optionsWithUrls && filter.optionsWithUrls.map((optionObj) => {
+                  const href = optionObj.url;
+                  const displayName = optionObj.displayName;
+                  const optionName = optionObj.name;
 
-                  // Check if this specific filter option is active in the URL
-                  // Example URL: /girls/ethnicity/asian/age/teen
-                  const urlSegments = router.asPath.split('/');
-                  const isActive = urlSegments.includes(filterSlug) && urlSegments.includes(optionSlug);
-
+                  // Check active state using router.query
+                  const isActive = router.query[filter.type] === optionName;
+                  
                   return (
                     <Link
-                      key={optionSlug}
+                      key={`${filter.type}-${optionName}`}
                       href={href}
-                      className={`block px-2 py-1.5 rounded transition-colors text-xs ${ // Even smaller text for options
-                        isActive ? '' : 'hover:bg-gray-700' // Apply hover only if not active
-                        }`}
-                      style={isActive ? { ...linkStyle, ...activeFilterLinkStyle } : linkStyle} // Combine base link style with active style
+                      className={`block px-2 py-1.5 rounded transition-colors text-xs ${ 
+                        isActive ? '' : 'hover:bg-gray-700'
+                      }`}
+                      style={isActive ? { ...linkStyle, ...activeFilterLinkStyle } : linkStyle}
+                      onClick={handleClick}
                     >
-                      {capitalizeString(option)}
+                      {displayName.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                     </Link>
                   );
                 })}
               </div>
             )}
           </div>
-        ))}
+        );
+        })}
 
-        {/* Static Links (can be adjusted or moved) */}
+        {/* Static Links */}
         <div className="mt-6 border-t pt-4" style={{ borderColor: currentTheme.border || '#333' }}>
           <Link
             href={"/blog"}
-            className={`block px-4 py-2 rounded transition-colors ${router.asPath.startsWith('/blog') ? 'text-white' : 'hover:bg-gray-700'
-              }`}
+            className={`block px-4 py-2 rounded transition-colors ${router.asPath.startsWith('/blog') ? 'text-white' : 'hover:bg-gray-700'}`}
             style={router.asPath.startsWith('/blog') ? activeLinkStyle : linkStyle}
+            onClick={handleClick}
           >
             Blog
           </Link>
           <Link
             href={"/models-wanted"}
-            className={`block px-4 py-2 rounded transition-colors ${router.asPath === '/models-wanted' ? 'text-white' : 'hover:bg-gray-700'
-              }`}
+            className={`block px-4 py-2 rounded transition-colors ${router.asPath === '/models-wanted' ? 'text-white' : 'hover:bg-gray-700'}`}
             style={router.asPath === '/models-wanted' ? activeLinkStyle : linkStyle}
+            onClick={handleClick}
           >
             Models Wanted
           </Link>
-          {/* Add other static links like Affiliates */}
         </div>
-
       </div>
     </aside>
   );
 };
 
-export default LegacySidebar; 
+export default LegacySidebar;

@@ -1,31 +1,95 @@
 import * as orchestrator from '@/services/orchestrator';
+import FILTER_MAP from '@/config/filterMap';
 
 // Define static details for the main site sections (can be expanded)
 const MAIN_CATEGORIES = {
   girls: { 
     title: 'Live Cam Girls', 
     description: 'Find the hottest live cam girls online. Watch sexy webcam girls perform live shows just for you.',
-    relevantTypes: ['ethnicity', 'body_size', 'willingness', 'appearance', 'breasts', 'hair_color', 'hair_type', 'age', 'tag'] // Types from orchestrator relevant to girls
+    relevantTypes: ['ethnicity', 'body_type', 'willingness', 'appearance', 'breasts', 'hair_color', 'hair_type', 'age', 'tag'], // Types from orchestrator relevant to girls
+    filters: [
+      {
+        type: 'ethnicity',
+        name: 'Ethnicity',
+        options: ['asian', 'latina', 'white', 'ebony', 'middle_eastern', 'indian']
+      },
+      {
+        type: 'hair_color',
+        name: 'Hair Color',
+        options: ['blonde', 'black', 'red', 'brunette', 'pink', 'other']
+      },
+      {
+        type: 'body_type',
+        name: 'Body Type',
+        options: ['slim', 'athletic', 'curvy', 'bbw', 'petite', 'average']
+      },
+      {
+        type: 'tags',
+        name: 'Tags',
+        options: ['milf', 'petite', 'bdsm', 'lingerie', 'tattoos', 'piercing', 'squirt', 'smoking', 'toys', 'roleplay']
+      }
+    ]
   },
   trans: {
     title: 'Trans Cam Models',
     description: 'Explore the hottest live trans cam models online. Watch transgender webcam models perform live just for you.',
-    relevantTypes: ['ethnicity', 'body_size', 'willingness', 'appearance', 'breasts', 'hair_color', 'hair_type', 'penis_size', 'age', 'tag'] // Types relevant to trans
+    relevantTypes: ['ethnicity', 'body_type', 'willingness', 'appearance', 'breasts', 'hair_color', 'hair_type', 'penis_size', 'age', 'tag'], // Types relevant to trans
+    filters: [
+      {
+        type: 'ethnicity',
+        name: 'Ethnicity',
+        options: ['asian', 'latina', 'white', 'ebony', 'middle_eastern', 'indian']
+      },
+      {
+        type: 'hair_color',
+        name: 'Hair Color',
+        options: ['blonde', 'black', 'red', 'brunette', 'pink', 'other']
+      },
+      {
+        type: 'body_type',
+        name: 'Body Type',
+        options: ['slim', 'athletic', 'curvy', 'muscular', 'petite', 'average']
+      },
+      {
+        type: 'tags',
+        name: 'Tags',
+        options: ['milf', 'lingerie', 'tattoos', 'piercing', 'smoking', 'toys', 'roleplay']
+      }
+    ]
   },
   fetish: {
     title: 'Fetish Cam Models',
     description: 'Explore our fetish cam models. Experience BDSM, domination, and other fetish content with our beautiful models.',
-    relevantTypes: ['willingness', 'appearance', 'tag'] // Types relevant to fetish
-  },
-  free: {
-    title: 'Free Cam Shows',
-    description: 'Enjoy free cam shows with the hottest webcam models. No credit card required for these free live cams.',
-    relevantTypes: ['tag'] // Primarily FreeAPI tags
+    relevantTypes: ['willingness', 'appearance', 'tag'], // Types relevant to fetish
+    filters: [
+      {
+        type: 'willingness',
+        name: 'Willingness',
+        options: ['fetish', 'bdsm', 'roleplay', 'dildo', 'anal']
+      },
+      {
+        type: 'tags',
+        name: 'Tags',
+        options: ['bdsm', 'lingerie', 'tattoos', 'piercing', 'smoking', 'toys', 'roleplay']
+      }
+    ]
   },
   videos: {
     title: 'Webcam Videos',
     description: 'Watch recorded webcam videos from the hottest cam models. Enjoy the best webcam performances anytime.',
-    relevantTypes: ['videoTag', 'videoCategory'] // VPAPI tags/categories
+    relevantTypes: ['videoTag', 'videoCategory'], // VPAPI tags/categories
+    filters: [
+      {
+        type: 'category',
+        name: 'Category',
+        options: ['popular', 'new', 'amateur', 'solo', 'lesbian', 'trans']
+      },
+      {
+        type: 'tags',
+        name: 'Tags',
+        options: ['hd', 'featured', 'trending', 'amateur', 'toys', 'lingerie']
+      }
+    ]
   },
   blog: {
      title: 'Cam Model Blog',
@@ -48,48 +112,18 @@ export default async function handler(req, res) {
       // Log the error but provide fallback data
       console.error('[API /categories] Error fetching categories from orchestrator:', categoryData.error);
       
-      // Create fallback data for basic functionality
+      // Create fallback data with predefined filters
       const fallbackData = {
         success: true,
         data: {
-          categories: [
-            {
-              id: 'girls',
-              slug: 'girls',
-              title: 'Live Cam Girls',
-              description: 'Find the hottest live cam girls online. Watch sexy webcam girls perform live shows just for you.'
-            },
-            {
-              id: 'trans',
-              slug: 'trans',
-              title: 'Trans Cam Models',
-              description: 'Explore the hottest live trans cam models online. Watch transgender webcam models perform live just for you.'
-            },
-            {
-              id: 'fetish',
-              slug: 'fetish',
-              title: 'Fetish Cam Models',
-              description: 'Explore our fetish cam models. Experience BDSM, domination, and other fetish content with our beautiful models.'
-            },
-            {
-              id: 'free',
-              slug: 'free',
-              title: 'Free Cam Shows',
-              description: 'Enjoy free cam shows with the hottest webcam models. No credit card required for these free live cams.'
-            },
-            {
-              id: 'videos',
-              slug: 'videos',
-              title: 'Webcam Videos',
-              description: 'Watch recorded webcam videos from the hottest cam models. Enjoy the best webcam performances anytime.'
-            },
-            {
-              id: 'blog',
-              slug: 'blog',
-              title: 'Cam Model Blog',
-              description: 'Read our blog for the latest news, updates, and stories about cam models and the webcam industry.'
-            }
-          ]
+          categories: Object.entries(MAIN_CATEGORIES).map(([id, data]) => ({
+            id,
+            slug: id,
+            name: data.title,
+            title: data.title,
+            description: data.description,
+            filters: data.filters || []
+          }))
         }
       };
       
@@ -113,25 +147,18 @@ export default async function handler(req, res) {
           mainCategoryDetails.relevantTypes.includes(sub.type)
       );
 
-      // TODO: Enhance subcategory data
-      // Fetch specific SEO title/description for each subcategory ID 
-      // from a CMS, database, or local content files if needed.
-      // For now, just return id and name.
-      const formattedSubcategories = relevantSubcategories.map(sub => ({
-          id: sub.id,
-          name: sub.name,
-          // title: fetchedTitle || sub.name, // Example placeholder
-          // description: fetchedDescription || `Explore ${sub.name} ${mainCategoryDetails.title}.` // Example placeholder
-      }));
-
+      // Return data with predefined filters
       const responseData = {
         id: category,
         slug: category,
+        name: mainCategoryDetails.title,
         title: mainCategoryDetails.title,
         description: mainCategoryDetails.description,
-        subcategories: formattedSubcategories,
-        // Include raw orchestrator data for debugging/flexibility if needed
-        // _taxonomy: unifiedTaxonomy 
+        filters: mainCategoryDetails.filters || [],
+        subcategories: relevantSubcategories.map(sub => ({
+          id: sub.id,
+          name: sub.name,
+        }))
       };
 
       res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300'); // Cache for 1 min, stale for 5 min
@@ -142,8 +169,10 @@ export default async function handler(req, res) {
     const allTopLevelCategories = Object.entries(MAIN_CATEGORIES).map(([id, data]) => ({
       id,
       slug: id,
+      name: data.title,
       title: data.title,
       description: data.description,
+      filters: data.filters || [],
       // Count relevant subcategories found in the *current* unified taxonomy
       subcategoriesCount: unifiedTaxonomy.all.filter(sub => data.relevantTypes.includes(sub.type)).length
     }));
@@ -153,8 +182,6 @@ export default async function handler(req, res) {
       success: true,
       data: {
         categories: allTopLevelCategories
-        // Include raw orchestrator data for debugging/flexibility if needed
-        // _taxonomy: unifiedTaxonomy
       }
     });
 

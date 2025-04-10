@@ -1,353 +1,210 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/router';
-import DarkTheme from '../../../components/navigation/dark-themeLive';
-import Slider from '@/components/slider/Slider';
+import { useEffect, useState, useMemo } from 'react';
 import HeadMeta from '@/components/HeadMeta';
 import CookiesModal from '@/components/CookiesModal/CookiesModal';
-import useWindowSize from '@/hooks/useWindowSize';
-import { MdKeyboardArrowUp, MdKeyboardArrowDown } from 'react-icons/md';
-import dynamic from 'next/dynamic';
+import DynamicSidebar from '@/components/navigation/DynamicSidebar';
+import ModelGrid from '@/theme/components/grid/ModelGrid';
+import ModelCard from '@/theme/components/common/ModelCard';
+import ThemeLayout from '@/theme/layouts/ThemeLayout';
+import { getModelThumbnail, getSafeImageUrl } from '@/utils/image-helpers';
+import { useSearchParams } from 'next/navigation';
+import TopText from '@/theme/components/content/TopText';
+import { capitalizeString } from '@/utils/string-helpers';
+import { ModelAPI } from '@/services/api';
 
-// Dynamically import components to reduce initial bundle size
-const Staticblogpost = dynamic(() => import('@/components/Staticblogpost'));
-const ModelCard = dynamic(() => import('@/components/cards/ModelCard'));
-
-// Default number of models to load per page
-const DEFAULT_LIMIT = 32;
-
-export default function SubcategoryPage({ initialData, category: initialCategory, subcategory: initialSubcategory, subcategoryData }) {
+/**
+ * Dynamic SEO-friendly filtered page for models
+ * Handles routes like /girls/asian, /trans/bdsm, etc.
+ */
+const FilteredModelsPage = ({ initialCategory, initialSubcategory, initialMetadata }) => {
   const router = useRouter();
-  const { category, subcategory } = router.query; // Get current route params
-  const { width } = useWindowSize();
-  const [models, setModels] = useState(initialData?.data?.models || []);
-  const [pageInfo, setPageInfo] = useState(initialData?.data?.pagination || {});
-  const [pageNo, setPageNo] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [buttonload, setButtonload] = useState(true);
-  const [dropdown, setDropdown] = useState(true);
-  const [currentTitle, setCurrentTitle] = useState(subcategoryData?.title || '');
-  const [currentTopText, setCurrentTopText] = useState(subcategoryData?.top_text || '');
-  const [currentBottomText, setCurrentBottomText] = useState(subcategoryData?.bottom_text || '');
+  const searchParams = useSearchParams();
   
-  // Determine if we're using mobile layout
-  const isMobile = width < 700;
+  // Extract category/subcategory from router or props
+  const { category: routeCategory, subcategory: routeSubcategory } = router.query;
+  const category = routeCategory || initialCategory;
+  const subcategory = routeSubcategory || initialSubcategory;
   
-  // Toggle dropdown for mobile display
-  const handleToggle = () => {
-    setDropdown(!dropdown);
+  // State for models
+  const [models, setModels] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  
+  // Generate metadata based on category/subcategory
+  const generateMetadata = () => {
+    if (!category || !subcategory) return {
+      title: "Loading...",
+      description: "Please wait while we load this page.",
+      keywords: ""
+    };
+    
+    return {
+      title: `${capitalizeString(subcategory)} ${capitalizeString(category)} Models`,
+      description: `Discover ${subcategory} ${category} models available for live chat and webcam shows.`,
+      keywords: `${subcategory} ${category}, cam models, live chat`
+    };
   };
   
-  // Function to fetch models (used for initial load and route changes)
-  const fetchModels = async (fetchCategory, fetchSubcategory, reset = false) => {
-    if (!fetchCategory || !fetchSubcategory) return; // Don't fetch if params aren't ready
-
-    setLoading(true);
-    try {
-      const response = await axios.get('/api/models', {
-        params: {
-          category: fetchCategory,
-          subcategory: fetchSubcategory,
-          limit: DEFAULT_LIMIT,
-          offset: 0, // Always start from first page on new fetch/reset
-          _timestamp: Date.now() // Prevent caching
-        }
-      });
-
-      if (response.data?.success) {
-        setModels(response.data.data.models || []);
-        setPageInfo(response.data.data.pagination || {});
-        setPageNo(1); // Reset page number
-        setButtonload(response.data.data.models?.length >= DEFAULT_LIMIT); // Show/hide load more
-
-        // TODO: Fetch updated subcategoryData (title, text) here if needed
-        // For now, just format names
-        const formattedSub = fetchSubcategory.charAt(0).toUpperCase() + fetchSubcategory.slice(1);
-        const formattedCat = fetchCategory.charAt(0).toUpperCase() + fetchCategory.slice(1);
-        setCurrentTitle(`${formattedSub} ${formattedCat} Cams | Live ${formattedSub} Webcam Models`);
-        // Update texts or fetch from /api/categories if necessary
-      } else {
-        setModels([]);
-        setPageInfo({});
-        setPageNo(1);
-        setButtonload(false);
-        // Handle error case?
-      }
-    } catch (error) {
-      console.error('Error fetching models:', error);
-      setModels([]);
-      setPageInfo({});
-      setPageNo(1);
-      setButtonload(false);
-      // Handle error case?
-    } finally {
-      setLoading(false);
-    }
+  // Meta data for the page
+  const [pageMetadata, setPageMetadata] = useState(initialMetadata || generateMetadata());
+  
+  // Function to load more models
+  const loadMore = async () => {
+    if (!hasMore || loading || !router.isReady) return;
+    setPage(prev => prev + 1);
   };
   
-  // Load more models when "Load More" button is clicked
-  const loadMoreModels = async () => {
-    if (!category || !subcategory) return; // Need current route params
-
-    try {
-      setLoading(true);
-      const nextPage = pageNo + 1;
-      const newOffset = (nextPage - 1) * DEFAULT_LIMIT; // Correct offset calculation
-
-      // Fetch more models
-      const response = await axios.get('/api/models', {
-        params: {
-          category, // Use current route category
-          subcategory, // Use current route subcategory
-          limit: DEFAULT_LIMIT,
-          offset: newOffset,
-          _timestamp: Date.now() // Prevent caching
-        }
-      });
-
-      // Add new models to existing list
-      if (response.data?.success && response.data?.data?.models?.length) {
-        setModels(prevModels => [...prevModels, ...response.data.data.models]);
-        setPageInfo(response.data.data.pagination);
-        setPageNo(nextPage);
-        setButtonload(response.data.data.models.length >= DEFAULT_LIMIT); // Update button visibility
-      } else {
-         setButtonload(false); // Hide button if no more models or error
-      }
-
-    } catch (error) {
-      console.error('Error loading more models:', error);
-       setButtonload(false); // Hide on error
-    } finally {
-      setLoading(false);
-    }
-  };
-  
-  // Effect to handle route changes (client-side navigation)
+  // Update metadata when category/subcategory changes
   useEffect(() => {
-    if (router.isReady) {
-      const currentCategory = router.query.category;
-      const currentSubcategory = router.query.subcategory;
-
-      // Check if the route params have actually changed from the initial SSR props
-      // or from the previous state if navigation has already happened.
-      // This prevents unnecessary fetches on initial load.
-      if (currentCategory && currentSubcategory && (currentCategory !== initialCategory || currentSubcategory !== initialSubcategory)) {
-         // Only fetch if category/subcategory are defined and different from initial load
-         fetchModels(currentCategory, currentSubcategory, true); // Pass true to reset
-      } else if (currentCategory && currentSubcategory && models.length === 0 && !loading) {
-          // If initialData was empty (e.g., SSR error) but params are valid, try fetching.
-          fetchModels(currentCategory, currentSubcategory, true);
-      } else {
-         // If route matches initial props, ensure state matches initialData
-         // This handles browser back/forward navigation back to the initial SSR state
-         setModels(initialData?.data?.models || []);
-         setPageInfo(initialData?.data?.pagination || {});
-         setPageNo(1);
-         setButtonload((initialData?.data?.models?.length || 0) >= DEFAULT_LIMIT);
-         setCurrentTitle(subcategoryData?.title || '');
-         setCurrentTopText(subcategoryData?.top_text || '');
-         setCurrentBottomText(subcategoryData?.bottom_text || '');
-      }
+    if (category && subcategory) {
+      setPageMetadata(generateMetadata());
     }
-  // Depend on router.isReady and the specific query params
-  // Also depend on initial props to detect changes correctly
-  }, [router.isReady, router.query.category, router.query.subcategory, initialCategory, initialSubcategory, initialData, subcategoryData]);
+  }, [category, subcategory]);
   
-  // Set dropdown state based on screen width
+  // Effect to fetch models
   useEffect(() => {
-    if (width > 700) {
-      setDropdown(true);
-    } else {
-      // Optionally collapse dropdown on mobile initially or keep previous state
-      // setDropdown(false);
-    }
-  }, [width]);
+    // Only fetch if router is ready and we have category/subcategory
+    if (!router.isReady || !category || !subcategory) return;
+    
+    const fetchModels = async () => {
+      try {
+        setLoading(true);
+        console.log(`[FilteredPage] Fetching models for ${category}/${subcategory}, page ${page}`);
+        
+        // Extract filter parameters from URL
+        const filters = {};
+        if (subcategory !== 'all') {
+          filters.ethnicity = subcategory;
+        }
+        
+        // Add any additional filters from URL query params
+        if (searchParams) {
+          for (const [key, value] of searchParams.entries()) {
+            if (key !== 'category' && key !== 'subcategory') {
+              filters[key] = value;
+            }
+          }
+        }
+        
+        // Fetch models with API
+        const response = await ModelAPI.fetchModels(category, filters, 24, page);
+        
+        if (response.success) {
+          if (page === 1) {
+            setModels(response.models);
+          } else {
+            setModels(prev => [...prev, ...response.models]);
+          }
+          
+          setHasMore(response.models.length === 24); // Assuming 24 is the page size
+        } else {
+          setError('Failed to load models');
+          // Use fallback in development
+          if (process.env.NODE_ENV === 'development') {
+            const fallbackModels = ModelAPI.getFallbackModels(category);
+            setModels(prev => page === 1 ? fallbackModels : [...prev, ...fallbackModels]);
+          }
+        }
+      } catch (err) {
+        console.error('[FilteredPage] Error fetching models:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchModels();
+  }, [category, subcategory, page, searchParams, router.isReady]);
   
-  // Format subcategory/category for display (use current route params)
-  const formattedSubcategory = subcategory ? subcategory.charAt(0).toUpperCase() + subcategory.slice(1) : '';
-  const formattedCategory = category ? category.charAt(0).toUpperCase() + category.slice(1) : '';
+  // Get a normalized display name for the filter
+  const filterDisplayName = useMemo(() => {
+    const normalized = subcategory?.replace(/_/g, ' ');
+    return normalized ? capitalizeString(normalized) : '';
+  }, [subcategory]);
   
-  // Prepare meta data for the page using state
-  const pageContent = {
-    meta_title: currentTitle || `${formattedSubcategory} ${formattedCategory} Cams | Live ${formattedSubcategory} Webcam Models`,
-    meta_desc: subcategoryData?.description || `Watch live ${subcategory} ${category} webcam models perform just for you on MistressWorld.`, // Keep initial desc for now
-    top_text: currentTopText || '', // Use state for dynamic updates
-    bottom_text: currentBottomText || subcategoryData?.bottom_text || '' // Use state or fallback
-  };
-  
-  // Handle loading state for the main grid
-  const showLoadingSkeleton = loading && models.length === 0;
-  
-  const isPageFree = category === 'free'; // Determine if the page is for free models
+  // Safe category access with fallback
+  const categoryName = category ? capitalizeString(category) : 'Models';
   
   return (
-    <div>
-      <HeadMeta pageContent={pageContent} />
-      <CookiesModal />
-      <DarkTheme>
-        <div className="bg-[#16181c] h-auto pb-[8px]">
-          <div className="py-4 px-3">
-            <div className="flex justify-between items-center mb-3">
-              <h1 className="text-white sm:text-[28px] text-lg font-bold">
-                {pageContent.meta_title}
-              </h1>
-              <span
-                onClick={() => handleToggle()}
-                className="cursor-pointer md:hidden transition-transform duration-300"
-              >
-                {dropdown ? (
-                  <MdKeyboardArrowUp fontSize={28} />
-                ) : (
-                  <MdKeyboardArrowDown fontSize={28} />
-                )}
-              </span>
-            </div>
-            
-            {dropdown && (
-              <div dangerouslySetInnerHTML={{ __html: pageContent.top_text || `
-                <h2 class="text-white sm:text-base text-sm font-medium mb-3">
-                  Explore the hottest live ${formattedSubcategory} ${formattedCategory} cam models on MistressWorld.xxx. 
-                  We offer a diverse selection of ${formattedSubcategory} ${category} cam models ready to engage in private chat. 
-                  Join us today for the ultimate webcam experience!
-                </h2>
-              `}} />
-            )}
-            
-            <h2 className="text-white text-[28px] font-bold mb-3">
-              Other {formattedCategory} Cam Categories
-            </h2>
-            <Slider category={category} />
-            
-            <h2 className="text-white text-[28px] font-bold mt-[30px]">
-              Live {formattedSubcategory} {formattedCategory} Cams
-            </h2>
-            
-            {showLoadingSkeleton ? (
-              <div className="text-white text-center w-full py-10">Loading models...</div>
-            ) : models?.length > 0 ? (
-              <>
-                <div className="md:flex flex-wrap hidden">
-                  {models.map((element, i) => (
-                    <ModelCard 
-                      key={`${element.id}-${i}`}
-                      image={element.thumbnail}
-                      name={element.name}
-                      age={element.age}
-                      tags={element.tags}
-                      ethnicity={element.ethnicity}
-                      slug={element.slug}
-                      isPageFree={isPageFree}
-                      preload={!isMobile && i < 8}
-                      isRelated={false}
-                    />
-                  ))}
-                </div>
-                <div className="md:hidden flex flex-wrap">
-                  {models.map((element, i) => (
-                    <ModelCard 
-                      key={`${element.id}-mobile-${i}`}
-                      image={element.thumbnail}
-                      name={element.name}
-                      age={element.age}
-                      tags={element.tags}
-                      ethnicity={element.ethnicity}
-                      slug={element.slug}
-                      isPageFree={isPageFree}
-                      preload={isMobile && i < 2}
-                      isRelated={false}
-                    />
-                  ))}
-                </div>
-              </>
-            ) : (
-              <div className="text-white text-center w-full py-10">
-                No models found for {formattedSubcategory} {formattedCategory}. Please try a different category.
-              </div>
-            )}
-            
-            {buttonload && models?.length > 0 && !showLoadingSkeleton && (
-              <div className="flex justify-center mt-4">
-                <button
-                  onClick={loadMoreModels}
-                  disabled={loading}
-                  className="bg-[#d41a7d] hover:bg-[#e63295] text-white font-bold py-2 px-4 rounded disabled:opacity-50"
-                >
-                  {loading ? 'Loading...' : 'Load More'}
-                </button>
-              </div>
-            )}
-            
-            <div className="mt-8" dangerouslySetInnerHTML={{ __html: pageContent.bottom_text }} />
+    <ThemeLayout 
+      meta={pageMetadata}
+      title={router.isReady ? `${filterDisplayName} ${categoryName}` : 'Loading...'}
+      description={pageMetadata.description}
+    >
+      <div className="py-4">
+        {/* Initial loading state when router is not ready or loading first page */}
+        {(!router.isReady || (loading && page === 1)) ? (
+          <div className="flex justify-center py-10">
+            <div className="animate-pulse text-xl">Loading models...</div>
           </div>
-        </div>
-      </DarkTheme>
-    </div>
+        ) : error && models.length === 0 ? (
+          <div className="text-center text-red-500 py-10">
+            Error loading models: {error}
+          </div>
+        ) : models.length === 0 ? (
+          <div className="text-center text-gray-500 py-10">
+            No models found matching these criteria. Try different filters.
+          </div>
+        ) : (
+          <ModelGrid models={models} isLoading={loading && page > 1}>
+            {(model) => (
+              <ModelCard
+                key={model.id || model.slug}
+                performerId={model.id}
+                name={model.name}
+                age={model.age}
+                ethnicity={model.ethnicity}
+                tags={model.tags || []}
+                image={model.thumbnail}
+                isOnline={model.isOnline || true}
+                viewerCount={model.viewerCount || 0}
+                country={model.country}
+                chatRoomUrl={model.chatRoomUrl}
+                showStatus={model.showStatus}
+                languages={model.languages}
+                isHd={model.isHd}
+              />
+            )}
+          </ModelGrid>
+        )}
+        
+        {/* Load more button - only show when we have models and more to load */}
+        {hasMore && models.length > 0 && router.isReady && (
+          <div className="flex justify-center mt-8 mb-4">
+            <button
+              onClick={loadMore}
+              disabled={loading}
+              className="px-6 py-2 bg-primary text-white rounded-full hover:bg-pink-700 transition-colors"
+            >
+              {loading ? 'Loading...' : 'Load More'}
+            </button>
+          </div>
+        )}
+      </div>
+    </ThemeLayout>
   );
-}
+};
 
+// Fetch initial data at build time or on server-side
 export async function getServerSideProps(context) {
-  const { category, subcategory } = context.params || {};
+  const { category, subcategory } = context.params;
   
-  const validCategories = ['girls', 'trans', 'free', /*'videos', 'blog' - Add others as needed*/];
-   if (!validCategories.includes(category)) {
-    console.warn(`Invalid category accessed: ${category}`);
-    return { notFound: true };
-  }
-
-  let categoryData = null;
-  let subcategoryData = {};
-  let modelsData = { success: false, data: { models: [], pagination: {} } }; // Default error state
-
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-
-  try {
-    // Fetch category data first
-    const categoryResponse = await fetch(`${apiUrl}/api/categories/${category}`);
-    if (!categoryResponse.ok) {
-        throw new Error(`Failed to fetch category data: ${categoryResponse.statusText}`);
-    }
-    categoryData = await categoryResponse.json();
-
-    // Validate subcategory
-    const validSubcategory = categoryData?.data?.subcategories?.some(
-      sub => sub.id === subcategory
-    );
-
-    if (!validSubcategory) {
-      console.warn(`Invalid subcategory '${subcategory}' for category '${category}'`);
-      return { notFound: true };
-    }
-
-    // Get specific subcategory details (title, description, etc.)
-    subcategoryData = categoryData.data.subcategories.find(sub => sub.id === subcategory) || {};
-
-    // Fetch initial models for the validated subcategory
-    const modelsResponse = await fetch(
-        `${apiUrl}/api/models?category=${category}&subcategory=${subcategory}&limit=${DEFAULT_LIMIT}&_timestamp=${Date.now()}`
-    );
-     if (!modelsResponse.ok) {
-        // Don't throw, just log and return default empty models
-        console.error(`Failed to fetch initial models: ${modelsResponse.statusText}`);
-     } else {
-        modelsData = await modelsResponse.json();
-     }
-
-
-  } catch (error) {
-    console.error(`Error in getServerSideProps for /${category}/${subcategory}:`, error);
-    // Return props with empty data but allow page to render
-  }
-
+  // Generate basic metadata
+  const metadata = {
+    title: `${capitalizeString(subcategory)} ${capitalizeString(category)} Models`,
+    description: `Discover ${subcategory} ${category} models available for live chat and webcam shows.`,
+    keywords: `${subcategory} ${category}, cam models, live chat`
+  };
+  
   return {
     props: {
-      // Pass category/subcategory explicitly for the initial state
       initialCategory: category,
       initialSubcategory: subcategory,
-      initialData: modelsData, // Contains models and pagination
-      subcategoryData, // Contains title, description, etc.
-      // Key prop forces re-mount on shallow route changes if needed, but useEffect should handle it
-      // key: `${category}-${subcategory}`
-    }
+      initialMetadata: metadata
+    },
   };
-} 
+}
+
+export default FilteredModelsPage; 

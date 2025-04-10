@@ -1,6 +1,13 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
-import { ApiProviders, API_URLS } from '@/services/api';
+import { ApiProviders } from '@/services/api';
+
+// Define API URLs locally if not accessible from main API export
+const API_URLS = {
+  awe: '/api/models',
+  free: '/api/models',
+  vpapi: '/api/videos'
+};
 
 /**
  * Custom hook for fetching and managing model feeds from different providers
@@ -284,6 +291,30 @@ const useModelFeed = (options = {}) => {
       setOffset(currentOffset + finalItems.length);
       setHasMore(totalHasMore && finalItems.length >= limit);
 
+      // For development, provide fallback models
+      if (process.env.NODE_ENV === 'development') {
+        const fallbackModels = Array.from({ length: 8 }, (_, i) => ({
+          id: `fallback-${i}`,
+          slug: `fallback-${i}`,
+          performerName: `Model ${i+1}`,
+          name: `Model ${i+1}`,
+          thumbnail: `https://via.placeholder.com/300x200?text=Model+${i+1}`,
+          snapshotUrl: `https://via.placeholder.com/300x200?text=Model+${i+1}`,
+          isOnline: Math.random() > 0.5,
+          age: Math.floor(20 + Math.random() * 20),
+          viewers: Math.floor(Math.random() * 1000),
+          tags: ['fallback', 'test', 'development'],
+          attributes: ['fallback', 'test', 'development'],
+          country: 'Test Country',
+          _provider: 'fallback'
+        }));
+        
+        console.log(`[useModelFeed] Using fallback models:`, fallbackModels.length);
+        setModels(prevModels => isLoadMore ? [...prevModels, ...fallbackModels] : fallbackModels);
+        setOffset(currentOffset + fallbackModels.length);
+        setHasMore(true);
+      }
+
     } catch (err) {
       console.error(`Error fetching model feed:`, err);
       setError(err.message || 'Failed to fetch models');
@@ -294,118 +325,78 @@ const useModelFeed = (options = {}) => {
         const fallbackModels = Array.from({ length: 8 }, (_, i) => ({
           id: `fallback-${i}`,
           slug: `fallback-${i}`,
-          performerName: `Fallback Model ${i + 1}`,
-          images: {
-            thumbnail: `https://picsum.photos/id/${i + 100}/320/180`,
-            preview: `https://picsum.photos/id/${i + 100}/800/600`,
-          },
-          categories: [category || 'default', subcategory].filter(Boolean),
-          isOnline: true,
-          viewerCount: Math.floor(Math.random() * 100),
-          appearances: {
-            age: 20 + Math.floor(Math.random() * 20),
-            ethnicity: ['asian', 'latina', 'ebony', 'white'][Math.floor(Math.random() * 4)]
-          },
+          performerName: `Model ${i+1}`,
+          name: `Model ${i+1}`,
+          thumbnail: `https://via.placeholder.com/300x200?text=Model+${i+1}`,
+          snapshotUrl: `https://via.placeholder.com/300x200?text=Model+${i+1}`,
+          isOnline: Math.random() > 0.5,
+          age: Math.floor(20 + Math.random() * 20),
+          viewers: Math.floor(Math.random() * 1000),
+          tags: ['fallback', 'test', 'development'],
+          attributes: ['fallback', 'test', 'development'],
+          country: 'Test Country',
           _provider: 'fallback'
         }));
         
+        console.log(`[useModelFeed] Using fallback models:`, fallbackModels.length);
         setModels(prevModels => isLoadMore ? [...prevModels, ...fallbackModels] : fallbackModels);
-        console.log('Using fallback models for development');
+        setOffset(currentOffset + fallbackModels.length);
+        setHasMore(true);
       }
+
     } finally {
       setIsLoading(false);
       setRequestInProgress(false);
+      initialFetchDone.current = true;
     }
-  }, [
-    category, 
-    subcategory, 
-    limit, 
-    JSON.stringify(filters), 
-    getApiEndpoint, 
-    getProviders, 
-    // Removed providerData - we read it but don't need to recreate the function if it changes
-    // Removed requestInProgress - managed internally
-    // Added offset - needed for loading more
-    offset
-  ]);
+  }, [category, subcategory, filters, getApiEndpoint, getProviders, isLoading, limit, providerData, provider, requestInProgress]);
 
-  // Shuffle array (Fisher-Yates algorithm)
-  const shuffleArray = useCallback((array) => {
+  // Load more data
+  const loadMore = useCallback(() => {
+    if (!isLoading && hasMore) {
+      console.log(`[useModelFeed] loadMore called, fetching from offset: ${offset}`);
+      fetchData(offset, true);
+    }
+  }, [fetchData, hasMore, isLoading, offset]);
+
+  // Reload the feed
+  const refresh = useCallback(() => {
+    console.log(`[useModelFeed] refresh called, fetching from offset: 0`);
+    setModels([]);
+    setOffset(0);
+    setHasMore(true);
+    fetchData(0, false);
+  }, [fetchData]);
+
+  // Initial data fetch if no initial models provided
+  useEffect(() => {
+    if (models.length === 0 && !initialFetchDone.current) {
+      console.log(`[useModelFeed] Initial fetch (models length: ${models.length})`);
+      fetchData(0, false);
+    } else {
+      console.log(`[useModelFeed] Skipping initial fetch (models length: ${models.length}, initialFetchDone: ${initialFetchDone.current})`);
+    }
+  }, [fetchData, models.length]);
+
+  // Helper function for random sorting
+  function shuffleArray(array) {
     const newArray = [...array];
     for (let i = newArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
     }
     return newArray;
-  }, []);
+  }
 
-  // Initial fetch if no initial models were provided
-  useEffect(() => {
-    // Only fetch if we haven't already AND there are no initial models
-    if (!initialFetchDone.current && initialModels.length === 0) {
-      // Explicitly pass the correct provider when fetching initially
-      console.log(`[useModelFeed] Initiating first fetch with provider:`, provider);
-      console.log(`[useModelFeed] Current hook state: models=${models.length}, isLoading=${isLoading}, error=${error}, category=${category}, subcategory=${subcategory}`);
-      initialFetchDone.current = true; // Mark as done before the fetch to prevent duplicate calls
-      fetchData(0, false); 
-    }
-    // Remove provider from dependency array to prevent re-fetching when it's stringified differently
-  }, [initialModels.length, fetchData]); // Removed 'provider' from dependencies
-
-  // Debug logs for component renders
-  useEffect(() => {
-    console.log(`[useModelFeed] State updated: models=${models.length}, isLoading=${isLoading}, error=${error}, hasMore=${hasMore}`);
-    if (models.length > 0) {
-      console.log(`[useModelFeed] First model:`, JSON.stringify(models[0]));
-    }
-    if (error) {
-      console.log(`[useModelFeed] Error details:`, error);
-    }
-  }, [models, isLoading, error, hasMore]);
-
-  // Function to load more models
-  const loadMore = () => {
-    if (!isLoading && hasMore && !requestInProgress) {
-      console.log(`[useModelFeed] loadMore called with provider:`, provider);
-      fetchData(offset, true);
-    }
-  };
-
-  // Function to refresh the feed from the beginning
-  const refresh = () => {
-    if (!requestInProgress) {
-      console.log(`[useModelFeed] refresh called with provider:`, provider);
-      setModels([]);
-      setOffset(0);
-      setHasMore(true);
-      setProviderData({});
-      fetchData(0, false);
-    }
-  };
-
-  // Filter models client-side (for additional filters not supported by API)
-  const filterModels = useCallback((filterFn) => {
-    if (typeof filterFn !== 'function') return models;
-    return models.filter(filterFn);
-  }, [models]);
-
-  // Get data for a specific provider
-  const getProviderStats = useCallback((providerKey) => {
-    return providerData[providerKey] || { items: [], pagination: { total: 0 }, error: null };
-  }, [providerData]);
-
-  return { 
-    models, 
-    isLoading, 
-    error, 
-    hasMore, 
+  return {
+    models,
+    isLoading,
+    error,
     loadMore,
     refresh,
-    filterModels,
-    totalLoaded: models.length,
-    providerData,
-    getProviderStats
+    hasMore,
+    providerData
   };
 };
 
-export default useModelFeed; 
+export default useModelFeed;

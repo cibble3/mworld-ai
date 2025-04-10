@@ -51,52 +51,52 @@ const MobileMenu = () => {
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleNavClick('/girls/asian')} className={styles.mobileNavSubLink}>
+                  <button onClick={() => handleNavClick('/girls?ethnicity=asian')} className={styles.mobileNavSubLink}>
                     <Translatable>Asian</Translatable>
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleNavClick('/girls/ebony')} className={styles.mobileNavSubLink}>
+                  <button onClick={() => handleNavClick('/girls?ethnicity=ebony')} className={styles.mobileNavSubLink}>
                     <Translatable>Ebony</Translatable>
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleNavClick('/girls/latina')} className={styles.mobileNavSubLink}>
+                  <button onClick={() => handleNavClick('/girls?ethnicity=latina')} className={styles.mobileNavSubLink}>
                     <Translatable>Latina</Translatable>
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleNavClick('/girls/blonde')} className={styles.mobileNavSubLink}>
+                  <button onClick={() => handleNavClick('/girls?hair_color=blonde')} className={styles.mobileNavSubLink}>
                     <Translatable>Blonde</Translatable>
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleNavClick('/girls/brunette')} className={styles.mobileNavSubLink}>
+                  <button onClick={() => handleNavClick('/girls?hair_color=brunette')} className={styles.mobileNavSubLink}>
                     <Translatable>Brunette</Translatable>
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleNavClick('/girls/bbw')} className={styles.mobileNavSubLink}>
+                  <button onClick={() => handleNavClick('/girls?body_type=bbw')} className={styles.mobileNavSubLink}>
                     <Translatable>BBW</Translatable>
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleNavClick('/girls/milf')} className={styles.mobileNavSubLink}>
+                  <button onClick={() => handleNavClick('/girls?tags=milf')} className={styles.mobileNavSubLink}>
                     <Translatable>MILF</Translatable>
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleNavClick('/girls/teen')} className={styles.mobileNavSubLink}>
+                  <button onClick={() => handleNavClick('/girls?age_group=18-22')} className={styles.mobileNavSubLink}>
                     <Translatable>18+ Teen</Translatable>
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleNavClick('/girls/mature')} className={styles.mobileNavSubLink}>
+                  <button onClick={() => handleNavClick('/girls?age_group=40%2B')} className={styles.mobileNavSubLink}>
                     <Translatable>Mature</Translatable>
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleNavClick('/girls/fetish')} className={styles.mobileNavSubLink}>
+                  <button onClick={() => handleNavClick('/girls?tags=fetish')} className={styles.mobileNavSubLink}>
                     <Translatable>Fetish</Translatable>
                   </button>
                 </li>
@@ -114,32 +114,32 @@ const MobileMenu = () => {
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleNavClick('/trans/asian')} className={styles.mobileNavSubLink}>
+                  <button onClick={() => handleNavClick('/trans?ethnicity=asian')} className={styles.mobileNavSubLink}>
                     <Translatable>Asian</Translatable>
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleNavClick('/trans/ebony')} className={styles.mobileNavSubLink}>
+                  <button onClick={() => handleNavClick('/trans?ethnicity=ebony')} className={styles.mobileNavSubLink}>
                     <Translatable>Ebony</Translatable>
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleNavClick('/trans/latina')} className={styles.mobileNavSubLink}>
+                  <button onClick={() => handleNavClick('/trans?ethnicity=latina')} className={styles.mobileNavSubLink}>
                     <Translatable>Latina</Translatable>
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleNavClick('/trans/blonde')} className={styles.mobileNavSubLink}>
+                  <button onClick={() => handleNavClick('/trans?hair_color=blonde')} className={styles.mobileNavSubLink}>
                     <Translatable>Blonde</Translatable>
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleNavClick('/trans/brunette')} className={styles.mobileNavSubLink}>
+                  <button onClick={() => handleNavClick('/trans?hair_color=brunette')} className={styles.mobileNavSubLink}>
                     <Translatable>Brunette</Translatable>
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleNavClick('/trans/fetish')} className={styles.mobileNavSubLink}>
+                  <button onClick={() => handleNavClick('/trans?tags=fetish')} className={styles.mobileNavSubLink}>
                     <Translatable>Fetish</Translatable>
                   </button>
                 </li>

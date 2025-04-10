@@ -34,16 +34,22 @@ export default async function handler(req, res) {
     });
   }
 
-  const { 
-      provider = orchestrator.ApiProviders.AWE, // Default to AWE via orchestrator constant
-      category,
-      subcategory,
-      limit = 32,
-      offset = 0,
-      debug = false,
-      // Pass any other potential filter parameters directly
-      ...otherFilters 
+  // Get the parameters from query string
+  const {
+    provider = orchestrator.ApiProviders.AWE, // Default to AWE via orchestrator constant
+    category,
+    subcategory,
+    limit = 32,
+    offset = 0,
+    debug = false,
+    // Pass any other potential filter parameters directly
+    ...otherFilters 
   } = req.query;
+  
+  // Log incoming request
+  console.log(`[API /models] Request: ${req.method} ${req.url}`);
+  console.log(`[API /models] Provider: ${provider}, Category: ${category}, Subcategory: ${subcategory}`);
+  console.log(`[API /models] Limit: ${limit}, Offset: ${offset}, Filters:`, otherFilters);
   
   // Ensure provider is treated consistently
   const providerKey = String(provider).toLowerCase();
@@ -98,6 +104,26 @@ export default async function handler(req, res) {
           filters: otherFilters // Pass remaining query params as filters
       });
 
+      // Check if result is defined before accessing its properties
+      if (!result) {
+          console.error('[API /models] Orchestrator returned undefined result');
+          return res.status(500).json({
+              success: false,
+              error: 'No data returned from model provider',
+              data: {
+                  models: [],
+                  pagination: {
+                      total: 0,
+                      limit: parsedLimit,
+                      offset: parsedOffset,
+                      currentPage: 1,
+                      totalPages: 0,
+                      hasMore: false
+                  }
+              }
+          });
+      }
+
       // Set cache if successful and caching enabled
       if (result.success && CACHE_CONFIG.ENABLED) {
           try {
@@ -118,6 +144,26 @@ export default async function handler(req, res) {
       console.log(`[API /models] Returning result (Success: ${result.success}, Status: ${statusCode})`);
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('X-Cache', 'MISS');
+      
+      // Ensure result.data exists before proceeding
+      if (!result.data || !result.data.items) {
+          console.error('[API /models] Missing data or items in result');
+          return res.status(500).json({
+              success: false,
+              error: 'Invalid data structure returned from provider',
+              data: {
+                  models: [],
+                  pagination: {
+                      total: 0,
+                      limit: parsedLimit,
+                      offset: parsedOffset,
+                      currentPage: 1,
+                      totalPages: 0,
+                      hasMore: false
+                  }
+              }
+          });
+      }
       
       // If debug is enabled, strip down the response to be more direct
       if (debug) {
@@ -144,7 +190,41 @@ export default async function handler(req, res) {
         return res.status(statusCode).json(simplifiedResult);
       }
       
-      return res.status(statusCode).json(result);
+      // Return standardized result formatted to match what the frontend expects
+      const formattedResult = {
+        success: result.success,
+        error: result.error,
+        data: {
+          models: result.data.items.map(model => ({
+            id: model.id || model.performerId || `model-${Date.now()}`,
+            performerId: model.performerId || model.id,
+            slug: model.slug || model.id,
+            name: model.name || 'Unknown',
+            image: model.image || model.thumbnail,
+            thumbnail: model.thumbnail,
+            preview: model.preview || model.image || model.thumbnail,
+            previewImage: model.preview || model.image || model.thumbnail,
+            age: model.age,
+            ethnicity: model.ethnicity || '',
+            bodyType: model.bodyType || '',
+            tags: model.tags || [],
+            isOnline: model.isOnline !== false,
+            viewerCount: model.viewerCount || 0,
+            primaryCategory: category || 'girls',
+            _provider: providerKey
+          })),
+          pagination: {
+            total: result.data.pagination.total,
+            limit: parsedLimit,
+            offset: parsedOffset,
+            currentPage: result.data.pagination.currentPage,
+            totalPages: result.data.pagination.totalPages,
+            hasMore: result.data.pagination.hasMore
+          }
+        }
+      };
+      
+      return res.status(statusCode).json(formattedResult);
 
   } catch (error) {
       // Catch unexpected errors during orchestrator call or response handling

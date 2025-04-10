@@ -1,31 +1,58 @@
 import React from 'react';
-import { useTheme, THEMES } from '@/context/ThemeContext';
-import ModernLayout from './ModernLayout';
-import LegacyLayout from './AppLayout';
+import { useTheme } from '@/context/ThemeContext';
+import UnifiedLayout from './UnifiedLayout';
+import HeadMeta from '@/components/HeadMeta';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
+import ENV from '@/config/environment';
+import { useRouter } from 'next/router';
 
 /**
- * ThemeLayout - Smart layout component that selects the appropriate
- * layout based on the current theme.
- * 
- * This component ensures only ONE layout is rendered,
- * preventing nested layouts that cause duplicate headers/footers.
+ * ThemeLayout - Wrapper for UnifiedLayout.
+ * Handles basic setup and passes props down.
  */
-const ThemeLayout = (props) => {
+const ThemeLayout = ({ children, meta = {}, ...props }) => {
   const { theme } = useTheme();
+  const router = useRouter();
   
-  // For debugging:
-  console.log(`Current theme: ${theme}`);
-  
-  // IMPORTANT: Only use one theme layout to prevent duplicate headers/footers
-  // This ensures consistent layout across all categories and subcategories
-  const useLegacyLayout = true; // Hard-coded to legacy for consistent layout
-  
-  // Only render one layout component based on setting
-  if (useLegacyLayout) {
-    return <LegacyLayout {...props} />;
-  } else {
-    return <ModernLayout {...props} />;
+  if (ENV.IS_DEV) {
+    console.log(`[ThemeLayout] Rendering with theme: ${theme}, path: ${router.asPath}`);
   }
+
+  // Convert simple meta object to full pageContent format if needed
+  const pageContent = meta.meta_title ? meta : {
+    meta_title: meta.title || props.title || "MistressWorld",
+    meta_desc: meta.description || props.description || "Live cam models and videos",
+    meta_keywords: meta.keywords || "",
+    top_text: meta.top_text || "",
+    canonicalUrl: meta.canonicalUrl || "",
+    ogImage: meta.ogImage || "",
+    schema: meta.schema || null
+  };
+
+  // Extract title and description
+  const { title, description, ...otherProps } = props;
+  
+  const commonElements = (
+    <>
+      <HeadMeta pageContent={pageContent} />
+    </>
+  );
+  
+  return (
+    <>
+      {commonElements}
+      <ErrorBoundary>
+        <UnifiedLayout 
+          {...otherProps}
+          title={title}
+          description={description}
+          meta={pageContent}
+        >
+          {children}
+        </UnifiedLayout>
+      </ErrorBoundary>
+    </>
+  );
 };
 
 export default ThemeLayout; 

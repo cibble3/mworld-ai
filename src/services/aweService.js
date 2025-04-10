@@ -2,6 +2,16 @@ import axios from 'axios';
 import { ApiProviders } from './constants'; // Assuming constants are moved
 import { AWE_CONFIG, DEFAULT_LIMIT, AWE_FILTERS, AWE_SYNONYMS } from './config'; // Adjust path as needed
 
+// Let's add some additional filter types to AWE_FILTERS if it's not defined in the config
+// This is a fallback in case it's not defined in config.js
+const EXTENDED_FILTERS = {
+  ...AWE_FILTERS,
+  age_group: ['18-22', '23-29', '30-39', '40+'],
+  breast_size: ['small', 'medium', 'large', 'very_large'],
+  language: ['english', 'spanish', 'french', 'german', 'russian', 'italian'],
+  experience: ['beginner', 'intermediate', 'professional']
+};
+
 // Normalization function specific to AWE
 export const normalizeAWEModel = (model) => ({
     id: model.id || model.username,
@@ -54,8 +64,8 @@ export const mapParamsToAWE = (params) => {
         const sub = params.subcategory.toLowerCase();
         const mappedSub = AWE_SYNONYMS[sub] || sub;
         let found = false;
-        for (const filterType in AWE_FILTERS) {
-            if (AWE_FILTERS[filterType].includes(mappedSub)) {
+        for (const filterType in EXTENDED_FILTERS) {
+            if (EXTENDED_FILTERS[filterType].includes(mappedSub)) {
                 aweFilters.push(mappedSub);
                 found = true;
                 break;
@@ -71,12 +81,12 @@ export const mapParamsToAWE = (params) => {
             if (['customOrder', '_timestamp'].includes(filterKey)) continue;
             const filterValue = String(params.filters[filterKey]).toLowerCase();
             const mappedValue = AWE_SYNONYMS[filterValue] || filterValue;
-            if (AWE_FILTERS[filterKey] && AWE_FILTERS[filterKey].includes(mappedValue)) {
+            if (EXTENDED_FILTERS[filterKey] && EXTENDED_FILTERS[filterKey].includes(mappedValue)) {
                 aweFilters.push(mappedValue);
             } else {
                 let foundDirect = false;
-                for (const type in AWE_FILTERS) {
-                    if (AWE_FILTERS[type].includes(mappedValue)) {
+                for (const type in EXTENDED_FILTERS) {
+                    if (EXTENDED_FILTERS[type].includes(mappedValue)) {
                         aweFilters.push(mappedValue);
                         foundDirect = true;
                         break;
@@ -234,4 +244,51 @@ export const fetchAweModels = async (params = {}) => {
             };
         }
     }
+};
+
+export const getModels = async ({
+  online = 1,
+  category = null,
+  limit = 100,
+  page = 0,
+  ethnicity = null,
+  hair_color = null,
+  willingness = null,
+  tags = null,
+  source = null,
+  height = null,
+  body_type = null,
+  age_group = null,
+  breast_size = null,
+  language = null,
+  experience = null,
+}) => {
+  try {
+    const baseUrl = process.env.AWE_API_URL;
+    const siteId = process.env.AWE_SITE_ID;
+    const apiKey = process.env.AWE_API_KEY;
+
+    let url = `${baseUrl}/api/models?api_key=${apiKey}&online=${online}&page=${page}&limit=${limit}`;
+
+    if (category) url += `&category=${category}`;
+    if (ethnicity) url += `&ethnicity=${ethnicity}`;
+    if (hair_color) url += `&hair_color=${hair_color}`;
+    if (willingness) url += `&willingness=${willingness}`;
+    if (tags) url += `&tags=${tags}`;
+    if (source) url += `&source=${source}`;
+    if (height) url += `&height=${height}`;
+    if (body_type) url += `&body_type=${body_type}`;
+    if (age_group) url += `&age_group=${age_group}`;
+    if (breast_size) url += `&breast_size=${breast_size}`;
+    if (language) url += `&language=${language}`;
+    if (experience) url += `&experience=${experience}`;
+
+    console.log("Request URL:", url);
+
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching models from AWE API:", error);
+    throw error;
+  }
 }; 

@@ -16,41 +16,151 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import useModelFeed from '@/hooks/useModelFeed';
 import { capitalizeString } from "@/helper/helpers";
+import UnifiedLayout from '@/theme/layouts/UnifiedLayout';
+import FilterBar from '@/theme/components/filters/FilterBar';
+import apiService from '@/services/apiService';
 const Staticblogpost = dynamic(() => import("@/components/Staticblogpost"));
 
 const HomeLiveScreenPhoto = dynamic(() =>
   import("@/components/NewHomeLiveScreenPhone")
 );
 
-const TransTypePage = () => {
+/**
+ * Trans Page - Displays trans models based on type/filter with filtering options
+ */
+const TransTypePage = ({ initialData, filters }) => {
   const router = useRouter();
-  const { type } = router.query;
-
-  if (!type) {
-    return <ThemeLayout meta={{title: "Loading..."}}><div>Loading category...</div></ThemeLayout>;
-  }
-
-  // Fetch models using the hook
-  const { models, isLoading, error, hasMore, loadMore } = useModelFeed({
-    category: 'trans',
-    subcategory: type,
-    limit: 32,
-  });
-
-  // Use specific title/desc from girlsTransContent if available for the page heading
-  const pageContent = girlsTransContent[type] || {};
-  const title = pageContent.title || `Live ${capitalizeString(type)} Trans Cams`;
-  const desc = pageContent.desc || `Watch live ${type} trans cams.`;
+  const [models, setModels] = useState(initialData?.items || []);
+  const [pagination, setPagination] = useState(initialData?.pagination || {});
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  
+  // Extract type and filter values from URL query
+  const { type } = router.query; 
+  const filterValues = {
+    ethnicity: router.query.ethnicity || '',
+    hair_color: router.query.hair_color || '',
+    body_type: router.query.body_type || '',
+    tags: router.query.tags || ''
+  };
+  
+  // Get specific content for this trans type
+  const pageContent = girlsTransContent?.trans?.[type] || {};
+  const title = pageContent.title || `Live ${capitalizeString(type || 'trans')} Cam Models`;
+  const description = pageContent.desc || `Explore our stunning collection of live ${type || 'transgender'} cam models.`;
 
   // Construct meta tags
   const meta = {
     title: pageContent.meta_title || title,
-    description: pageContent.meta_desc || desc,
+    description: pageContent.meta_desc || description,
     keywords: pageContent.meta_keywords || `${type} trans cams, live ${type} trans cams`,
-    // Add other meta tags as needed (e.g., canonical, open graph)
   };
-
-  // Define Bottom Content JSX
+  
+  // Fetch models when filters or type change
+  useEffect(() => {
+    if (!type) return; // Don't fetch if type isn't ready
+    
+    const fetchFilteredModels = async () => {
+      setIsLoading(true);
+      
+      try {
+        // Collect all applied filters
+        const appliedFilters = {
+          ...filterValues,
+          subcategory: type // Add the type as a subcategory filter
+        };
+        
+        // Remove empty filters
+        Object.keys(appliedFilters).forEach(key => {
+          if (!appliedFilters[key]) {
+            delete appliedFilters[key];
+          }
+        });
+        
+        // Fetch models with filters
+        const result = await apiService.fetchModels('trans', appliedFilters, {
+          limit: 24,
+          offset: 0
+        });
+        
+        if (result.success) {
+          setModels(result.data.items);
+          setPagination(result.data.pagination);
+          setError(null);
+        } else {
+          setError(result.error || 'Failed to fetch models');
+          setModels([]);
+        }
+      } catch (err) {
+        setError(err.message || 'An error occurred');
+        setModels([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchFilteredModels();
+  }, [router.query, type]); // Depend on query and type
+  
+  // Handle loading more models
+  const handleLoadMore = async () => {
+    if (isLoading || !pagination.hasMore || !type) return;
+    
+    setIsLoading(true);
+    
+    try {
+      // Collect all applied filters
+      const appliedFilters = {
+          ...filterValues,
+          subcategory: type
+        };
+        
+      Object.keys(appliedFilters).forEach(key => {
+        if (!appliedFilters[key]) {
+          delete appliedFilters[key];
+        }
+      });
+      
+      // Fetch more models
+      const result = await apiService.fetchModels('trans', appliedFilters, {
+        limit: 24,
+        offset: pagination.offset + pagination.limit
+      });
+      
+      if (result.success) {
+        setModels(prevModels => [...prevModels, ...result.data.items]);
+        setPagination(result.data.pagination);
+        setError(null);
+      } else {
+        setError(result.error || 'Failed to load more models');
+      }
+    } catch (err) {
+      setError(err.message || 'An error occurred');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  // Handle filter change
+  const handleFilterChange = (filterType, value) => {
+    const newQuery = { ...router.query };
+    
+    if (value) {
+      newQuery[filterType] = value;
+    } else {
+      delete newQuery[filterType];
+    }
+    
+    // Ensure type remains in the query
+    newQuery.type = type;
+    
+    router.push({
+      pathname: router.pathname,
+      query: newQuery
+    }, undefined, { shallow: true });
+  };
+  
+  // Prepare bottom content
   const bottomContentJSX = pageContent.about ? (
     <div className="grid md:grid-cols-2 gap-8">
       {pageContent.about.map((section, index) => (
@@ -67,54 +177,145 @@ const TransTypePage = () => {
       ))}
     </div>
   ) : null;
-
+  
   return (
-    <ThemeLayout 
-      meta={meta}
+    <UnifiedLayout
       title={title}
-      description={desc}
+      description={description}
+      meta={meta}
       bottomContentChildren={bottomContentJSX}
     >
-      {/* <CookiesModal /> */}
+      {/* Filters */}
+      <FilterBar 
+        filters={filters}
+        activeFilters={filterValues}
+        onFilterChange={handleFilterChange}
+      />
       
-      {/* Models Grid Section */}
-      <section className="py-8">
-        <ModelGrid
-          models={models}
-          isLoading={isLoading}
+      {/* Models Grid */}
+      <div className="mb-8">
+        <ModelGrid 
+          models={models} 
+          isLoading={isLoading && models.length === 0} // Show loading skeleton only initially
           error={error}
-          cols={1} sm={2} md={3} lg={4} gap={6}
-          renderCard={(model, index) => (
-            <ModelCard
-              key={model.id || index}
-              image={model.images?.thumbnail}
-              name={model.performerName}
-              age={model.appearances?.age}
-              tags={model.categories}
-              ethnicity={model.appearances?.ethnicity}
-              performerId={model.slug}
-              isOnline={model.isOnline}
-              viewerCount={model.viewerCount}
-              preload={index < 4}
+        >
+          {(model) => (
+            <ModelCard 
+              key={model.id}
+              performerId={model.id}
+              name={model.name}
+              age={model.age}
+              ethnicity={model.ethnicity}
+              tags={model.tags || []}
+              image={model.thumbnail}
+              isOnline={model.isOnline !== false}
+              viewerCount={model.viewerCount || 0}
             />
           )}
-        />
-
+        </ModelGrid>
+        
         {/* Load More Button */}
-        {hasMore && (
-          <div className="text-center mt-8">
+        {pagination.hasMore && (
+          <div className="flex justify-center mt-6">
             <button
-              onClick={loadMore}
+              onClick={handleLoadMore}
               disabled={isLoading}
-              className="bg-pink-600 hover:bg-pink-700 text-white px-8 py-3 rounded-md transition-colors disabled:opacity-50"
+              className="px-6 py-2 bg-pink-500 text-white rounded-md hover:bg-pink-600 disabled:opacity-50"
             >
-              {isLoading ? 'Loading...' : 'Load More Models'}
+              {isLoading ? 'Loading...' : 'Load More'}
             </button>
           </div>
         )}
-      </section>
-    </ThemeLayout>
+      </div>
+    </UnifiedLayout>
   );
 };
+
+// Server-side data fetching for initial load
+export async function getServerSideProps(context) {
+  const { type } = context.query;
+
+  if (!type) {
+    return { notFound: true }; // Return 404 if type is missing
+  }
+  
+  try {
+    // Collect filters from query params
+    const queryFilters = {};
+    if (context.query.ethnicity) queryFilters.ethnicity = context.query.ethnicity;
+    if (context.query.hair_color) queryFilters.hair_color = context.query.hair_color;
+    if (context.query.body_type) queryFilters.body_type = context.query.body_type;
+    if (context.query.tags) queryFilters.tags = context.query.tags;
+    
+    // Include the type as a subcategory filter
+    const appliedFilters = { ...queryFilters, subcategory: type };
+
+    // Fetch initial models
+    const result = await apiService.fetchModels('trans', appliedFilters, {
+      limit: 24,
+      offset: 0
+    });
+    
+    // TODO: Fetch dynamic filter options for 'trans' category
+    // For now, using static filters similar to the 'girls' page
+    const filterOptions = [
+      {
+        type: 'ethnicity',
+        name: 'Ethnicity',
+        options: [
+          { value: 'asian', label: 'Asian' },
+          { value: 'latina', label: 'Latina' },
+          { value: 'white', label: 'White' },
+          { value: 'ebony', label: 'Ebony' }
+        ]
+      },
+      {
+        type: 'hair_color',
+        name: 'Hair Color',
+        options: [
+          { value: 'blonde', label: 'Blonde' },
+          { value: 'brunette', label: 'Brunette' },
+          { value: 'red', label: 'Red' },
+          { value: 'black', label: 'Black' }
+        ]
+      },
+      {
+        type: 'body_type',
+        name: 'Body Type',
+        options: [
+          { value: 'slim', label: 'Slim' },
+          { value: 'athletic', label: 'Athletic' },
+          { value: 'curvy', label: 'Curvy' },
+          { value: 'muscular', label: 'Muscular' }
+        ]
+      },
+      {
+        type: 'tags',
+        name: 'Tags',
+        options: [
+          { value: 'milf', label: 'MILF' },
+          { value: 'petite', label: 'Petite' },
+          { value: 'tattoos', label: 'Tattoos' },
+          { value: 'piercing', label: 'Piercing' }
+        ]
+      }
+    ];
+    
+    return {
+      props: {
+        initialData: result.success ? result.data : { items: [], pagination: {} },
+        filters: filterOptions,
+      }
+    };
+  } catch (error) {
+    console.error(`[TransPage Type: ${type}] getServerSideProps error:`, error);
+    return {
+      props: {
+        initialData: { items: [], pagination: {} },
+        filters: [],
+      }
+    };
+  }
+}
 
 export default TransTypePage;

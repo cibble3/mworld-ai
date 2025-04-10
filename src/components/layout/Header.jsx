@@ -141,34 +141,34 @@ const Header = () => {
                     </Link>
                     
                     <div className={styles.dropdownMenu}>
-                      <Link href="/girls/asian" className={styles.dropdownItem}>
+                      <Link href="/girls?ethnicity=asian" className={styles.dropdownItem}>
                         <Translatable>Asian</Translatable>
                       </Link>
-                      <Link href="/girls/ebony" className={styles.dropdownItem}>
+                      <Link href="/girls?ethnicity=ebony" className={styles.dropdownItem}>
                         <Translatable>Ebony</Translatable>
                       </Link>
-                      <Link href="/girls/latina" className={styles.dropdownItem}>
+                      <Link href="/girls?ethnicity=latina" className={styles.dropdownItem}>
                         <Translatable>Latina</Translatable>
                       </Link>
-                      <Link href="/girls/blonde" className={styles.dropdownItem}>
+                      <Link href="/girls?hair_color=blonde" className={styles.dropdownItem}>
                         <Translatable>Blonde</Translatable>
                       </Link>
-                      <Link href="/girls/brunette" className={styles.dropdownItem}>
+                      <Link href="/girls?hair_color=brunette" className={styles.dropdownItem}>
                         <Translatable>Brunette</Translatable>
                       </Link>
-                      <Link href="/girls/bbw" className={styles.dropdownItem}>
+                      <Link href="/girls?body_type=bbw" className={styles.dropdownItem}>
                         <Translatable>BBW</Translatable>
                       </Link>
-                      <Link href="/girls/milf" className={styles.dropdownItem}>
+                      <Link href="/girls?tags=milf" className={styles.dropdownItem}>
                         <Translatable>MILF</Translatable>
                       </Link>
-                      <Link href="/girls/teen" className={styles.dropdownItem}>
+                      <Link href="/girls?age_group=18-22" className={styles.dropdownItem}>
                         <Translatable>18+ Teen</Translatable>
                       </Link>
-                      <Link href="/girls/mature" className={styles.dropdownItem}>
+                      <Link href="/girls?age_group=40%2B" className={styles.dropdownItem}>
                         <Translatable>Mature</Translatable>
                       </Link>
-                      <Link href="/girls/fetish" className={styles.dropdownItem}>
+                      <Link href="/girls?tags=fetish" className={styles.dropdownItem}>
                         <Translatable>Fetish</Translatable>
                       </Link>
                     </div>
@@ -185,22 +185,22 @@ const Header = () => {
                     </Link>
                     
                     <div className={styles.dropdownMenu}>
-                      <Link href="/trans/asian" className={styles.dropdownItem}>
+                      <Link href="/trans?ethnicity=asian" className={styles.dropdownItem}>
                         <Translatable>Asian</Translatable>
                       </Link>
-                      <Link href="/trans/ebony" className={styles.dropdownItem}>
+                      <Link href="/trans?ethnicity=ebony" className={styles.dropdownItem}>
                         <Translatable>Ebony</Translatable>
                       </Link>
-                      <Link href="/trans/latina" className={styles.dropdownItem}>
+                      <Link href="/trans?ethnicity=latina" className={styles.dropdownItem}>
                         <Translatable>Latina</Translatable>
                       </Link>
-                      <Link href="/trans/blonde" className={styles.dropdownItem}>
+                      <Link href="/trans?hair_color=blonde" className={styles.dropdownItem}>
                         <Translatable>Blonde</Translatable>
                       </Link>
-                      <Link href="/trans/brunette" className={styles.dropdownItem}>
+                      <Link href="/trans?hair_color=brunette" className={styles.dropdownItem}>
                         <Translatable>Brunette</Translatable>
                       </Link>
-                      <Link href="/trans/fetish" className={styles.dropdownItem}>
+                      <Link href="/trans?tags=fetish" className={styles.dropdownItem}>
                         <Translatable>Fetish</Translatable>
                       </Link>
                     </div>
